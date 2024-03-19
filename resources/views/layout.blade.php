@@ -2,6 +2,7 @@
 <html lang="en">
 
 // Layout Web
+<!-- Buat Layout Web -->
 
 <head>
     <meta charset="utf-8">
