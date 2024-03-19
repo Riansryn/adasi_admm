@@ -163,14 +163,14 @@
             //sweet alert status close
             function confirmStatusChange(id) {
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You are about to change the status to "Close".',
+                    title: 'Anda yakin?',
+                    text: 'Anda ingin Close proses ini?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No'
+                    confirmButtonText: 'Iya',
+                    cancelButtonText: 'Tidak'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Jika pengguna menekan tombol "Yes", kirim permintaan PATCH ke endpoint changeStatus

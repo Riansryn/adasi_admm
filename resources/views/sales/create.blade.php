@@ -238,15 +238,15 @@
                 // Menampilkan sweet alert error jika ada input yang kosong
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error!',
-                    text: 'Please fill all the fields before saving.',
+                    title: 'Gagal!',
+                    text: 'Form belum di isi!',
                 });
             } else {
                 // Simulasi validasi
                 Swal.fire({
                     icon: 'success',
-                    title: 'Success!',
-                    text: 'Data has been saved successfully.',
+                    title: 'Berhasil!',
+                    text: 'Data telah tersimpan',
                     showConfirmButton: false 
                 });
                 document.getElementById('formInputHandling').submit();
