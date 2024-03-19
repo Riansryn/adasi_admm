@@ -79,19 +79,20 @@ class HandlingController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-            // Inisialisasi variabel untuk menyimpan nama file gambar
-            $image = null;
-
             // Cek apakah file gambar diunggah
+        // Cek apakah file gambar diunggah
             if ($request->hasFile('image')) {
                 // Validasi file gambar
                 $request->validate([
                     'image' => 'image|mimes:jpeg,jpg,png',
                 ]);
 
-                // //upload image
+                // Pindahkan foto ke direktori public/assets/foto
                 $image = $request->file('image');
-                $image->storeAs('public/handling', $image->hashName());
+                $imagePath = $image->hashName(); // Gunakan hashname sebagai nama file
+                $image->move(public_path('assets/image'), $imagePath);
+            } else {
+                $imagePath = null;
             }
                 // Dapatkan tahun saat ini
                 $currentYear = date('Y');
@@ -113,7 +114,7 @@ class HandlingController extends Controller
                 'category'          => $request->category,
                 'process_type'      => $request->process_type,
                 'type_1'            => $request->type_1,
-                'image'             => $image->hashName(), // Simpan nama file gambar atau null jika tidak ada gambar yang diunggah
+                'image'             => $imagePath, // Simpan nama file gambar atau null jika tidak ada gambar yang diunggah
                 'status'            => 0
             ]);
 
@@ -159,11 +160,28 @@ class HandlingController extends Controller
         if ($request->hasFile('image')) {
 
             //upload new image
-            $image = $request->file('image');
-            $image->storeAs('public/handling', $image->hashName());
+            if ($request->hasFile('image')) {
+                // Validasi file gambar
+                $request->validate([
+                    'image' => 'image|mimes:jpeg,jpg,png',
+                ]);
+
+                // Pindahkan foto ke direktori public/assets/foto
+                $image = $request->file('image');
+                $imagePath = $image->hashName(); // Gunakan hashname sebagai nama file
+                $image->move(public_path('assets/image'), $imagePath);
+            } else {
+                $imagePath = null;
+            }
 
             //delete old image
-            Storage::delete('public/handling/', $handlings->image);
+            // Hapus gambar lama jika ada
+            if ($handlings->image) {
+                $oldImagePath = public_path('assets/image/' . $handlings->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
 
             //update post with new image
             $handlings->update([
@@ -180,7 +198,7 @@ class HandlingController extends Controller
                 'category'              => $request->category,
                 'process_type'          => $request->process_type,
                 'type_1'                => $request->type_1,
-                'image'                 => $image->hashName(),
+                'image'                 => $imagePath,
                 'status'                => 0
             
             ]);
@@ -221,8 +239,14 @@ class HandlingController extends Controller
         //get post by ID
         $handlings = Handling::findOrFail($id);
 
-        //delete image
-        Storage::delete('public/handling/'. $handlings->image);
+        //delete old image
+            // Hapus gambar lama jika ada
+            if ($handlings->image) {
+                $oldImagePath = public_path('assets/image/' . $handlings->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
 
         //delete post
         $handlings->delete();

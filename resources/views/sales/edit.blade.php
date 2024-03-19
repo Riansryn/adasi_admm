@@ -160,13 +160,13 @@
                                 <div class="col-sm-10">
                                     <div class="form-check mr-2">
                                         <input type="checkbox" class="form-check-input" id="type_1" name="type_1"
-                                            value="Claim" @if ($handlings->type_1 == 'Claim') checked @endif>
-                                        <label class="form-check-label" for="check1">Claim</label>
+                                            value="Klaim" @if ($handlings->type_1 == 'Klaim') checked @endif>
+                                        <label class="form-check-label" for="check1">Klaim</label>
                                     </div>
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="type_1" name="type_1"
-                                            value="Complain" @if ($handlings->type_1 == 'Complain') checked @endif>
-                                        <label class="form-check-label" for="check2">Complain</label>
+                                            value="Komplain" @if ($handlings->type_1 == 'Komplain') checked @endif>
+                                        <label class="form-check-label" for="check2">Komplain</label>
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-sm-10">
-                                    <img src="{{ asset('storage/handling/' . $handlings->image) }}"
+                                    <img src="{{ asset('assets/image/' . $handlings->image) }}"
                                         class="img-fluid img-thumbnail rounded" style="max-width: 300px;">
                                 </div>
                             </div>
