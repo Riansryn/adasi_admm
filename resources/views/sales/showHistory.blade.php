@@ -166,20 +166,20 @@
                                 <div class="col-sm-10">
                                     <div class="form-check mr-2">
                                         <input type="checkbox" class="form-check-input" id="type_1" name="type_1"
-                                            disabled value="Claim" @if ($handlings->type_1 == 'Claim') checked @endif>
-                                        <label class="form-check-label" for="check1">Claim</label>
+                                            disabled value="Klaim" @if ($handlings->type_1 == 'Klaim') checked @endif>
+                                        <label class="form-check-label" for="check1">Klaim</label>
                                     </div>
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="type_1" name="type_1"
-                                            disabled value="Complain" @if ($handlings->type_1 == 'Complain') checked @endif>
-                                        <label class="form-check-label" for="check2">Complain</label>
+                                            disabled value="Komplain" @if ($handlings->type_1 == 'Komplain') checked @endif>
+                                        <label class="form-check-label" for="check2">Komplain</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-2 col-form-label">Gambar</label>
                                 <div class="col-sm-10">
-                                    <img src="{{ asset('storage/handling/' . $handlings->image) }}"
+                                    <img src="{{ asset('assets/image/' . $handlings->image) }}"
                                         class="img-fluid img-thumbnail rounded" style="max-width: 350px;">
                                 </div>
                             </div>
@@ -223,17 +223,17 @@
                                                 <td class="text-center py-3">{{ $row->due_date }}</td>
                                                 <td class="text-center pt-3">
                                                     @if (in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['pdf']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
+                                                        <a href="{{ asset('assets/image/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-pdf"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['xlsx', 'xls']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
+                                                        <a href="{{ asset('assets/image/'. $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-excel"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
+                                                        <a href="{{ asset('assets/image/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <img src="{{ asset('/storage/handling/' . $row->file) }}"
                                                                 class="img-fluid rounded"

@@ -84,9 +84,9 @@
                                             <th class="text-center" width="100px">Type 1</th>
                                             <th class="text-center" width="100px">Type 2</th>
                                             <th class="text-center" width="100px">Image</th>
-                                            <th class="text-center" width="100px">Schedule Visit</th>
+                                            {{-- <th class="text-center" width="100px">Schedule Visit</th>
                                             <th class="text-center" width="100px">Due Date</th>
-                                            <th class="text-center" width="100px">Pic</th>
+                                            {{-- <th class="text-center" width="100px">Pic</th> --}}
                                             <th class="text-center" width="100px">Last Update</th>
                                             <th class="text-center" width="100px">Status</th>
                                             <th class="text-center" width="100px">Action</th>
@@ -116,12 +116,12 @@
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
                                                 <td class="text-center py-3">{{ $row->type_2 }}</td>
                                                 <td class="text-center pt-3">
-                                                    <img src="{{ asset('/storage/handling/' . $row->image) }}"
+                                                    <img src="{{ asset('assets/image/' . $row->image) }}"
                                                         class="img-fluid rounded" style="max-width: 100%; height: auto;">
                                                 </td>
-                                                <td class="text-center pt-3">{{ $row->schedule }}</td>
+                                                {{-- <td class="text-center pt-3">{{ $row->schedule }}</td>
                                                 <td class="text-center pt-3">{{ $row->due_date }}</td>
-                                                <td class="text-center pt-3">{{ $row->pic }}</td>
+                                                <td class="text-center pt-3">{{ $row->pic }}</td> --}}
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>
                                                 <td class="text-center py-3"
                                                     style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">

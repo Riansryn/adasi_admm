@@ -48,15 +48,15 @@
                                                 <td class="text-center py-3">{{ $row->due_date }}</td>
                                                 <td class="text-center pt-3">
                                                     @if (in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['pdf']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"  download="{{ $row->file_name }}">
+                                                        <a href="{{asset('assets/image/' . $row->file) }}"  download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-pdf"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['xlsx', 'xls']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"  download="{{ $row->file_name }}">
+                                                        <a href="{{asset('assets/image/' . $row->file) }}"  download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-excel"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"  download="{{ $row->file_name }}">
+                                                        <a href="{{ asset('assets/image/' . $row->file) }}"  download="{{ $row->file_name }}">
                                                             <img src="{{ asset('/storage/handling/' . $row->file) }}"
                                                                 class="img-fluid rounded"
                                                                 style="max-width: 100%; height: auto;">

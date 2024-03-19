@@ -179,7 +179,7 @@ class DeptManController extends Controller
             $file = $request->file('file');
             $filename = $file->hashName(); // Mendapatkan nama hash untuk file
             $originalFilename = $file->getClientOriginalName();
-            $path = $file->storeAs('public/handling', $filename); // Simpan file dengan nama hash di direktori 'files'
+            $path = $file->move(public_path('assets/image'), $filename); // Simpan file dengan nama hash di direktori 'files'
         } else {
             $filename = null; // Atur nama file menjadi null jika tidak ada file yang diunggah
             $originalFilename = null;
