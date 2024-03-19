@@ -68,7 +68,7 @@
                                                 <td class="text-center py-3">{{ $row->process_type }}</td>
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
                                                 <td class="text-center pt-3">
-                                                    <img src="{{ asset('/storage/handling/' . $row->image) }}"
+                                                    <img src="{{ asset('assets/image/'. $row->image) }}"
                                                         class="img-fluid rounded" style="max-width: 100%; height: auto;">
                                                 </td>
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>
@@ -99,7 +99,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-
+{{-- form tindak lanjut --}}
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Tampilan Data Tindak Lanjut</h5>
@@ -155,7 +155,7 @@
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
                                                 <td class="text-center py-3">{{ $row->type_2 }}</td>
                                                 <td class="text-center pt-3">
-                                                    <img src="{{ asset('/storage/handling/' . $row->image) }}"
+                                                    <img src="{{ asset('assets/image/' . $row->image) }}"
                                                         class="img-fluid rounded" style="max-width: 100%; height: auto;">
                                                 </td>
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>

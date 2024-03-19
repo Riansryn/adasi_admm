@@ -76,9 +76,10 @@
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
                                                 <td class="text-center py-3">{{ $row->type_2 }}</td>
                                                 <td class="text-center pt-3">
-                                                    @if($row->image)
+                                                    @if ($row->image)
                                                         <img src="{{ asset('assets/image/' . $row->image) }}"
-                                                             class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                                                            class="img-fluid rounded"
+                                                            style="max-width: 100%; height: auto;">
                                                     @else
                                                         <span>No Image Available</span>
                                                     @endif
@@ -116,10 +117,10 @@
                                                                 <i class="fas fa-trash fa-1x"></i>
                                                             </button>
                                                         @elseif($row->status == 1)
-                                                        <a href="{{ route('showHistory', $row->id) }}"
-                                                            class="btn btn-sm btn-success">
-                                                            <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
-                                                        </a>
+                                                            <a href="{{ route('showHistory', $row->id) }}"
+                                                                class="btn btn-sm btn-success">
+                                                                <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+                                                            </a>
                                                         @elseif ($row->status == 2)
                                                             <!-- Jika status 2 (Finish), tampilkan SweetAlert untuk konfirmasi -->
                                                             <button type="button" class="btn btn-sm btn-danger"
@@ -130,7 +131,7 @@
                                                                 class="btn btn-sm btn-success">
                                                                 <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
                                                             </a>
-                                                            @elseif($row->status == 3)
+                                                        @elseif($row->status == 3)
                                                             <a href="{{ route('showHistory', $row->id) }}"
                                                                 class="btn btn-sm btn-success">
                                                                 <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
@@ -158,6 +159,45 @@
                 </div>
             </div>
         </section>
+        <script>
+            //sweet alert status close
+            function confirmStatusChange(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to change the status to "Close".',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Jika pengguna menekan tombol "Yes", kirim permintaan PATCH ke endpoint changeStatus
+                        changeStatus(id);
+                        window.location.href = '{{ route('index') }}';
+                    }
+                });
+            }
+            // Fungsi untuk mengirimkan permintaan PATCH ke endpoint changeStatus
+            function changeStatus(id) {
+                // Kirimkan permintaan AJAX menggunakan jQuery
+                $.ajax({
+                    type: 'PATCH', // Metode HTTP yang digunakan adalah PATCH
+                    url: '/changeStatus/' + id, // URL endpoint dengan parameter id
+                    data: {
+                        _token: '{{ csrf_token() }}', // Token CSRF untuk keamanan
+                        _method: 'PATCH' // Metode HTTP yang digunakan adalah PATCH
+                    },
+                    success: function(response) {
+                        // Tampilkan pesan sukses jika permintaan berhasil
+                        Swal.fire('Success!', 'Status has been changed successfully.', 'success');
+                        // Lakukan reload halaman atau update tabel jika diperlukan
+                        window.location.href = '{{ route('index') }}';
+                    }
+                });
+            }
+        </script>
 
     </main><!-- End #main -->
 @endsection

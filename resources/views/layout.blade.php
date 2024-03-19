@@ -488,46 +488,7 @@
             return rowData;
         }
 
-        //sweet alert status close
-        function confirmStatusChange(id) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You are about to change the status to "Close".',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Jika pengguna menekan tombol "Yes", kirim permintaan PATCH ke endpoint changeStatus
-                    changeStatus(id);
-                    window.location.href = '{{ route('
-                    index ') }}';
-                }
-            });
-        }
-
-        // Fungsi untuk mengirimkan permintaan PATCH ke endpoint changeStatus
-        function changeStatus(id) {
-            // Kirimkan permintaan AJAX menggunakan jQuery
-            $.ajax({
-                type: 'PATCH', // Metode HTTP yang digunakan adalah PATCH
-                url: '/changeStatus/' + id, // URL endpoint dengan parameter id
-                data: {
-                    _token: '{{ csrf_token() }}', // Token CSRF untuk keamanan
-                    _method: 'PATCH' // Metode HTTP yang digunakan adalah PATCH
-                },
-                success: function(response) {
-                    // Tampilkan pesan sukses jika permintaan berhasil
-                    Swal.fire('Success!', 'Status has been changed successfully.', 'success');
-                    // Lakukan reload halaman atau update tabel jika diperlukan
-                    window.location.href = '{{ route('
-                    index ') }}';
-                }
-            });
-        }
+       
         // imageModal
         $(document).ready(function() {
             $('.clickable-image').click(function() {
