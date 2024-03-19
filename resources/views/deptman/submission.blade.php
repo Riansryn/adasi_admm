@@ -99,7 +99,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-
+{{-- form tindak lanjut --}}
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Tampilan Data Tindak Lanjut</h5>
