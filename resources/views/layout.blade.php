@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
-// Layout Web
 <!-- Buat Layout Web -->
 
 <head>
@@ -110,12 +108,27 @@
                 <li class="nav-label">DMS Menu</h5>
             </b>
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboard-nav">
+                <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboard-admin-nav">
+                    <i class="bi bi-gear"></i>
+                    <span>Dashboard Admin</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="dashboard-admin-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a class="nav-link" href="{{ route('dashboardusers') }}">
+                            <i class="bi bi-list-check"></i>
+                            <span>Daftar Pengguna</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboard-menu-nav">
                     <i class="bi bi-gear"></i>
                     <span>Dashboard Menu</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul id="dashboard-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <ul id="dashboard-menu-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
                         <a class="nav-link" href="{{ route('dashboardHandling') }}">
                             <i class="bi bi-list-check"></i>
@@ -130,6 +143,7 @@
                     </li>
                 </ul>
             </li>
+
             <li class="nav-label">Production</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" href="#prod-forms-nav">
@@ -488,7 +502,7 @@
             return rowData;
         }
 
-       
+
         // imageModal
         $(document).ready(function() {
             $('.clickable-image').click(function() {
