@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+// Layout Web
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -17,9 +19,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -34,8 +34,7 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
     {{-- datatable --}}
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
@@ -59,6 +58,7 @@
 
 <body>
 
+    <!-- Buat Header -->
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -86,8 +86,7 @@
                     </a>
                 </li><!-- End Search Icon-->
                 <li class="nav-item dropdown pe-3">
-                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
-                        data-bs-toggle="dropdown">
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         <img src="assets/img/user.png" alt="Profile" class="rounded-circle">
                         <span class="d-none d-md-block ps-2">{{ Auth::user()->name }} <br>
                             {{ Auth::user()->roles->role }}</span>
@@ -148,10 +147,8 @@
             </li>
             <li class="nav-label">Maintenance</li>
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#maint-received-nav" data-bs-toggle="collapse"
-                    href="#">
-                    <i class="bi bi-journal-text"></i><span>Received FPP & Jadwal Preventive</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                <a class="nav-link collapsed" data-bs-target="#maint-received-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-journal-text"></i><span>Received FPP & Jadwal Preventive</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="maint-received-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li class="nav-item">
@@ -177,121 +174,112 @@
             <!-- End Prod Forms Nav -->
             <ul class="sidebar-nav">
                 @if (Auth::check())
-                    @if (Auth::user()->role_id == 3 || Auth::user()->role_id == 1)
-                        {{-- Role ID untuk Maintenance --}}
-                        {{-- Tampilkan sidebar untuk Maintenance --}}
-                        <li class="nav-label">Dept. Maintenance</li>
+                @if (Auth::user()->role_id == 3 || Auth::user()->role_id == 1)
+                {{-- Role ID untuk Maintenance --}}
+                {{-- Tampilkan sidebar untuk Maintenance --}}
+                <li class="nav-label">Dept. Maintenance</li>
 
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#dept-maint-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-journal-text"></i><span>Mesin & Approve FPP</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="dept-maint-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li class="nav-item">
-                            <a class="nav-link collapsed" data-bs-target="#dept-maint-nav" data-bs-toggle="collapse"
-                                href="#">
-                                <i class="bi bi-journal-text"></i><span>Mesin & Approve FPP</span><i
-                                    class="bi bi-chevron-down ms-auto"></i>
+                            <a class="nav-link collapsed" href="{{ route('dashboardmesins') }}">
+                                <i class="bi bi-gear"></i>
+                                <span>Data Mesin</span>
                             </a>
-                            <ul id="dept-maint-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link collapsed" href="{{ route('dashboardmesins') }}">
-                                        <i class="bi bi-gear"></i>
-                                        <span>Data Mesin</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link collapsed" href="{{ route('deptmtce.index') }}">
-                                        <i class="bi bi-check2"></i>
-                                        <span>Data Approved FPP</span>
-                                    </a>
-                                </li>
-                                <!-- <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="{{ route('deptmtce.index') }}">
+                                <i class="bi bi-check2"></i>
+                                <span>Data Approved FPP</span>
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ asset('deptmtcepreventive') }}">
                             <i class="bi bi-check2"></i>
                             <span>Data Jadwal Preventive</span>
                         </a>
                     </li> -->
-                                <li class="nav-item">
-                                    <a class="nav-link collapsed" href="{{ route('blokDeptMaintenance') }}">
-                                        <i class="bi bi-check2"></i>
-                                        <span>Blok Jadwal Preventive</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li><!-- End Dept Maint Nav -->
                         <li class="nav-item">
-                            <a class="nav-link collapsed" data-bs-target="#dept-complain-nav"
-                                data-bs-toggle="collapse" href="#">
-                                <i class="bi bi-journal-text"></i><span>Handling Claim dan Complain</span><i
-                                    class="bi bi-chevron-down ms-auto"></i>
+                            <a class="nav-link collapsed" href="{{ route('blokDeptMaintenance') }}">
+                                <i class="bi bi-check2"></i>
+                                <span>Blok Jadwal Preventive</span>
                             </a>
-                            <ul id="dept-complain-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                                <li>
-                                    <a href="{{ route('submission') }}">
-                                        <i class="bi bi-circle"></i><span>Form Tindak Lanjut</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('showHistoryCLaimComplain') }}">
-                                        <i class="bi bi-circle"></i><span>Riwayat Klaim & Komplain</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('scheduleVisit') }}">
-                                        <i class="bi bi-circle"></i><span>Jadwal Kunjungan</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li><!-- End Dept Complain & Claim Nav -->
-                    @endif
-                    @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
-                        {{-- Role ID untuk Sales --}}
-                        {{-- Tampilkan sidebar untuk Sales --}}
-                        <li class="nav-label">Sales</li>
+                        </li>
+                    </ul>
+                </li><!-- End Dept Maint Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#dept-complain-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-journal-text"></i><span>Handling Claim dan Complain</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="dept-complain-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="{{ route('submission') }}">
+                                <i class="bi bi-circle"></i><span>Form Tindak Lanjut</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('showHistoryCLaimComplain') }}">
+                                <i class="bi bi-circle"></i><span>Riwayat Klaim & Komplain</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('scheduleVisit') }}">
+                                <i class="bi bi-circle"></i><span>Jadwal Kunjungan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Dept Complain & Claim Nav -->
+                @endif
+                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
+                {{-- Role ID untuk Sales --}}
+                {{-- Tampilkan sidebar untuk Sales --}}
+                <li class="nav-label">Sales</li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#sales-fpp-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-journal-text"></i><span>Form Permintaan Perbaikan</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="sales-fpp-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li class="nav-item">
-                            <a class="nav-link collapsed" data-bs-target="#sales-fpp-nav" data-bs-toggle="collapse"
-                                href="#">
-                                <i class="bi bi-journal-text"></i><span>Form Permintaan Perbaikan</span><i
-                                    class="bi bi-chevron-down ms-auto"></i>
+                            <a class="nav-link collapsed" href="{{ route('sales.index') }}">
+                                <i class="bi bi-list-check"></i>
+                                <span>Data Form FPP</span>
                             </a>
-                            <ul id="sales-fpp-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link collapsed" href="{{ route('sales.index') }}">
-                                        <i class="bi bi-list-check"></i>
-                                        <span>Data Form FPP</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li><!-- End Sales FPP Nav -->
-                        <li class="nav-item">
-                            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse"
-                                href="#">
-                                <i class="bi bi-journal-text"></i><span>Handling Claim dan Complain</span><i
-                                    class="bi bi-chevron-down ms-auto"></i>
+                        </li>
+                    </ul>
+                </li><!-- End Sales FPP Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-journal-text"></i><span>Handling Claim dan Complain</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="{{ route('index') }}">
+                                <i class="bi bi-circle"></i><span>Form Pengajuan Klaim dan Komplain</span>
                             </a>
-                            <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                                <li>
-                                    <a href="{{ route('index') }}">
-                                        <i class="bi bi-circle"></i><span>Form Pengajuan Klaim dan Komplain</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('showHistoryCLaimComplain') }}">
-                                        <i class="bi bi-circle"></i><span>Riwayat Klaim dan Komplain</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('scheduleVisit') }}">
-                                        <i class="bi bi-circle"></i><span>Jadwal Kunjungan</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li><!-- End Forms Nav -->
-                    @endif
+                        </li>
+                        <li>
+                            <a href="{{ route('showHistoryCLaimComplain') }}">
+                                <i class="bi bi-circle"></i><span>Riwayat Klaim dan Komplain</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('scheduleVisit') }}">
+                                <i class="bi bi-circle"></i><span>Jadwal Kunjungan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Forms Nav -->
+                @endif
                 @endif
             </ul>
         </ul>
         <!-- Footer Sidebar -->
         <ul class="sidebar-nav fixed-bottom ps-3">
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <a class="nav-link collapsed" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
@@ -316,8 +304,7 @@
         </div>
     </footer><!-- End Footer -->
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
@@ -515,7 +502,8 @@
                 if (result.isConfirmed) {
                     // Jika pengguna menekan tombol "Yes", kirim permintaan PATCH ke endpoint changeStatus
                     changeStatus(id);
-                    window.location.href = '{{ route('index') }}';
+                    window.location.href = '{{ route('
+                    index ') }}';
                 }
             });
         }
@@ -534,7 +522,8 @@
                     // Tampilkan pesan sukses jika permintaan berhasil
                     Swal.fire('Success!', 'Status has been changed successfully.', 'success');
                     // Lakukan reload halaman atau update tabel jika diperlukan
-                    window.location.href = '{{ route('index') }}';
+                    window.location.href = '{{ route('
+                    index ') }}';
                 }
             });
         }
@@ -590,7 +579,7 @@
                     icon: 'success',
                     title: 'Success!',
                     text: 'Data has been saved successfully.',
-                    showConfirmButton: false 
+                    showConfirmButton: false
                 });
             }
         }
@@ -796,38 +785,38 @@
         });
     </script>
 
-<style>
-    #footer {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: #f8f9fa;
-        padding: 10px;
-        text-align: center;
-        box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-    }
+    <style>
+        #footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
 
-    #footer .copyright,
-    #footer .credits {
-        color: #343a40;
-    }
-</style>
+        #footer .copyright,
+        #footer .credits {
+            color: #343a40;
+        }
+    </style>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all the accordion elements
-        var accordions = document.querySelectorAll('.accordion');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all the accordion elements
+            var accordions = document.querySelectorAll('.accordion');
 
-        // Add click event listener to each accordion
-        accordions.forEach(function(accordion) {
-            // Toggle the 'show' class on collapse element when the accordion title is clicked
-            accordion.querySelector('.card-title').addEventListener('click', function() {
-                accordion.querySelector('.collapse').classList.toggle('show');
+            // Add click event listener to each accordion
+            accordions.forEach(function(accordion) {
+                // Toggle the 'show' class on collapse element when the accordion title is clicked
+                accordion.querySelector('.card-title').addEventListener('click', function() {
+                    accordion.querySelector('.collapse').classList.toggle('show');
+                });
             });
         });
-    });
-</script>
+    </script>
 
 
 </body>
