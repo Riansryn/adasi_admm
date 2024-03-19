@@ -49,7 +49,7 @@
                             <div class="row mb-3">
                                 <label for="customer_code" class="col-sm-2 col-form-label">Kode Pelanggan</label>
                                 <div class="col-sm-10">
-                                    <select name="customer_id" class="select2" style="width: 400px;" required>
+                                    <select id="customer_id" name="customer_id" class="select2" style="width: 400px;" required>
                                         <option value="" disabled selected>🔍 Search or select customer</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}" data-name_customer="{{ $customer->name_customer }}" data-area="{{ $customer->area }}">{{ $customer->customer_code }}</option>
@@ -89,7 +89,7 @@
                             <div class="row mb-3">
                                 <label for="type_material" class="col-sm-2 col-form-label">Tipe Bahan</label>
                                 <div class="col-sm-10">
-                                    <select name="type_id" class="form-select" style="width: 400px;" required>
+                                    <select id="type_id" name="type_id" class="form-select" style="width: 400px;" required>
                                         <option value="">------------- Type Material ------------</option>
                                         @foreach ($type_materials as $typematerial)
                                             <option value="{{ $typematerial->id }}">{{ $typematerial->type_name }}
@@ -183,7 +183,7 @@
                             <div class="row mb-3" style="margin-top: 2%">
                                 <div class="col-sm-12 d-flex justify-content-end">
                                     <button id="saveButton" type="submit" class="btn btn-primary mb-4 me-3"
-                                        onclick="validateAndSubmit()">
+                                        onclick="validateCreate()">
                                         <i class="fas fa-save"></i> Simpan
                                     </button>
                                     <button type="button" class="btn btn-primary mb-4 me-3" onclick="goToIndex()">
@@ -217,7 +217,54 @@
                     areaCustomerSelect.value = selectedOption.getAttribute('data-area');
                 });
             });
+
+            function validateCreate() {
+            event.preventDefault();
+
+            var no_wo = document.getElementById('no_wo').value.trim();
+            var image = document.getElementById('formFile').value.trim();
+            var customerCode = document.getElementById('customer_id').value.trim();
+            var customerName = document.getElementById('name_customer').value.trim();
+            var area = document.getElementById('area').value.trim();
+            var qty = document.getElementById('qty').value.trim();
+            var pcs = document.getElementById('pcs').value.trim();
+            var category = document.getElementById('category').value.trim();
+            var process_type = document.getElementById('process_type').value.trim();
+            var type_1 = document.getElementById('type_1').value.trim();
+
+            // Memeriksa apakah ada input yang kosong
+            if (!no_wo || !image || !customerName || !customerCode || !area || !qty || !pcs || !category || !process_type ||
+                type_1.length === 0) {
+                // Menampilkan sweet alert error jika ada input yang kosong
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Please fill all the fields before saving.',
+                });
+            } else {
+                // Simulasi validasi
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Data has been saved successfully.',
+                    showConfirmButton: false 
+                });
+                document.getElementById('formInputHandling').submit();
+            }
+        }
+
+          // Event listener untuk submit form
+          document.getElementById('formInputHandling').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman formulir secara default
+
+            // Memanggil fungsi untuk menangani pengiriman formulir dan menampilkan SweetAlert
+            validateCreate();
+        });
         </script>
+
+        
+
+        
         
 
     </main><!-- End #main -->
