@@ -9,9 +9,8 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/Logo-adasi-tab.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/Logo-adasi-tab.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -36,9 +35,9 @@
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            <a href="index.html" class="logo d-flex align-items-center">
-                <img src="assets/img/logo.png" alt="">
-                <span class="d-none d-lg-block">NiceAdmin</span>
+            <a href="" class="logo d-flex align-items-center">
+                <img src="assets/img/AdasiLogo.png" style="margin-left: 60px" alt="">
+                <span class="d-none d-lg-block"></span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
@@ -67,6 +66,12 @@
                         <a class="nav-link" href="{{ route('dashboardusers') }}">
                             <i class="bi bi-list-check"></i>
                             <span>Daftar Pengguna</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ route('dashboardcustomers') }}">
+                            <i class="bi bi-list-check"></i>
+                            <span>Daftar Pelanggan</span>
                         </a>
                     </li>
                 </ul>

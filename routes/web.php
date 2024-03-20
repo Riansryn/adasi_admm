@@ -8,6 +8,7 @@ use App\http\Controllers\PDFController;
 use App\http\Controllers\ExcelController;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MesinController;
 use App\Http\Controllers\FormFPPController;
 use App\Http\Controllers\PreventiveController;
@@ -41,6 +42,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('dashboardMaintenance', [EventController::class, 'dashboardMaintenance'])->name('dashboardMaintenance');
     Route::resource('mesins', MesinController::class);
     Route::resource('users', UserController::class);
+    Route::resource('customers', CustomerController::class);
     Route::resource('formperbaikans', FormFPPController::class);
     Route::resource('receivedfpps', FormFPPController::class);
     Route::resource('approvedfpps', FormFPPController::class);
@@ -51,6 +53,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 
     //Admin
     Route::get('dashboardusers', [UserController::class, 'index'])->name('dashboardusers');
+    Route::get('dashboardcustomers', [CustomerController::class, 'index'])->name('dashboardcustomers');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
 

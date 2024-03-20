@@ -93,9 +93,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="gambar" class="form-label">
-                                        Upload Gambar (Jika Ada)<span style="color: red;"></span>
+                                        Upload Gambar (Jika Ada)<span style="color: red;">*</span>
                                     </label>
-                                    <input type="file" class="form-control" id="gambar" name="gambar" onchange="previewImage(this, 'gambarPreview')">
+                                    <input type="file" class="form-control" id="gambar" name="gambar" onchange="previewImage()">
                                 </div>
 
                                 <input type="hidden" name="note" id="note" value="">
@@ -167,24 +167,31 @@
     </script>
 
     <script>
-        // Fungsi untuk menampilkan gambar setelah diunggah
-        function previewImage(input, previewId) {
-            var preview = document.getElementById(previewId);
-            var file = input.files[0];
-            var reader = new FileReader();
+        document.addEventListener("DOMContentLoaded", function() {
+            // Menangkap elemen input file
+            var gambarInput = document.getElementById('gambar');
 
-            reader.onloadend = function() {
-                preview.src = reader.result;
-                preview.style.display = 'block'; // Menampilkan gambar setelah diunggah
-            };
+            // Menangkap elemen gambar preview
+            var gambarPreview = document.getElementById('gambarPreview');
 
-            if (file) {
+            // Mengatur listener untuk input file
+            gambarInput.addEventListener('change', function() {
+                previewImage(this, gambarPreview);
+            });
+
+            // Fungsi untuk menampilkan preview gambar
+            function previewImage(input, previewElement) {
+                var file = input.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    previewElement.src = e.target.result;
+                    previewElement.style.display = 'block'; // Menampilkan preview setelah gambar diunggah
+                };
+
                 reader.readAsDataURL(file);
-            } else {
-                preview.src = "";
-                preview.style.display = 'none'; // Menyembunyikan gambar jika tidak ada file yang dipilih
             }
-        }
+        });
     </script>
 
 
