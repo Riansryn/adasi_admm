@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Buat Layout Web -->
 
 <head>
     <meta charset="utf-8">
@@ -210,13 +209,7 @@
                     <li>
                         <a class="nav-link" href="{{ route('dashboardHandling') }}">
                             <i class="bi bi-list-check"></i>
-                            <span>Dashboard Handling</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{{ route('dashboardMaintenance') }}">
-                            <i class="bi bi-list-check"></i>
-                            <span>Dashboard Maintenance</span>
+                            <span>Dashboard Maintenance Handling</span>
                         </a>
                     </li>
                 </ul>
@@ -240,7 +233,7 @@
                 </ul>
             </li>
             @endif
-            @if (Auth::user()->role_id == 6 || Auth::user()->role_id == 1)
+            @if (Auth::user()->role_id == 6 || Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
             <li class="nav-label">Maintenance</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#maint-received-nav" data-bs-toggle="collapse" href="#">
@@ -254,11 +247,11 @@
                         </a>
                     </li>
                     {{-- <li class="nav-item">
-                        <a class="nav-link collapsed" href="">
-                            <i class="bi bi-calendar"></i>
-                            <span>Data Jadwal Preventive</span>
-                        </a>
-                    </li>  --}}
+                <a class="nav-link collapsed" href="">
+                    <i class="bi bi-calendar"></i>
+                    <span>Data Jadwal Preventive</span>
+                </a>
+            </li>  --}}
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('blokMaintanence') }}">
                             <i class="bi bi-check2"></i>
@@ -271,7 +264,7 @@
             <!-- End Prod Forms Nav -->
             <ul class="sidebar-nav">
 
-                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 3)
+                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 6)
                 {{-- Role ID untuk Maintenance --}}
                 {{-- Tampilkan sidebar untuk Maintenance --}}
                 <li class="nav-label">Engineering</li>
@@ -294,11 +287,11 @@
                             </a>
                         </li>
                         <!-- <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ asset('deptmtcepreventive') }}">
-                            <i class="bi bi-check2"></i>
-                            <span>Data Jadwal Preventive</span>
-                        </a>
-                    </li> -->
+                <a class="nav-link collapsed" href="{{ asset('deptmtcepreventive') }}">
+                    <i class="bi bi-check2"></i>
+                    <span>Data Jadwal Preventive</span>
+                </a>
+            </li> -->
                         <li class="nav-item">
                             <a class="nav-link collapsed" href="{{ route('blokDeptMaintenance') }}">
                                 <i class="bi bi-check2"></i>
@@ -330,7 +323,7 @@
                     </ul>
                 </li><!-- End Dept Complain & Claim Nav -->
                 @endif
-                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4)
                 {{-- Role ID untuk Sales --}}
                 {{-- Tampilkan sidebar untuk Sales --}}
                 <li class="nav-label">Sales</li>

@@ -4,7 +4,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Dashboard</h1>
+            <h1>Dashboard Maintenance Handling</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active">Dashboard</li>
@@ -12,8 +12,106 @@
             </nav>
         </div><!-- End Page Title -->
 
+        <hr>
+
         <section class="section dashboard">
             <div class="row">
+                <h3 style="display: flex;
+            justify-content: center;">Daftar Form Permintaan Perbaikan</h3>
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Open <span></span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    @if ($openCount > 0)
+                                    <i class="bi bi-envelope-open-fill"></i>
+                                    @else
+                                    <i class="bi bi-envelope-open-fill"></i>
+                                    @endif
+                                </div>
+                                <div class="ps-3">
+                                    <h2>{{ $openCount }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Sales Card Today -->
+
+                <!-- Sales Card This Month -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">On Progress <span></span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    @if ($onProgressCount > 0)
+                                    <i class="bi bi-hourglass-split "></i>
+                                    @else
+                                    <i class="bi bi-hourglass-split "></i>
+                                    @endif
+                                </div>
+                                <div class="ps-3">
+                                    <h2>{{ $onProgressCount }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Sales Card This Month -->
+
+                <!-- Revenue Card Today -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Finish <span></span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    @if ($finishCount > 0)
+                                    <i class="bi bi-check2-all"></i>
+                                    @else
+                                    <i class="bi bi-check2-all"></i>
+                                    @endif
+                                </div>
+                                <div class="ps-3">
+                                    <h2>{{ $finishCount }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Revenue Card Today -->
+
+                <!-- Revenue Card This Month -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Closed <span></span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    @if ($closedCount > 0)
+                                    <i class="bi bi-x-circle-fill"></i>
+                                    @else
+                                    <i class="bi bi-x-circle-fill"></i>
+                                    @endif
+                                </div>
+                                <div class="ps-3">
+                                    <h2>{{ $closedCount }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Revenue Card This Month -->
+            </div>
+
+
+
+        </section>
+
+        <hr>
+
+        <section class="section dashboard">
+            <div class="row">
+            <h3 style="display: flex; justify-content: center;">Daftar Form Claim dan Complain</h3>
+
 
                 <!-- Left side columns -->
                 <div class="col-lg-12">
@@ -27,7 +125,7 @@
                                     <div class="d-flex align-items-center">
                                         <div
                                             class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-envelope-open-fill"></i>
+                                              <i class="bi bi-envelope-open-fill"></i>
                                         </div>
                                         <div class="ps-3">
                                             @php
@@ -183,6 +281,31 @@
                 }
             });
         </script>
+
+            <script>
+        // Function to update card based on data
+
+        function updateCard(cardId, title, iconId, count) {
+            document.getElementById(cardId + 'Title').textContent = title;
+            document.getElementById(cardId + 'Icon').className = 'bi bi-' + iconId;
+            document.getElementById(cardId + 'Count').textContent = count;
+        }
+
+        // Simulate data update every 5 seconds
+        setInterval(function() {
+            // Simulate new data
+            var openCount = Math.floor(Math.random() * 100);
+            var onProgressCount = Math.floor(Math.random() * 100);
+            var finishCount = Math.floor(Math.random() * 100);
+            var closedCount = Math.floor(Math.random() * 100);
+
+            // Update each card
+            updateCard('open', 'Open', 'cart', openCount);
+            updateCard('onProgress', 'On Progress', 'clock', onProgressCount);
+            updateCard('finish', 'Finish', 'currency-dollar', finishCount);
+            updateCard('closed', 'Closed', 'check-circle', closedCount);
+        }, 5000); // Update every 5 seconds
+    </script>
 
     </main><!-- End #main -->
 @endsection
