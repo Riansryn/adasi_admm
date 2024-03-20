@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <title>Login - DMS-ADASI</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="assets/img/Logo-adasi-tab.png" rel="icon">
+    <link href="assets/img/Logo-adasi-tab.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -51,8 +51,8 @@
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
                             <div class="d-flex justify-content-center py-4">
-                                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/logo.png" alt="">
+                                <a href="" class="logo d-flex align-items-center w-auto">
+                                    <img src="assets/img/Logo-adasi-tab.png" alt="">
                                     <span class="d-none d-lg-block">Astra Daido Steel Indonesia</span>
                                 </a>
                             </div><!-- End Logo -->

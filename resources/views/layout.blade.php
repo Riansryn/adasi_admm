@@ -12,8 +12,8 @@
     <meta name="csrf-token">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/Logo-adasi-tab.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/Logo-adasi-tab.png') }}" rel="apple-touch-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Google Fonts -->
@@ -70,12 +70,91 @@
         </div><!-- End Logo -->
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
+<<<<<<< HEAD
 
                 <li class="nav-item d-block d-lg-none">
                     <a class="nav-link nav-icon search-bar-toggle " href="#">
                         <i class="bi bi-search"></i>
                     </a>
                 </li><!-- End Search Icon-->
+=======
+                
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                      <i class="bi bi-bell"></i>
+                      <span class="badge bg-primary badge-number">4</span>
+                    </a><!-- End Notification Icon -->
+          
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                      <li class="dropdown-header">
+                        You have 4 new notifications
+                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                      </li>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+          
+                      <li class="notification-item">
+                        <i class="bi bi-exclamation-circle text-warning"></i>
+                        <div>
+                          <h4>Lorem Ipsum</h4>
+                          <p>Quae dolorem earum veritatis oditseno</p>
+                          <p>30 min. ago</p>
+                        </div>
+                      </li>
+          
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+          
+                      <li class="notification-item">
+                        <i class="bi bi-x-circle text-danger"></i>
+                        <div>
+                          <h4>Atque rerum nesciunt</h4>
+                          <p>Quae dolorem earum veritatis oditseno</p>
+                          <p>1 hr. ago</p>
+                        </div>
+                      </li>
+          
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+          
+                      <li class="notification-item">
+                        <i class="bi bi-check-circle text-success"></i>
+                        <div>
+                          <h4>Sit rerum fuga</h4>
+                          <p>Quae dolorem earum veritatis oditseno</p>
+                          <p>2 hrs. ago</p>
+                        </div>
+                      </li>
+          
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+          
+                      <li class="notification-item">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <div>
+                          <h4>Dicta reprehenderit</h4>
+                          <p>Quae dolorem earum veritatis oditseno</p>
+                          <p>4 hrs. ago</p>
+                        </div>
+                      </li>
+          
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+                      <li class="dropdown-footer">
+                        <a href="#">Show all notifications</a>
+                      </li>
+          
+                    </ul><!-- End Notification Dropdown Items -->
+          
+                  </li><!-- End Notification Nav -->
+                
+>>>>>>> 910fc6731d2a3edd382d18a3bfa47827e543abc7
                 <li class="nav-item dropdown pe-3">
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         <img src="assets/img/user.png" alt="Profile" class="rounded-circle">
@@ -137,7 +216,8 @@
                     </li>
                 </ul>
             </li>
-
+            @if (Auth::check())
+            @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
             <li class="nav-label">Production</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" href="#prod-forms-nav">
@@ -154,6 +234,8 @@
                     </li>
                 </ul>
             </li>
+            @endif
+            @if (Auth::user()->role_id == 6 || Auth::user()->role_id == 1)
             <li class="nav-label">Maintenance</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#maint-received-nav" data-bs-toggle="collapse" href="#">
@@ -180,10 +262,11 @@
                     </li>
                 </ul>
             </li><!-- End Maint Received Nav -->
+            @endif
             <!-- End Prod Forms Nav -->
             <ul class="sidebar-nav">
-                @if (Auth::check())
-                @if (Auth::user()->role_id == 3 || Auth::user()->role_id == 1)
+                
+                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                 {{-- Role ID untuk Maintenance --}}
                 {{-- Tampilkan sidebar untuk Maintenance --}}
                 <li class="nav-label">Dept. Maintenance</li>
@@ -242,7 +325,7 @@
                     </ul>
                 </li><!-- End Dept Complain & Claim Nav -->
                 @endif
-                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                 {{-- Role ID untuk Sales --}}
                 {{-- Tampilkan sidebar untuk Sales --}}
                 <li class="nav-label">Sales</li>
@@ -303,13 +386,6 @@
     <footer id="footer" class="footer">
         <div class="copyright">
             &copy; Copyright <strong><span>ADASI</span></strong>. All Rights Reserved
-        </div>
-        <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-
         </div>
     </footer><!-- End Footer -->
 
