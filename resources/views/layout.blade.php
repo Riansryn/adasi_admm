@@ -222,7 +222,7 @@
                 </ul>
             </li>
             @if (Auth::check())
-            @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+            @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
             <li class="nav-label">Production</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" href="#prod-forms-nav">
@@ -271,7 +271,7 @@
             <!-- End Prod Forms Nav -->
             <ul class="sidebar-nav">
 
-                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 3)
                 {{-- Role ID untuk Maintenance --}}
                 {{-- Tampilkan sidebar untuk Maintenance --}}
                 <li class="nav-label">Dept. Maintenance</li>
@@ -330,7 +330,7 @@
                     </ul>
                 </li><!-- End Dept Complain & Claim Nav -->
                 @endif
-                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
                 {{-- Role ID untuk Sales --}}
                 {{-- Tampilkan sidebar untuk Sales --}}
                 <li class="nav-label">Sales</li>
