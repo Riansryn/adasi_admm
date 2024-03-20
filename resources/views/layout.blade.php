@@ -70,7 +70,7 @@
         </div><!-- End Logo -->
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
-                
+
                 <li class="nav-item d-block d-lg-none">
                     <a class="nav-link nav-icon search-bar-toggle " href="#">
                         <i class="bi bi-search"></i>
@@ -96,13 +96,14 @@
                 @csrf
                 <!-- CSRF token untuk keamanan -->
             </form>
-            
+
             <b>
                 <li class="nav-label">DMS Menu</h5>
             </b>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboard-admin-nav">
-                    <i class="bi bi-gear"></i>
+                    <i class="bi bi-person-circle"></i>
+
                     <span>Dashboard Admin</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>

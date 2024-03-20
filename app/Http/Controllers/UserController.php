@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 
@@ -45,7 +43,7 @@ class UserController extends Controller
             'role_id' => $request->role_id ?? $user->role_id,
             'name' => $request->nama ?? $user->name,
             'username' => $request->username ?? $user->username,
-            'password' => $request->password ?? $user->password,
+            'password' => bcrypt($request->pass) ?? $user->password,
             'pass' => $request->pass ?? $user->pass,
             'email' => $request->email ?? $user->email,
             'telp' => $request->telp ?? $user->telp,
@@ -64,7 +62,7 @@ class UserController extends Controller
             'role_id' => $request->role_id,
             'name' => $request->name,
             'username' => $request->username,
-            'password' => Hash::make($request->password), // Mengenkripsi password menggunakan bcrypt()
+            'password' => bcrypt($request->pass), // Mengenkripsi password menggunakan bcrypt()
             'pass' => $request->pass,
             'email' => $request->email,
             'telp' => $request->telp,

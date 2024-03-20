@@ -57,7 +57,7 @@
             </b>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboard-admin-nav">
-                    <i class="bi bi-gear"></i>
+                    <i class="bi bi-person-circle"></i>
                     <span>Dashboard Admin</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
