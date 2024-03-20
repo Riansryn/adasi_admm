@@ -380,7 +380,7 @@
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
-            </li><!-- End Logout Nav -->
+            </li>
         </ul>
         <!-- End Footer Sidebar -->
     </aside><!-- End Sidebar-->
