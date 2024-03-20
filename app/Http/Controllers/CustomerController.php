@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    // Menampilkan daftar Pengguna
     public function index()
     {
         $customers = Customer::where('status', 0)->latest()->get();
