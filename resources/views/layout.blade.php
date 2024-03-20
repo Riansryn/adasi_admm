@@ -12,8 +12,8 @@
     <meta name="csrf-token">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/Logo-adasi-tab.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/Logo-adasi-tab.png') }}" rel="apple-touch-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Google Fonts -->
