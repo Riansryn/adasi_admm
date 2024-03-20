@@ -189,8 +189,15 @@
                             <span>Daftar Pengguna</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="{{ route('dashboardcustomers') }}">
+                            <i class="bi bi-list-check"></i>
+                            <span>Daftar Pelanggan</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
+
             @endif
 
             <li class="nav-item">
