@@ -34,6 +34,8 @@
                                             <th style="text-align: center;">Jadwal Kunjungan</th>
                                             <th style="text-align: center;">PIC</th>
                                             <th style="text-align: center;">Tenggat waktu</th>
+                                            <th style="text-align: center;">Jenis 1</th>
+                                            <th style="text-align: center;">Jenis 2</th>
                                             <th style="text-align: center;">Unggahan (File)</th>
                                             <th style="text-align: center;">Pembaruan Terakhir</th>
                                         </tr>
@@ -46,14 +48,16 @@
                                                 <td class="text-center py-3">{{ $row->schedule }}</td>
                                                 <td class="text-center py-3">{{ $row->pic }}</td>
                                                 <td class="text-center py-3">{{ $row->due_date }}</td>
+                                                <td class="text-center py-3">{{ $row->handlings->type_1 }}</td>
+                                                <td class="text-center py-3">{{ $row->handlings->type_2 }}</td>
                                                 <td class="text-center pt-3">
                                                     @if (in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['pdf']))
                                                         <a href="{{asset('assets/image/' . $row->file) }}"  download="{{ $row->file_name }}">
-                                                            <i class="fas fa-file-pdf"></i>
+                                                            <i class="fas fa-file-pdf fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['xlsx', 'xls']))
                                                         <a href="{{asset('assets/image/' . $row->file) }}"  download="{{ $row->file_name }}">
-                                                            <i class="fas fa-file-excel"></i>
+                                                            <i class="fas fa-file-excel fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
                                                         <a href="{{ asset('assets/image/' . $row->file) }}"  download="{{ $row->file_name }}">

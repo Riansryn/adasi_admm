@@ -114,7 +114,7 @@ class DeptManController extends Controller
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
 
-        $data = ScheduleVisit::where('handling_id', $id)->get();
+        $data = ScheduleVisit::where('handling_id', $id)->with('handlings')->get();
 
         //render view with handlings
         return view('deptman.followup', compact('handlings', 'customers', 'type_materials', 'data'))->with('i', (request()->input('page', 1) - 1) * 5);
@@ -130,7 +130,7 @@ class DeptManController extends Controller
         $type_materials = TypeMaterial::all();
 
         // Mengambil data schedule visit yang terkait dengan handling tersebut
-        $data = ScheduleVisit::where('handling_id', $id)->get();
+        $data = ScheduleVisit::where('handling_id', $id)->with('handlings')->get();
 
         // Mengembalikan view 'deptman.historyProgres' dengan data yang dibutuhkan
         return view('deptman.historyProgres', compact('handling', 'customers', 'type_materials', 'data'))
@@ -142,7 +142,7 @@ class DeptManController extends Controller
         $handlings = Handling::findOrFail($id);
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
-        $data = ScheduleVisit::where('handling_id', $id)->get();
+        $data = ScheduleVisit::where('handling_id', $id)->with('handlings')->get();
 
         return view('deptman.showCloseProgres', compact('handlings', 'customers', 'type_materials', 'data'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
@@ -261,7 +261,7 @@ class DeptManController extends Controller
 
                  // Update status Handling menjadi 3
                  $handlings->update([
-                    'type_2' => 'Claim',
+                    'type_2' => 'Klaim',
                      'status' => 1
                  ]);
 

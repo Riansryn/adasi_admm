@@ -129,14 +129,14 @@
                             </div>
                             <div class="row mb-2 ps-5">
                                 <div class="col-md-1">
-                                    <label for="qty" class="form-label">Jumlah:</label>
+                                    <label for="qty" class="form-label">QTY (Kg):</label>
                                     <input type="text" class="form-control input-sm" id="qty" name="qty"
-                                        placeholder="(/KG)" style="max-width: 150px;" required>
+                                         style="max-width: 150px;" required>
                                 </div>
                                 <div class="col-md-1">
-                                    <label for="pcs" class="form-label">Jumlah</label>
+                                    <label for="pcs" class="form-label">Unit (Pcs):</label>
                                     <input type="text" class="form-control input-sm" id="pcs" name="pcs"
-                                        placeholder="(/PCS)" style="max-width: 150px;" required>
+                                         style="max-width: 150px;" required>
                                 </div>
                             </div>
                             <div class="row mb-3">

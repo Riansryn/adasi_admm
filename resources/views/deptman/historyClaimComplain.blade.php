@@ -68,28 +68,25 @@
                                         <tr>
                                             <th class="text-center" width="50px">NO</th>
                                             <th class="text-center" width="100px">NO WO</th>
-                                            <th class="text-center" width="100px">Customer Code</th>
-                                            <th class="text-center" width="150px">Name Customer</th>
-                                            <th class="text-center" width="50px">Area</th>
-                                            <th class="text-center" width="100px">Type Material</th>
+                                            <th class="text-center" width="100px">Kode Pelanggan</th>
+                                            <th class="text-center" width="150px">Nama Pelanggan</th>
+                                            <th class="text-center" width="100px">Area Pelanggan</th>
+                                            <th class="text-center" width="100px">Tipe Bahan</th>
                                             <th class="text-center" width="30px">T</th>
                                             <th class="text-center" width="30px">W</th>
                                             <th class="text-center" width="30px">OD</th>
                                             <th class="text-center" width="30px">ID</th>
                                             <th class="text-center" width="30px">L</th>
-                                            <th class="text-center" width="90px">Qty(/KG)</th>
-                                            <th class="text-center" width="30px">PCS</th>
-                                            <th class="text-center" width="100px">Category (NG)</th>
-                                            <th class="text-center" width="100px">Proses Type</th>
-                                            <th class="text-center" width="100px">Type 1</th>
-                                            <th class="text-center" width="100px">Type 2</th>
-                                            <th class="text-center" width="100px">Image</th>
-                                            {{-- <th class="text-center" width="100px">Schedule Visit</th>
-                                            <th class="text-center" width="100px">Due Date</th>
-                                            {{-- <th class="text-center" width="100px">Pic</th> --}}
-                                            <th class="text-center" width="100px">Last Update</th>
+                                            <th class="text-center" width="95px">Jumlah(/Kg)</th>
+                                            <th class="text-center" width="98px">Jumlah(/Pcs)</th>
+                                            <th class="text-center" width="105px">Kategori (NG)</th>
+                                            <th class="text-center" width="100px">Tipe proses</th>
+                                            <th class="text-center" width="95px">Jenis 1</th>
+                                            <th class="text-center" width="95px">Jenis 2</th>
+                                            <th class="text-center" width="100px">Gambar</th>
+                                            <th class="text-center" width="100px">Pembaruan Terakhir</th>
                                             <th class="text-center" width="100px">Status</th>
-                                            <th class="text-center" width="100px">Action</th>
+                                            <th class="text-center" width="100px">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -281,12 +281,14 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align: center;">NO</th>
-                                            <th style="text-align: center;">Hasil & Tindak Lanjut</th>
-                                            <th style="text-align: center;">Schedule Visit</th>
+                                            <th style="text-align: center;">Hasil dan Tindak Lanjut</th>
+                                            <th style="text-align: center;">Jadwal Kunjungan</th>
                                             <th style="text-align: center;">PIC</th>
-                                            <th style="text-align: center;">Due Date</th>
-                                            <th style="text-align: center;">File</th>
-                                            <th style="text-align: center;">Last Update</th>
+                                            <th style="text-align: center;">Tenggat waktu</th>
+                                            <th style="text-align: center;">Jenis 1</th>
+                                            <th style="text-align: center;">Jenis 2</th>
+                                            <th style="text-align: center;">Unggahan (File)</th>
+                                            <th style="text-align: center;">Pembaruan Terakhir</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -297,14 +299,16 @@
                                                 <td class="text-center py-3">{{ $row->schedule }}</td>
                                                 <td class="text-center py-3">{{ $row->pic }}</td>
                                                 <td class="text-center py-3">{{ $row->due_date }}</td>
+                                                <td class="text-center py-3">{{ $row->handlings->type_1 }}</td>
+                                                <td class="text-center py-3">{{ $row->handlings->type_2 }}</td>
                                                 <td class="text-center pt-3">
                                                     @if (in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['pdf']))
                                                         <a href="{{ asset('/storage/handling/' . $row->file) }}"  download="{{ $row->file_name }}">
-                                                            <i class="fas fa-file-pdf"></i>
+                                                            <i class="fas fa-file-pdf fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['xlsx', 'xls']))
                                                         <a href="{{ asset('/storage/handling/' . $row->file) }}"  download="{{ $row->file_name }}">
-                                                            <i class="fas fa-file-excel"></i>
+                                                            <i class="fas fa-file-excel fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
                                                         <a href="{{ asset('/storage/handling/' . $row->file) }}"  download="{{ $row->file_name }}">

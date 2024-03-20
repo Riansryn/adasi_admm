@@ -222,7 +222,7 @@
                 </ul>
             </li>
             @if (Auth::check())
-            @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
+            @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
             <li class="nav-label">Production</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" href="#prod-forms-nav">
@@ -274,7 +274,7 @@
                 @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 3)
                 {{-- Role ID untuk Maintenance --}}
                 {{-- Tampilkan sidebar untuk Maintenance --}}
-                <li class="nav-label">Dept. Maintenance</li>
+                <li class="nav-label">Engineering</li>
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#dept-maint-nav" data-bs-toggle="collapse" href="#">
@@ -434,6 +434,7 @@
     <!-- JS for full calender -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+    
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
