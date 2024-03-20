@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Buat Layout Web -->
 
 <head>
     <meta charset="utf-8">
@@ -210,13 +209,7 @@
                     <li>
                         <a class="nav-link" href="{{ route('dashboardHandling') }}">
                             <i class="bi bi-list-check"></i>
-                            <span>Dashboard Handling</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{{ route('dashboardMaintenance') }}">
-                            <i class="bi bi-list-check"></i>
-                            <span>Dashboard Maintenance</span>
+                            <span>Dashboard Maintenance Handling</span>
                         </a>
                     </li>
                 </ul>
