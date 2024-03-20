@@ -270,10 +270,6 @@ class EventController extends Controller
                 'end' => $request->end, // Tetapkan nilai end dari permintaan
                 'status' => 1 // Tetapkan status 1 (confirmed finish)
             ]);
-
-            $event->update([
-                'end' => $request->end
-            ]);
         } else {
             // Jika tidak confirmed_event bernilai 1, perbarui event yang ada dengan nilai end baru
             $event->update([
