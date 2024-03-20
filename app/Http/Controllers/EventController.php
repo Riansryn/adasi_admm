@@ -19,58 +19,58 @@ class EventController extends Controller
      * @return response()
      */
 
-     public function index(Request $request)
-     {
-         if ($request->ajax()) {
-             $start = $request->start;
-             $end = $request->end;
- 
-             $data = Event::whereBetween('start', [$start, $end])
-                 ->orWhereBetween('end', [$start, $end])
-                 ->get(['id', 'nama_mesin', 'type', 'no_mesin', 'start', 'end', 'status']);
- 
-             // Menambahkan warna berdasarkan status dan id
-             foreach ($data as $event) {
-                 if ($event->status === 0) {
-                     $event->color = 'yellow'; // Warna kuning untuk status 0
-                     $event->textColor = 'black'; // Teks hitam untuk warna kuning
-                 } else {
-                     $event->color = '#2ecc71'; // Warna hitam untuk status 1
-                     $event->textColor = 'black'; // Teks putih untuk warna hitam
-                 }
-             }
- 
-             return response()->json($data);
-         }
- 
-         return view('maintenance.blokpreventive');
-     }
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $start = $request->start;
+            $end = $request->end;
 
-     public function indexDeptMTCE(Request $request)
-     {
-         if ($request->ajax()) {
-             $start = $request->start;
-             $end = $request->end;
- 
-             $data = Event::whereBetween('start', [$start, $end])
-                 ->get(['id', 'nama_mesin', 'type', 'no_mesin', 'start', 'end', 'status']);
- 
-             // Menambahkan warna berdasarkan status dan id
-             foreach ($data as $event) {
-                 if ($event->status === 0) {
-                     $event->color = 'yellow'; // Warna kuning untuk status 0
-                     $event->textColor = 'black'; // Teks hitam untuk warna kuning
-                 } else {
-                     $event->color = '#2ecc71'; // Warna hitam untuk status 1
-                     $event->textColor = 'black'; // Teks putih untuk warna hitam
-                 }
-             }
- 
-             return response()->json($data);
-         }
- 
-         return view('deptmtce.blokpreventive');
-     }
+            $data = Event::whereBetween('start', [$start, $end])
+                ->orWhereBetween('end', [$start, $end])
+                ->get(['id', 'nama_mesin', 'type', 'no_mesin', 'start', 'end', 'status']);
+
+            // Menambahkan warna berdasarkan status dan id
+            foreach ($data as $event) {
+                if ($event->status === 0) {
+                    $event->color = 'yellow'; // Warna kuning untuk status 0
+                    $event->textColor = 'black'; // Teks hitam untuk warna kuning
+                } else {
+                    $event->color = '#2ecc71'; // Warna hitam untuk status 1
+                    $event->textColor = 'black'; // Teks putih untuk warna hitam
+                }
+            }
+
+            return response()->json($data);
+        }
+
+        return view('maintenance.blokpreventive');
+    }
+
+    public function indexDeptMTCE(Request $request)
+    {
+        if ($request->ajax()) {
+            $start = $request->start;
+            $end = $request->end;
+
+            $data = Event::whereBetween('start', [$start, $end])
+                ->get(['id', 'nama_mesin', 'type', 'no_mesin', 'start', 'end', 'status']);
+
+            // Menambahkan warna berdasarkan status dan id
+            foreach ($data as $event) {
+                if ($event->status === 0) {
+                    $event->color = 'yellow'; // Warna kuning untuk status 0
+                    $event->textColor = 'black'; // Teks hitam untuk warna kuning
+                } else {
+                    $event->color = '#2ecc71'; // Warna hitam untuk status 1
+                    $event->textColor = 'black'; // Teks putih untuk warna hitam
+                }
+            }
+
+            return response()->json($data);
+        }
+
+        return view('deptmtce.blokpreventive');
+    }
 
     public function blokMaintanence(Request $request)
     {

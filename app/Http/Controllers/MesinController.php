@@ -171,45 +171,42 @@ class MesinController extends Controller
 
     public function update(Request $request, Mesin $mesin, DetailPreventive $detail)
     {
-        // Cek apakah ada perubahan pada kolom selain issue
-        if ($mesin->isDirty(['nama_mesin', 'no_mesin', 'merk', 'type', 'mfg_date', 'acq_date', 'age', 'preventive_date', 'foto'])) {
-            // Update data mesin
-            $mesin->update([
-                'nama_mesin' => $request->nama_mesin ?? $mesin->nama_mesin,
-                'no_mesin' => $request->no_mesin ?? $mesin->no_mesin,
-                'merk' => $request->merk ?? $mesin->merk,
-                'type' => $request->type ?? $mesin->type,
-                'mfg_date' => $request->mfg_date ?? $mesin->mfg_date,
-                'acq_date' => $request->acq_date ?? $mesin->acq_date,
-                'age' => $request->age ?? $mesin->age,
-                'preventive_date' => $request->preventive_date ?? $mesin->preventive_date,
-            ]);
-
-            // Cek apakah ada file foto yang diunggah
-            if ($request->hasFile('foto')) {
-                // Menghapus foto lama jika ada
-                if ($mesin->foto) {
-                    $oldFotoPath = public_path('assets/' . $mesin->foto);
-                    if (file_exists($oldFotoPath)) {
-                        unlink($oldFotoPath);
-                    }
+        // Cek apakah ada file foto yang diunggah
+        if ($request->hasFile('foto')) {
+            // Menghapus foto lama jika ada
+            if ($mesin->foto) {
+                $oldFotoPath = public_path('assets/' . $mesin->foto);
+                if (file_exists($oldFotoPath)) {
+                    unlink($oldFotoPath);
                 }
-
-                // Simpan foto baru
-                $foto = $request->file('foto');
-                $fotoName = $foto->getClientOriginalName();
-                $fotoPath = $foto->move(public_path('assets/foto'), $fotoName);
-
-                // Perbarui path foto di database
-                $mesin->foto = 'foto/' . $fotoName;
             }
 
-            // Simpan perubahan ke dalam database
-            $mesin->save();
+            // Simpan foto baru
+            $foto = $request->file('foto');
+            $fotoName = $foto->getClientOriginalName();
+            $fotoPath = $foto->move(public_path('assets/foto'), $fotoName);
 
-            return redirect()->route('mesins.index')->with('success', 'Mesin updated successfully');
+            // Perbarui path foto di database
+            $mesin->foto = 'foto/' . $fotoName;
         }
+
+        // Update data mesin
+        $mesin->update([
+            'nama_mesin' => $request->nama_mesin ?? $mesin->nama_mesin,
+            'no_mesin' => $request->no_mesin ?? $mesin->no_mesin,
+            'merk' => $request->merk ?? $mesin->merk,
+            'type' => $request->type ?? $mesin->type,
+            'mfg_date' => $request->mfg_date ?? $mesin->mfg_date,
+            'acq_date' => $request->acq_date ?? $mesin->acq_date,
+            'age' => $request->age ?? $mesin->age,
+            'preventive_date' => $request->preventive_date ?? $mesin->preventive_date,
+        ]);
+        // Simpan perubahan ke dalam database
+        $mesin->save();
+
+        return redirect()->route('mesins.index')->with('success', 'Mesin updated successfully');
     }
+
 
     public function updatePreventive(Request $request, Mesin $mesin)
     {

@@ -14,6 +14,8 @@ use App\Http\Controllers\PreventiveController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExcelCSVController;
 use App\Http\Controllers\DetailPreventiveController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,11 +35,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('full-calender', [EventController::class, 'blokMaintanence'])->name('blokMaintanence');
     Route::get('full-calenderDept', [EventController::class, 'blokDeptMaintenance'])->name('blokDeptMaintenance');
-    
+
     Route::post('full-calender-AJAX', [EventController::class, 'ajax']);
     Route::get('generate-pdf/{mesin}', [PDFController::class, 'generatePDF'])->name('pdf.mesin');
     Route::get('dashboardMaintenance', [EventController::class, 'dashboardMaintenance'])->name('dashboardMaintenance');
     Route::resource('mesins', MesinController::class);
+    Route::resource('users', UserController::class);
     Route::resource('formperbaikans', FormFPPController::class);
     Route::resource('receivedfpps', FormFPPController::class);
     Route::resource('approvedfpps', FormFPPController::class);
@@ -45,6 +48,12 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('preventives', PreventiveController::class);
     Route::resource('detailpreventive', DetailPreventiveController::class);
     Route::resource('events', EventController::class);
+
+    //Admin
+    Route::get('dashboardusers', [UserController::class, 'index'])->name('dashboardusers');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+
 
     //Preventive
     Route::get('dashpreventive', [PreventiveController::class, 'maintenanceDashPreventive'])
@@ -109,6 +118,7 @@ Route::middleware(['web', 'auth'])->group(function () {
         ->name('mesins.lihatissue');
     Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
         ->name('mesins.lihatperbaikan');
+    Route::put('/mesins/{mesin}', [MesinController::class, 'update'])->name('mesins.update');
 
     //Sales
     Route::get('dashboardfppsales', [FormFPPController::class, 'DashboardFPPSales'])
@@ -139,11 +149,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('/updateFollowUp/{id}', [DeptManController::class, 'updateFollowUp'])->name('updateFollowUp');
     Route::get('scheduleVisit', [DeptManController::class, 'scheduleVisit'])->name('scheduleVisit');
     Route::get('showHistoryCLaimComplain', [DeptManController::class, 'showHistoryCLaimComplain'])->name('showHistoryCLaimComplain');
-    Route::get('/export-excel',[ExcelController::class, 'exportExcel'])->name('export.excel');
+    Route::get('/export-excel', [ExcelController::class, 'exportExcel'])->name('export.excel');
     Route::get('/showCloseProgres/{id}', [DeptManController::class, 'showCloseProgres'])->name('showCloseProgres');
     // Tambahkan rute lainnya di sini
 });
-
-
-
-
