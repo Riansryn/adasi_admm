@@ -50,7 +50,6 @@ class HandlingController extends Controller
 
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
-
         $data = ScheduleVisit::where('handling_id', $id)->get();
 
         //render view with handlings
