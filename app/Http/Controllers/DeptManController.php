@@ -139,12 +139,12 @@ class DeptManController extends Controller
 
     public function showCloseProgres($id)
     {
-        $handling = Handling::findOrFail($id);
+        $handlings = Handling::findOrFail($id);
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
         $data = ScheduleVisit::where('handling_id', $id)->get();
 
-        return view('deptman.showCloseProgres', compact('handling', 'customers', 'type_materials', 'data'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptman.showCloseProgres', compact('handlings', 'customers', 'type_materials', 'data'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
