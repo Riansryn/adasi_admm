@@ -88,60 +88,36 @@
                                     @csrf
                                     @method('PUT')
 
-                                    @php
-                                    $latestTindakLanjut = $formperbaikan->tindaklanjuts->last();
-                                    @endphp
-
-                                    @if ($latestTindakLanjut)
                                     <!-- Tindak Lanjut -->
                                     <div class="mb-3">
                                         <label for="tindak_lanjut" class="form-label">Tindak Lanjut</label>
-                                        <textarea class="form-control" id="tindak_lanjut" name="tindak_lanjut" rows="3">{{ old('tindak_lanjut', $latestTindakLanjut->tindak_lanjut ?? '') }}</textarea>
+                                        <textarea class="form-control" id="tindak_lanjut" name="tindak_lanjut" rows="3"></textarea>
                                     </div>
 
                                     <!-- Due Date -->
                                     <div class="mb-3">
                                         <label for="due_date" class="form-label">Due Date</label>
-                                        <input type="date" class="form-control" id="due_date" name="due_date" value="{{ old('due_date', $latestTindakLanjut->due_date ?? '') }}">
+                                        <input type="date" class="form-control" id="due_date" name="due_date">
                                     </div>
 
                                     <!-- Schedule Pengecekan -->
                                     <div class="mb-3">
                                         <label for="schedule_pengecekan" class="form-label">Schedule Pengecekan</label>
-                                        <input type="date" class="form-control" id="schedule_pengecekan" name="schedule_pengecekan" value="{{ old('schedule_pengecekan', $latestTindakLanjut->schedule_pengecekan ?? '') }}">
+                                        <input type="date" class="form-control" id="schedule_pengecekan" name="schedule_pengecekan">
                                     </div>
 
                                     <!-- Input for attachment file -->
                                     <div class="mb-3">
-                                        @if($latestTindakLanjut->attachment_file)
                                         <label for="attachment_file" class="form-label">Attachment File</label>
                                         <!-- Input file for existing attachment -->
                                         <input type="file" class="form-control" id="attachment_file" name="attachment_file">
                                         <br>
-                                        @php
-                                        $filePath = asset('storage/' . $latestTindakLanjut->attachment_file);
-                                        $fileName = basename($latestTindakLanjut->attachment_file);
-                                        @endphp
-                                        <a href="{{ route('download.attachment', $latestTindakLanjut->id) }}" target="_blank" download="{{ $fileName }}">
-                                            <i class="fas fa-file-download"></i> <!-- Ganti dengan kelas ikon yang Anda inginkan -->
-                                            {{ $fileName }}
-                                        </a>
                                         <br>
-                                        @else
-                                        <!-- Input file for new attachment -->
-                                        <label for="attachment_file" class="form-label">Attachment File</label>
-                                        <input type="file" class="form-control" id="attachment_file" name="attachment_file">
-                                        <br>
-                                        <p>No attachment file found.</p>
-                                        @endif
                                     </div>
                                     <!-- Hidden Inputs for Confirmation -->
                                     <input type="hidden" name="confirmed_finish" id="confirmed_finish" value='0'>
                                     <input type="hidden" name="confirmed_finish6" id="confirmed_finish6" value='0'>
 
-                                    @else
-                                    <p>No Tindak Lanjut found.</p>
-                                    @endif
                                     <div class="text-end">
                                         <button type="button" class="btn btn-secondary" id="saveButton" onclick="handleSaveButtonClick()">Save</button>
                                         <button type="button" class="btn btn-primary" id="finishButton" onclick="handleFinishButtonClick()">Finish</button>

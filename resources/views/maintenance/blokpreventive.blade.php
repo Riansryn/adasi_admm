@@ -25,8 +25,6 @@
                                 <i class="bi bi-plus"></i> Tambah Event
                             </a>
                         </div> -->
-                        {{-- biar mula kerja lagi22 --}}
-                        {{-- buat delta --}}
                     </div>
                 </div>
             </div>
@@ -99,8 +97,6 @@
             slotEventOverlap: false, // Set to false to prevent events from overlapping
             slotDuration: '00:15:00' // Set the duration of each time slot, in this case 15 minutes
         });
-
-
     });
 </script>
 @endsection

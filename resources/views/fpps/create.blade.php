@@ -48,8 +48,8 @@
                                     </label>
                                     <select class="form-select" id="section" name="section">
                                         <option value="" disabled selected>Select Section</option>
-                                        <!-- <option value="Cutting">Cutting</option>
-                                        <option value="Machining">Machining</option>
+                                        <option value="Cutting">Cutting</option>
+                                        <!-- <option value="Machining">Machining</option>
                                         <option value="MC Custom">MC Custom</option>
                                         <option value="Bubut">Bubut</option>
                                         <option value="Heat Treatment">Heat Treatment</option> -->
