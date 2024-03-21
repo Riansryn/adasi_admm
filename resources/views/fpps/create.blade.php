@@ -48,11 +48,11 @@
                                     </label>
                                     <select class="form-select" id="section" name="section">
                                         <option value="" disabled selected>Select Section</option>
-                                        <option value="Cutting">Cutting</option>
+                                        <!-- <option value="Cutting">Cutting</option>
                                         <option value="Machining">Machining</option>
                                         <option value="MC Custom">MC Custom</option>
                                         <option value="Bubut">Bubut</option>
-                                        <option value="Heat Treatment">Heat Treatment</option>
+                                        <option value="Heat Treatment">Heat Treatment</option> -->
                                     </select>
                                 </div>
 
@@ -62,11 +62,11 @@
                                     </label>
                                     <select class="form-select" id="mesin" name="mesin">
                                         <option value="" disabled selected>Select Mesin</option>
-                                        <option value="CC1">CC1</option>
-                                        <option value="CC2">CC2</option>
-                                        <option value="CC3">CC3</option>
-                                        <option value="CC4">CC4</option>
-                                        <option value="CC5">CC5</option>
+                                        <option value="C1">C1</option>
+                                        <option value="C2">C2</option>
+                                        <option value="C3">C3</option>
+                                        <option value="C4">C4</option>
+                                        <option value="C5">C5</option>
                                     </select>
                                 </div>
 

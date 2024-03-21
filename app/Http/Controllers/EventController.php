@@ -222,7 +222,7 @@ class EventController extends Controller
             // Jika ada event dengan status 0 dan ada juga event dengan status 1, tampilkan detail event
             return view('maintenance.lihatblok', compact('event', 'issues', 'mesins', 'selected_mesin_id', 'checkedIssues'));
         } else {
-            return view('maintenance.blokpreventive', compact('event', 'issues', 'mesins', 'selected_mesin_id', 'checkedIssues'));
+            return view('maintenance.lihatblok', compact('event', 'issues', 'mesins', 'selected_mesin_id', 'checkedIssues'));
         }
     }
 
@@ -287,23 +287,23 @@ class EventController extends Controller
         return redirect()->route('maintenance.blokpreventive')->with('success', 'Event deleted successfully');
     }
 
-    public function dashboardMaintenance(DetailPreventive $detailpreventive, Event $event)
-    {
-        // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
-        $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
-        $events = Event::latest()->get();
+    // public function dashboardMaintenance(DetailPreventive $detailpreventive, Event $event)
+    // {
+    //     // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
+    //     $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
+    //     $events = Event::latest()->get();
 
-        // Menghitung jumlah form FPP berdasarkan status
-        $openCount = $formperbaikans->where('status', 0)->count();
-        $onProgressCount = $formperbaikans->where('status', 1)->count();
-        $finishCount = $formperbaikans->where('status', 2)->count();
-        $closedCount = $formperbaikans->where('status', 3)->count();
+    //     // Menghitung jumlah form FPP berdasarkan status
+    //     $openCount = $formperbaikans->where('status', 0)->count();
+    //     $onProgressCount = $formperbaikans->where('status', 1)->count();
+    //     $finishCount = $formperbaikans->where('status', 2)->count();
+    //     $closedCount = $formperbaikans->where('status', 3)->count();
 
-        // Ambil detail preventive untuk setiap event dan issue
-        $issues = $event->detailPreventives()->pluck('issue')->toArray();
+    //     // Ambil detail preventive untuk setiap event dan issue
+    //     $issues = $event->detailPreventives()->pluck('issue')->toArray();
 
-        return view('dashboard.dashboardMaintenance', compact('formperbaikans', 'openCount', 'onProgressCount', 'finishCount', 'closedCount', 'issues', 'events'))->with('i', (request()->input('page', 1) - 1) * 5);
-    }
+    //     return view('dashboard.dashboardMaintenance', compact('formperbaikans', 'openCount', 'onProgressCount', 'finishCount', 'closedCount', 'issues', 'events'))->with('i', (request()->input('page', 1) - 1) * 5);
+    // }
 
     // public function import(Request $request)
     // {

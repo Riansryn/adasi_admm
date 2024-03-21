@@ -196,9 +196,7 @@
                     </li>
                 </ul>
             </li>
-
             @endif
-
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboard-menu-nav">
                     <i class="bi bi-gear"></i>
@@ -427,7 +425,7 @@
     <!-- JS for full calender -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
-    
+
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 

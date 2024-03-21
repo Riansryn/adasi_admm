@@ -26,7 +26,7 @@
                             </a>
                         </div> -->
                         {{-- biar mula kerja lagi22 --}}
-                         {{-- buat delta --}}
+                        {{-- buat delta --}}
                     </div>
                 </div>
             </div>
@@ -71,25 +71,35 @@
                 element.find('.fc-title').text(titleText);
 
                 // Add event time if needed
-                var startTime = moment(event.schedule_plan).format('h:mm A');
-                var eventTime = startTime;
+                var eventTime;
+                if (event.status === 0) {
+                    var startTime = moment(event.schedule_plan).format('h:mm A');
+                    eventTime = 'Start: ' + startTime;
+                } else if (event.status === 1) {
+                    var endTime = moment(event.actual_plan).format('h:mm A');
+                    eventTime = 'End: ' + endTime;
+                }
 
                 // Append event time to the event title
                 element.find('.fc-title').append('<div class="fc-time">' + eventTime + '</div>');
+
+                // Set event background color and text color based on status
+                if (event.status === '0') {
+                    element.css('background-color', 'yellow');
+                    element.css('color', 'black');
+                } else if (event.status === '1') {
+                    element.css('background-color', 'green');
+                    element.css('color', 'white');
+                }
             },
             eventClick: function(event) {
                 window.location.href = SITEURL + '/events/editMaintenance/' + event.id;
             },
             eventDisplay: 'block',
-            eventBackgroundColor: function(event) {
-                return event.color;
-            },
-            eventTextColor: function(event) {
-                return event.textColor;
-            },
             slotEventOverlap: false, // Set to false to prevent events from overlapping
             slotDuration: '00:15:00' // Set the duration of each time slot, in this case 15 minutes
         });
+
 
     });
 </script>
