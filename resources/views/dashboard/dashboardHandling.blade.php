@@ -227,18 +227,13 @@
                                     </ul>
                                 </div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Handling Claim & Complain <span>/Year</span></h5>
-
-                                    <!-- Line Chart -->
-                                    {{-- <div id="reportsChart"></div> --}}
+                                {{-- <div class="card-body">
+                                    {{-- <h5 class="card-title">Handling Claim & Complain <span>/Year</span></h5>
                                     <div style="width: 100%;">
                                         <canvas id="combinedChart" width="800" height="220"></canvas>
-                                    </div>
+                                    </div> 
 
-                                    <!-- End Line Chart -->
-
-                                </div>
+                                </div> --}}
 
                             </div>
                         </div><!-- End Reports -->
