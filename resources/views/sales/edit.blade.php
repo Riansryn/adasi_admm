@@ -26,7 +26,7 @@
                                 <label for="no_wo" class="col-sm-2 col-form-label">No. WO</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="no_wo" name="no_wo"
-                                        value="{{ $handlings->no_wo }}" maxlength="15" required>
+                                        value="{{ $handlings->no_wo }}" maxlength="6" required>
                                 </div>
                             </div>
                             <!-- Customer Code -->
