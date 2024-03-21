@@ -207,7 +207,7 @@
                     <li>
                         <a class="nav-link" href="{{ route('dashboardHandling') }}">
                             <i class="bi bi-list-check"></i>
-                            <span>Dashboard Maintenance Handling</span>
+                            <span>Dashboard DMS ADASI</span>
                         </a>
                     </li>
                 </ul>

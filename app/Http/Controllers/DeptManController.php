@@ -44,7 +44,20 @@ class DeptManController extends Controller
     public function scheduleVisit()
     {
         // Ambil semua data ScheduleVisit dari database
-        $scheduleVisits = ScheduleVisit::all();
+        // $scheduleVisits = ScheduleVisit::all();
+        $scheduleVisits = DB::table('handlings')
+                            ->join('customers', 'handlings.customer_id', '=', 'customers.id')
+                            ->join('schedule_visits', 'handlings.id', '=', 'schedule_visits.handling_id')
+                            ->select(
+                                'handlings.id AS handling_id',
+                                'customers.id AS customer_id',
+                                'customers.name_customer',
+                                'schedule_visits.schedule',
+                                'schedule_visits.results',
+                                'schedule_visits.due_date',
+                                'schedule_visits.pic'
+                            )
+                            ->get();
 
         return view('deptman.scheduleVisit', compact('scheduleVisits'));
     }

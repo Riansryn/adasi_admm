@@ -52,8 +52,8 @@
 
                             <div class="d-flex justify-content-center py-4">
                                 <a href="" class="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/Logo-adasi-tab.png" alt="">
-                                    <span class="d-none d-lg-block">Astra Daido Steel Indonesia</span>
+                                    <img src="assets/img/AdasiLogo.png" alt="" width="200" height="800">
+                                    <span class="d-none d-lg-block"></span>
                                 </a>
                             </div><!-- End Logo -->
 
