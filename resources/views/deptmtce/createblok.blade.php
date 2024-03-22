@@ -38,6 +38,7 @@
                                 <div class="card-body">
                                     <form id="eventForm" action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                                         @csrf
+                                        
                                         <div class="mb-3">
                                             <label for="nama_mesin" class="form-label">
                                                 Nama Mesin<span style="color: red;">*</span>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FormFPP;
 use App\Models\TindakLanjut;
+use App\Models\Mesin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -65,7 +66,8 @@ class FormFPPController extends Controller
 
     public function create()
     {
-        return view('fpps.create');
+        $mesins = Mesin::orderBy('updated_at', 'desc')->get();
+        return view('fpps.create', compact('mesins'));
     }
 
     public function LihatMaintenance(FormFPP $formperbaikan, TindakLanjut $tindaklanjut)
@@ -204,8 +206,7 @@ class FormFPPController extends Controller
         $createdFormFPP = FormFPP::create([
             'id_fpp' => $request->id_fpp,
             'pemohon' => $request->pemohon,
-            'date' => $request->date,
-            'section' => $request->section,
+            'tanggal' => $request->tanggal,
             'mesin' => $request->mesin,
             'lokasi' => $request->lokasi,
             'kendala' => $request->kendala,

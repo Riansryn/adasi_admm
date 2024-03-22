@@ -11,8 +11,8 @@ class FormFPP extends Model
     protected $table = 'form_f_p_p_s';
     use HasFactory;
     protected $fillable = [
-        'id', 'id_fpp', 'pemohon', 'date',
-        'section', 'mesin', 'lokasi',
+        'id', 'id_fpp', 'pemohon', 'tanggal',
+        'mesin', 'lokasi',
         'kendala', 'gambar', 'status'
     ];
 
