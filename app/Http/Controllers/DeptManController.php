@@ -31,12 +31,12 @@ class DeptManController extends Controller
         $data = Handling::with('customers', 'type_materials')
             ->where('status', '=', 0) // Filter berdasarkan status '0'
             ->orderByDesc('created_at') // Urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
-            ->paginate(5);
+            ->paginate();
 
         $data2 = Handling::with('customers', 'type_materials')
             ->whereIn('status', [1, 2, 3]) // Filter berdasarkan status 1, 2, dan 3
             ->orderByDesc('created_at') // Urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
-            ->paginate(5);
+            ->paginate();
 
         return view('deptman.submission', compact('data', 'data2'))->with('i', (request()->input('page', 1) - 1) * 5);
     }

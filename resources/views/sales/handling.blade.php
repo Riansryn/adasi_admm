@@ -1,6 +1,7 @@
 @extends('layout')
 
 @section('content')
+
     <main id="main" class="main">
 
         <div class="pagetitle">
@@ -160,6 +161,11 @@
             </div>
         </section>
         <script>
+            //datatabelSales
+            $(document).ready(function() {
+                new DataTable('#viewSales');
+
+            });
             //sweet alert status close
             function confirmStatusChange(id) {
                 Swal.fire({

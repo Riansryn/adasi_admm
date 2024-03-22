@@ -25,9 +25,9 @@
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     @if ($openCount > 0)
-                                    <i class="bi bi-envelope-open-fill"></i>
+                                        <i class="bi bi-envelope-open-fill"></i>
                                     @else
-                                    <i class="bi bi-envelope-open-fill"></i>
+                                        <i class="bi bi-envelope-open-fill"></i>
                                     @endif
                                 </div>
                                 <div class="ps-3">
@@ -46,9 +46,9 @@
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     @if ($onProgressCount > 0)
-                                    <i class="bi bi-hourglass-split "></i>
+                                        <i class="bi bi-hourglass-split "></i>
                                     @else
-                                    <i class="bi bi-hourglass-split "></i>
+                                        <i class="bi bi-hourglass-split "></i>
                                     @endif
                                 </div>
                                 <div class="ps-3">
@@ -67,9 +67,9 @@
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     @if ($finishCount > 0)
-                                    <i class="bi bi-check2-all"></i>
+                                        <i class="bi bi-check2-all"></i>
                                     @else
-                                    <i class="bi bi-check2-all"></i>
+                                        <i class="bi bi-check2-all"></i>
                                     @endif
                                 </div>
                                 <div class="ps-3">
@@ -88,9 +88,9 @@
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     @if ($closedCount > 0)
-                                    <i class="bi bi-x-circle-fill"></i>
+                                        <i class="bi bi-x-circle-fill"></i>
                                     @else
-                                    <i class="bi bi-x-circle-fill"></i>
+                                        <i class="bi bi-x-circle-fill"></i>
                                     @endif
                                 </div>
                                 <div class="ps-3">
@@ -110,7 +110,7 @@
 
         <section class="section dashboard">
             <div class="row">
-            <h3 style="display: flex; justify-content: center;">Daftar Form Claim dan Complain</h3>
+                <h3 style="display: flex; justify-content: center;">Daftar Form Claim dan Complain</h3>
 
 
                 <!-- Left side columns -->
@@ -125,7 +125,7 @@
                                     <div class="d-flex align-items-center">
                                         <div
                                             class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                              <i class="bi bi-envelope-open-fill"></i>
+                                            <i class="bi bi-envelope-open-fill"></i>
                                         </div>
                                         <div class="ps-3">
                                             @php
@@ -227,13 +227,13 @@
                                     </ul>
                                 </div>
 
-                                {{-- <div class="card-body">
-                                    {{-- <h5 class="card-title">Handling Claim & Complain <span>/Year</span></h5>
-                                    <div style="width: 100%;">
-                                        <canvas id="combinedChart" width="800" height="220"></canvas>
-                                    </div> 
+                                <div class="card-body">
+                                    <h5 class="card-title">Chart Klaim dan Komplain <span></span></h5>
+                                    <div>
+                                        <canvas id="myChart" width="200" height="50"></canvas>
+                                    </div>
 
-                                </div> --}}
+                                </div>
 
                             </div>
                         </div><!-- End Reports -->
@@ -241,66 +241,36 @@
                     </div>
                 </div><!-- End Left side columns -->
 
-                <!-- Right side columns -->
-                {{-- <div class="col-lg-4"> --}}
-
             </div>
         </section>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
         <script>
-            // chartDashboard Handling
-            const ctx = document.getElementById('combinedChart').getContext('2d');
+            // Function to update card based on data
 
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-                        'October', 'November', 'December'
-                    ],
-                    datasets: [{
-                        label: 'Claim',
-                        borderColor: 'blue',
-                        borderWidth: 1
-                    }, {
-                        label: 'Complain',
-                        data: {!! json_encode(array_values($complainData)) !!},
-                        borderColor: 'green',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+            function updateCard(cardId, title, iconId, count) {
+                document.getElementById(cardId + 'Title').textContent = title;
+                document.getElementById(cardId + 'Icon').className = 'bi bi-' + iconId;
+                document.getElementById(cardId + 'Count').textContent = count;
+            }
+
+            // Simulate data update every 5 seconds
+            setInterval(function() {
+                // Simulate new data
+                var openCount = Math.floor(Math.random() * 100);
+                var onProgressCount = Math.floor(Math.random() * 100);
+                var finishCount = Math.floor(Math.random() * 100);
+                var closedCount = Math.floor(Math.random() * 100);
+
+                // Update each card
+                updateCard('open', 'Open', 'cart', openCount);
+                updateCard('onProgress', 'On Progress', 'clock', onProgressCount);
+                updateCard('finish', 'Finish', 'currency-dollar', finishCount);
+                updateCard('closed', 'Closed', 'check-circle', closedCount);
+            }, 5000); // Update every 5 seconds
+
+            
         </script>
-
-            <script>
-        // Function to update card based on data
-
-        function updateCard(cardId, title, iconId, count) {
-            document.getElementById(cardId + 'Title').textContent = title;
-            document.getElementById(cardId + 'Icon').className = 'bi bi-' + iconId;
-            document.getElementById(cardId + 'Count').textContent = count;
-        }
-
-        // Simulate data update every 5 seconds
-        setInterval(function() {
-            // Simulate new data
-            var openCount = Math.floor(Math.random() * 100);
-            var onProgressCount = Math.floor(Math.random() * 100);
-            var finishCount = Math.floor(Math.random() * 100);
-            var closedCount = Math.floor(Math.random() * 100);
-
-            // Update each card
-            updateCard('open', 'Open', 'cart', openCount);
-            updateCard('onProgress', 'On Progress', 'clock', onProgressCount);
-            updateCard('finish', 'Finish', 'currency-dollar', finishCount);
-            updateCard('closed', 'Closed', 'check-circle', closedCount);
-        }, 5000); // Update every 5 seconds
-    </script>
 
     </main><!-- End #main -->
 @endsection

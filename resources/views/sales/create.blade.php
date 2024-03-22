@@ -25,7 +25,7 @@
                             <div class="row mb-3">
                                 <label for="no_wo" class="col-sm-2 col-form-label">No. WO</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="no_wo" name="no_wo" maxlength="25" style="width: 100%; max-width: 400px;" required>
+                                    <input type="text" class="form-control" id="no_wo" name="no_wo" maxlength="6" style="width: 100%; max-width: 400px;" required>
                                 </div>
                                 <label for="image_upload" class="col-sm-2 col-form-label">Unggah Gambar</label>
                                 <div class="col-sm-4">

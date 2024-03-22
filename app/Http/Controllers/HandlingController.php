@@ -24,11 +24,30 @@ class HandlingController extends Controller
         $data = Handling::with('customers', 'type_materials')
             ->orderByRaw('FIELD(status, 0) DESC, created_at DESC')
             ->whereIn('status', [0, 1, 2, 3])
-            ->paginate(5);
+            ->paginate();
 
 
-        return view('sales.handling', compact('data'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('sales.handling', compact('data'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
+
+    public function barChart(){
+        // Mengambil data dari database
+        $handlings = Handling::select('status', 'status_2', 'created_at')->get();
+    
+        // Mengonversi data ke format yang sesuai untuk JavaScript
+        $bulan = [];
+        $data1 = [];
+        $data2 = [];
+    
+        foreach ($handlings as $handling) {
+            $bulan[] = $handling->created_at->format('F'); // Formatkan tanggal menjadi nama bulan
+            $data1[] = $handling->status;
+            $data2[] = $handling->status_2;
+        }
+    
+        return view('dashboard.dashboardHandling', compact('bulan', 'data1', 'data2'));
+    }
+    
 
     public function changeStatus($id)
     {
@@ -115,7 +134,8 @@ class HandlingController extends Controller
             'process_type'      => $request->process_type,
             'type_1'            => $request->type_1,
             'image'             => $imagePath, // Simpan nama file gambar atau null jika tidak ada gambar yang diunggah
-            'status'            => 0
+            'status'            => 0,
+            'status_2'          => 0
         ]);
 
         //redirect to index
@@ -219,7 +239,6 @@ class HandlingController extends Controller
                 'process_type'          => $request->process_type,
                 'type_1'                => $request->type_1,
                 'status'                => 0
-
             ]);
         }
 

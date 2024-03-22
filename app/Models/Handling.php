@@ -28,6 +28,7 @@ class Handling extends Model
         'type_2',
         'image',
         'status',
+        'status_2'
     ];
 
     public function customers(): BelongsTo
