@@ -68,6 +68,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 
     //Production
     Route::get('dashboardproduction', [FormFPPController::class, 'DashboardProduction'])->name('fpps.index');
+    Route::get('historyfpp', [FormFPPController::class, 'HistoryFPP'])->name('fpps.history');
     Route::get('formproduction', [FormFPPController::class, 'FormProduction'])
         ->name('fpps.create');
 

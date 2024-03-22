@@ -200,12 +200,12 @@ class EventController extends Controller
 
         // Ambil nilai issues dari tabel detailpreventive berdasarkan id_mesin dari event
         $issues = $detailpreventive->where('id_mesin', $event->id_mesin)
-            ->where('start', $event->start) // Misalkan 'start' adalah nama kolom tanggal start
+            ->where('end', $event->end)
             ->pluck('issue')
             ->toArray();
 
         $checkedIssues = $detailpreventive->where('id_mesin', $event->id_mesin)
-            ->where('start', $event->start) // Misalkan 'start' adalah nama kolom tanggal start
+            ->where('end', $event->end)
             ->pluck('issue_checked')
             ->toArray();
 
@@ -266,7 +266,7 @@ class EventController extends Controller
                 'type' => $event->type,
                 'no_mesin' => $event->no_mesin,
                 'mfg_date' => $event->mfg_date,
-                'start' => $event->start, // Gunakan nilai start yang sama dengan event sebelumnya
+                'start' => $request->start,
                 'end' => $request->end, // Tetapkan nilai end dari permintaan
                 'status' => 1 // Tetapkan status 1 (confirmed finish)
             ]);

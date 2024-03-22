@@ -23,7 +23,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Form Create FPP</h5>
+                            <h5 class="card-title">Buat Form Permintaan Perbaikan</h5>
 
                             <form id="FPPForm" action="{{ route('formperbaikans.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -37,7 +37,7 @@
 
                                 <div class="mb-3">
                                     <label for="date" class="form-label">
-                                        Date<span style="color: red;">*</span>
+                                        Tanggal<span style="color: red;">*</span>
                                     </label>
                                     <input type="date" class="form-control" id="date" name="date">
                                 </div>
@@ -132,15 +132,15 @@
                 // Menampilkan SweetAlert jika ada isian yang kosong kecuali upload gambar
                 Swal.fire({
                     title: 'Data belum lengkap!',
-                    text: 'Mohon lengkapi semua isian kecuali upload gambar.',
+                    text: 'Mohon lengkapi semua isian, kecuali unggah gambar.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
             } else {
                 // Jika formulir valid, tampilkan SweetAlert untuk konfirmasi
                 Swal.fire({
-                    title: 'Berhasil Disimpan!',
-                    text: 'Data Form FPP berhasil disimpan.',
+                    title: 'Berhasil!',
+                    text: 'Form Permintaan Perbaikan berhasil disimpan.',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then((result) => {

@@ -22,7 +22,6 @@
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
-
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">List Data mesin</h5>
@@ -37,14 +36,14 @@
                             <thead>
                                 <tr>
                                     <th scope="col">No</th>
-                                    <th scope="col">Nama Mesin</th>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Tipe</th>
                                     <th scope="col">No Mesin</th>
-                                    <th scope="col">Merk</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">MFG Date</th>
-                                    <th scope="col">Acquisition Date</th>
-                                    <th scope="col">Age</th>
-                                    <th scope="col">Created</th>
+                                    <th scope="col">Tanggal Dibuat</th>
+                                    <th scope="col">Umur</th>
+                                    <th scope="col">Spesifikasi</th>
+                                    <th scope="col">Lokasi</th>
+                                    <th scope="col">Created At</th>
                                     <th scope="col">Last Update</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
@@ -53,13 +52,13 @@
                                 @foreach ($mesins as $mesin)
                                 <tr>
                                     <td>{{ ++$i }}</td>
-                                    <td>{{ $mesin->nama_mesin }}</td>
+                                    <td>{{ $mesin->section }}</td>
+                                    <td>{{ $mesin->tipe }}</td>
                                     <td>{{ $mesin->no_mesin }}</td>
-                                    <td>{{ $mesin->merk }}</td>
-                                    <td>{{ $mesin->type }}</td>
-                                    <td>{{ $mesin->mfg_date }}</td>
-                                    <td>{{ $mesin->acq_date }}</td>
-                                    <td>{{ $mesin->age }}</td>
+                                    <td>{{ $mesin->tanggal_dibuat }}</td>
+                                    <td>{{ $mesin->umur }}</td>
+                                    <td>{{ $mesin->spesifikasi }}</td>
+                                    <td>{{ $mesin->lokasi }}</td>
                                     <td>{{ $mesin->created_at }}</td>
                                     <td>{{ $mesin->updated_at }}</td>
                                     <td>

@@ -16,10 +16,17 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="accordion" id="formAccordion">
-                            <h5 class="card-title">Form Lihat FPP</h5>
+                            <h5 class="card-title">Form Permintaan Perbaikan</h5>
 
                             <div class="collapse" id="formCollapse">
                                 <form id="FPPForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="pemohon" class="form-label">
+                                            Pemohon<span style="color: red;">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="pemohon" name="pemohon" value="{{ $formperbaikan->pemohon }}" readonly>
+                                    </div>
+
                                     <div class="mb-3">
                                         <label for="mesin" class="form-label">
                                             Mesin<span style="color: red;">*</span>
@@ -63,7 +70,7 @@
                                             @if($formperbaikan->gambar)
                                             <img id="gambarPreview" src="{{ asset($formperbaikan->gambar) }}" alt="Preview Gambar" style="max-width: 200px;">
                                             @else
-                                            <p>No image available</p>
+                                            <p>Gambar tidak tersedia</p>
                                             @endif
                                         </div>
                                     </div>
@@ -108,7 +115,7 @@
                                             @if($latestTindakLanjut->attachment_file)
                                             <a href="{{ asset('storage/' . $latestTindakLanjut->attachment_file) }}" target="_blank">{{ $latestTindakLanjut->attachment_file }}</a><br>
                                             @else
-                                            <p>No attachment file found.</p>
+                                            <p>Tidak ada unggahan.</p>
                                             @endif
                                         </div>
                                         @else

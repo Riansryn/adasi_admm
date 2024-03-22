@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Storage;
 
 class FormFPPController extends Controller
 {
+    public function HistoryFPP()
+    {
+        $formperbaikans = FormFPP::where('status', 3)->orderBy('updated_at', 'desc')->get();
+
+        return view('fpps.history', compact('formperbaikans'))->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
     public function DashboardProduction()
     {
         // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru

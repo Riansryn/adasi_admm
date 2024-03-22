@@ -33,13 +33,20 @@
                     <div class="card-body">
                         <div class="accordion">
                             <h5 class="card-title">
-                                Form Lihat FPP
+                                Form Permintaan Perbaikan
                             </h5>
 
                             <div class="collapse" id="accordion{{ $formperbaikan->id }}">
                                 <form id="FPPForm" action="{{ route('formperbaikans.update', $formperbaikan->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
+
+                                    <div class="mb-3">
+                                        <label for="pemohon" class="form-label">
+                                            Pemohon<span style="color: red;">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="pemohon" name="pemohon" value="{{ $formperbaikan->pemohon }}" readonly>
+                                    </div>
 
                                     <div class="mb-3">
                                         <label for="mesin" class="form-label">
@@ -256,7 +263,7 @@
         Swal.fire({
             title: 'Konfirmasi',
             text: 'Apakah Anda yakin ingin mengubah status menjadi On Progress?',
-            icon: 'question',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya',
             cancelButtonText: 'Tidak'
@@ -269,8 +276,8 @@
                 }
                 // Display success notification and execute additional code after clicking "OK"
                 Swal.fire({
-                    title: 'Berhasil Diubah!',
-                    text: 'Status berhasil diubah.',
+                    title: 'Berhasil!',
+                    text: 'Status berhasil diubah menjadi On Progress.',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {

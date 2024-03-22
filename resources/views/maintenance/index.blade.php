@@ -22,7 +22,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">List Data Received FPP</h5>
+                        <h5 class="card-title">Daftar Received FPP</h5>
                         <table class="table table-striped table-bordered table-hover datatable">
                             <thead>
                                 <tr>
@@ -32,9 +32,9 @@
                                     <th scope="col">Lokasi</th>
                                     <th scope="col">Kendala</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Created Date</th>
+                                    <th scope="col">Tanggal Dibuat</th>
                                     <th scope="col">Last Update</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

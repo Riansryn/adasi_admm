@@ -20,7 +20,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Daftar Form Permintaan Perbaikan</h5>
+                    <h5 class="card-title">History Form Permintaan Perbaikan</h5>
                     <div class="text-right mb-3">
                         <a class="btn btn-success float-right" href="{{ route('formperbaikans.create') }}">Buat Form</a>
                     </div>

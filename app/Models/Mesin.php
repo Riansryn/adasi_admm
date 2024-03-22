@@ -9,12 +9,11 @@ use Illuminate\Support\Carbon;
 class Mesin extends Model
 {
     use HasFactory;
-    protected $table = 'mesins';
+    protected $table = 'mesin';
     protected $fillable = [
-        'id',
-        'nama_mesin',
-        'no_mesin', 'merk', 'type',
-        'mfg_date', 'acq_date', 'age', 'preventive_date',
+        'section',
+        'no_mesin', 'tipe', 'tanggal_dibuat',
+        'umur', 'spesifikasi', 'lokasi', 'tanggal_preventif',
         'foto', 'sparepart', 'status'
     ];
 
