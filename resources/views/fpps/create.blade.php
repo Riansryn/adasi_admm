@@ -23,7 +23,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Form Create FPP</h5>
+                            <h5 class="card-title">Buat Form Permintaan Perbaikan</h5>
 
                             <form id="FPPForm" action="{{ route('formperbaikans.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -36,49 +36,31 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="date" class="form-label">
-                                        Date<span style="color: red;">*</span>
+                                    <label for="tanggal" class="form-label">
+                                        Tanggal<span style="color: red;">*</span>
                                     </label>
-                                    <input type="date" class="form-control" id="date" name="date">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="section" class="form-label">
-                                        Pilih Section<span style="color: red;">*</span>
-                                    </label>
-                                    <select class="form-select" id="section" name="section">
-                                        <option value="" disabled selected>Select Section</option>
-                                        <option value="Cutting">Cutting</option>
-                                        <!-- <option value="Machining">Machining</option>
-                                        <option value="MC Custom">MC Custom</option>
-                                        <option value="Bubut">Bubut</option>
-                                        <option value="Heat Treatment">Heat Treatment</option> -->
-                                    </select>
+                                    <input type="date" class="form-control" id="tanggal" name="tanggal">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="mesin" class="form-label">
                                         Pilih Mesin<span style="color: red;">*</span>
                                     </label>
-                                    <select class="form-select" id="mesin" name="mesin">
-                                        <option value="" disabled selected>Select Mesin</option>
-                                        <option value="C1">C1</option>
-                                        <option value="C2">C2</option>
-                                        <option value="C3">C3</option>
-                                        <option value="C4">C4</option>
-                                        <option value="C5">C5</option>
+                                    <select class="form-control" id="mesin" name="mesin">
+                                        <option value="">Pilih Mesin</option>
+                                        @foreach($mesins as $mesin)
+                                        <option value="{{ $mesin->no_mesin }}" data-lokasi="{{$mesin->lokasi}}">
+                                            {{ $mesin->section }} | {{ $mesin->tipe }} | {{ $mesin->no_mesin }}
+                                        </option>
+                                        @endforeach
                                     </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="lokasi" class="form-label">
-                                        Lokasi Mesin<span style="color: red;">*</span>
+                                        Lokasi<span style="color: red;">*</span>
                                     </label>
-                                    <select class="form-select" id="lokasi" name="lokasi">
-                                        <option value="" disabled selected>Select Lokasi Mesin</option>
-                                        <option value="Deltamas">Deltamas</option>
-                                        <option value="DS8">DS8</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="lokasi" name="lokasi" readonly>
                                 </div>
 
                                 <div class="mb-3">
@@ -122,25 +104,24 @@
         function handleFormSubmission() {
             // Memeriksa apakah semua isian telah diisi
             var pemohon = document.getElementById('pemohon').value;
-            var date = document.getElementById('date').value;
-            var section = document.getElementById('section').value;
+            var tanggal = document.getElementById('tanggal').value;
             var mesin = document.getElementById('mesin').value;
             var lokasi = document.getElementById('lokasi').value;
             var kendala = document.getElementById('kendala').value;
 
-            if (pemohon === '' || date === '' || section === '' || mesin === '' || lokasi === '' || kendala === '') {
+            if (pemohon === '' || tanggal === '' || mesin === '' || lokasi === '' || kendala === '') {
                 // Menampilkan SweetAlert jika ada isian yang kosong kecuali upload gambar
                 Swal.fire({
                     title: 'Data belum lengkap!',
-                    text: 'Mohon lengkapi semua isian kecuali upload gambar.',
+                    text: 'Mohon lengkapi semua isian, kecuali unggah gambar.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
             } else {
                 // Jika formulir valid, tampilkan SweetAlert untuk konfirmasi
                 Swal.fire({
-                    title: 'Berhasil Disimpan!',
-                    text: 'Data Form FPP berhasil disimpan.',
+                    title: 'Berhasil!',
+                    text: 'Form Permintaan Perbaikan berhasil disimpan.',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then((result) => {
@@ -191,6 +172,22 @@
 
                 reader.readAsDataURL(file);
             }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil elemen-elemen yang diperlukan
+            var MesinSelect = document.getElementById('mesin');
+            var lokasiInput = document.getElementById('lokasi');
+            // Tambahkan event listener untuk perubahan pada pilihan nama_mesin
+            MesinSelect.addEventListener('change', function() {
+                // Ambil opsi yang dipilih
+                var selectedOption = MesinSelect.options[MesinSelect.selectedIndex];
+
+                // Set nilai type, no_mesin, dan mfg_date sesuai data yang dipilih
+                lokasiInput.value = selectedOption.getAttribute('data-lokasi');
+            });
         });
     </script>
 

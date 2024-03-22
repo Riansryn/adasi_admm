@@ -15,7 +15,7 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Form Lihat FPP</h5>
+                        <h5 class="card-title">Form Permintaan Perbaikan</h5>
 
                         <form id="FPPForm" action="{{ route('formperbaikans.update', $formperbaikan->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf

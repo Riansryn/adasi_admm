@@ -28,56 +28,62 @@
                             <form id="mesinForm" action="{{ route('mesins.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="nama_mesin" class="form-label">
-                                        Nama Mesin<span style="color: red;">*</span>
+                                    <label for="section" class="form-label">
+                                        Section<span style="color: red;">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="nama_mesin" name="nama_mesin">
+                                    <input type="text" class="form-control" id="section" name="section">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="tipe" class="form-label">
+                                        Tipe<span style="color: red;">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="tipe" name="tipe">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="no_mesin" class="form-label">
-                                        No Mesin<span style="color: red;">*</span>
+                                        Nomor Mesin<span style="color: red;">*</span>
                                     </label>
                                     <input type="text" class="form-control" id="no_mesin" name="no_mesin">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="merk" class="form-label">
-                                        Merk<span style="color: red;">*</span>
+                                    <label for="tanggal_dibuat" class="form-label">
+                                        Manufacturing Year<span style="color: red;">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="merk" name="merk">
+                                    <input type="number" class="form-control" id="tanggal_dibuat" name="tanggal_dibuat" min="1900" max="2099" onchange="hitungUmur()">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="type" class="form-label">
-                                        Type<span style="color: red;">*</span>
-                                    </label>
-                                    <input type="text" class="form-control" id="type" name="type">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="mfg_date" class="form-label">
-                                        Manufacturing date<span style="color: red;">*</span>
-                                    </label>
-                                    <input type="number" class="form-control" id="mfg_date" name="mfg_date" placeholder="YYYY" min="1900" max="{{ date('Y') }}">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="acq_date" class="form-label">
-                                        Acquisition date<span style="color: red;">*</span>
-                                    </label>
-                                    <input type="number" class="form-control" id="acq_date" name="acq_date" placeholder="YYYY" min="1900" max="{{ date('Y') }}">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="age" class="form-label">Age<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" id="age" name="age" readonly>
+                                    <label for="umur" class="form-label">Umur<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="umur" name="umur" readonly>
                                     <!-- Jika Anda ingin melakukan perhitungan Age secara otomatis, Anda perlu menambahkan JavaScript untuk menghitungnya. -->
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="preventive_date" class="form-label">Schedule Preventive Date</label>
-                                    <input type="date" class="form-control" id="preventive_date" name="preventive_date">
+                                    <label for="spesifikasi" class="form-label">
+                                        Spesifikasi<span style="color: red;">*</span>
+                                    </label>
+                                    <textarea class="form-control" id="spesifikasi" name="spesifikasi"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="lokasi" class="form-label">
+                                        Lokasi Mesin<span style="color: red;">*</span>
+                                    </label>
+                                    <select class="form-select" id="lokasi" name="lokasi">
+                                        <option value="" disabled selected>Pilih Lokasi Mesin</option>
+                                        <option value="Deltamas">Deltamas</option>
+                                        <option value="DS8">DS8</option>
+                                        <option value="Surabaya">Surabaya</option>
+                                    </select>
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="tanggal_preventif" class="form-label">Schedule Preventive Date</label>
+                                    <input type="date" class="form-control" id="tanggal_preventif" name="tanggal_preventif">
                                 </div>
 
                                 <img id="fotoPreview" src="" alt="" style="max-width: 300px; max-height: 200px; display: none;">
@@ -111,63 +117,32 @@
             document.getElementById('mesinForm').reset();
         }
     </script>
-    <script>
-        function handleFormSubmission() {
-            // Mendapatkan nilai input dari formulir
-            var nama_mesin = document.getElementById('nama_mesin').value.trim();
-            var no_mesin = document.getElementById('no_mesin').value.trim();
-            var merk = document.getElementById('merk').value.trim();
-            var type = document.getElementById('type').value.trim();
-            var mfg_date = document.getElementById('mfg_date').value.trim();
-            var acq_date = document.getElementById('acq_date').value.trim();
-
-            // Melakukan validasi input
-            if (nama_mesin === '' || no_mesin === '' || merk === '' || type === '' || mfg_date === '' || acq_date === '') {
-                // Menampilkan SweetAlert jika ada isian yang kosong
-                Swal.fire({
-                    title: 'Peringatan!',
-                    text: 'Harap lengkapi semua isian yang diperlukan.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-                return false; // Menghentikan pengiriman formulir karena ada isian yang kosong
-            }
-
-            // Jika semua isian sudah terisi, lanjutkan pengiriman formulir
-            document.getElementById('mesinForm').submit();
-        }
-
-        // Event listener untuk submit form
-        document.getElementById('mesinForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah pengiriman formulir secara default
-
-            // Memanggil fungsi untuk menangani pengiriman formulir dan menampilkan SweetAlert
-            handleFormSubmission();
-        });
-    </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
     <script>
-        // Tambahkan skrip JavaScript untuk menghitung Age saat mengisi form
-        document.getElementById('mfg_date').addEventListener('input', function() {
-            calculateAge();
-        });
+        // Fungsi untuk menghitung umur berdasarkan tahun pembuatan
+        function hitungUmur() {
+            // Ambil tahun pembuatan dari input tahun_dibuat
+            var tahunDibuat = document.getElementById('tanggal_dibuat').value;
 
-        document.getElementById('acq_date').addEventListener('input', function() {
-            calculateAge();
-        });
+            // Ambil tahun saat ini
+            var tahunSaatIni = new Date().getFullYear();
 
-        function calculateAge() {
-            let mfgdate = parseInt(document.getElementById('mfg_date').value);
-            let acquisitiondate = parseInt(document.getElementById('acq_date').value);
+            // Hitung umur dengan mengurangi tahun saat ini dengan tahun pembuatan
+            var umur = tahunSaatIni - tahunDibuat;
 
-            if (!isNaN(mfgdate) && !isNaN(acquisitiondate)) {
-                let age = acquisitiondate - mfgdate;
-                document.getElementById('age').value = age >= 0 ? age : '';
-            }
+            // Masukkan hasil perhitungan umur ke input umur
+            document.getElementById('umur').value = umur;
         }
+
+        // Perbarui umur setiap kali tahun berubah
+        setInterval(function() {
+            hitungUmur();
+        }, 1000 * 60 * 60 * 24); // Perbarui setiap hari
     </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

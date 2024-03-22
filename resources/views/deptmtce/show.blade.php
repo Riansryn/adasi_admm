@@ -17,7 +17,7 @@
                 <div class="col-lg-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Form Lihat Preventive</h5>
+                            <h5 class="card-title">Form Permintaan Perbaikan</h5>
 
                             <form id="approvedForm" action="{{ route('formperbaikans.update', $formperbaikan->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -202,17 +202,18 @@
 <script>
     function showCheckAgain() {
         Swal.fire({
-            title: "Submit your note",
+            title: "Masukkan catatan",
             input: "text",
             inputAttributes: {
                 autocapitalize: "off"
             },
             showCancelButton: true,
-            confirmButtonText: "Save",
+            confirmButtonText: "Simpan",
+            cancelButtonText: "Batal",
             allowOutsideClick: () => !Swal.isLoading(),
             preConfirm: (note) => {
                 if (!note) {
-                    Swal.showValidationMessage("Note cannot be empty");
+                    Swal.showValidationMessage("Catatan tidak boleh kosong");
                 } else {
                     // Set the note value to the hidden input field in the form
                     document.getElementById('note').value = note;
@@ -236,11 +237,10 @@
 </script>
 <script>
     function showConfirmationAlert() {
-        // Tampilkan SweetAlert konfirmasi
         Swal.fire({
             title: 'Konfirmasi',
-            text: 'Apakah Anda yakin ingin mengkonfirmasikan ini?',
-            icon: 'question',
+            text: 'Apakah Anda yakin ingin melakukan konfirmasi?',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -253,11 +253,12 @@
                     icon: 'success',
                     title: 'Konfirmasi berhasil!',
                     showConfirmButton: false,
-                    timer: 2000 // Durasi notifikasi dalam milidetik
+                    timer: 2000,
+                    didClose: () => {
+                        // Submit the form after the success notification is closed
+                        document.getElementById('approvedForm').submit();
+                    }
                 });
-
-                document.getElementById('approvedForm').submit();
-
             }
         });
     }

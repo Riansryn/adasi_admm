@@ -13,7 +13,7 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Form Lihat FPP</h5>
+                        <h5 class="card-title">Form Permintaan Perbaikan</h5>
 
                         <form id="FPPForm" enctype="multipart/form-data">
                             <div class="mb-3">
@@ -24,7 +24,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="date" class="form-label">
-                                    Date<span style="color: red;">*</span>
+                                    Tanggal<span style="color: red;">*</span>
                                 </label>
                                 <input type="date" class="form-control" id="date" name="date" value="{{ $formperbaikan->date }}" readonly>
                             </div>

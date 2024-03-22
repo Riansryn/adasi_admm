@@ -57,14 +57,14 @@ class MesinController extends Controller
 
         // Simpan data mesin beserta path foto dan sparepart ke database
         Mesin::create([
-            'nama_mesin' => $request->nama_mesin,
+            'section' => $request->section,
             'no_mesin' => $request->no_mesin,
-            'merk' => $request->merk,
-            'type' => $request->type,
-            'mfg_date' => $request->mfg_date,
-            'acq_date' => $request->acq_date,
-            'age' => $request->age,
-            'preventive_date' => $request->preventive_date,
+            'tipe' => $request->tipe,
+            'tanggal_dibuat' => $request->tanggal_dibuat,
+            'umur' => $request->umur,
+            'spesifikasi' => $request->spesifikasi,
+            'lokasi' => $request->lokasi,
+            'tanggal_preventif' => $request->tanggal_preventif,
             'foto' => $fotoPath,
             'sparepart' => $sparepartPath,
             'status' => $request->status // Nilai status akan diambil dari request, jika tidak ada, nilai default akan digunakan
@@ -72,103 +72,6 @@ class MesinController extends Controller
 
         return redirect()->route('mesins.index')->with('success', 'Mesin created successfully');
     }
-
-    public function show(Mesin $mesin, FormFPP $formperbaikan)
-    {
-        // Mengambil formperbaikans berdasarkan status 3 dan nomor_mesin dari mesin yang sama dengan mesin di formperbaikan
-        $formperbaikans = FormFPP::where('status', '3')
-            ->where('mesin', $mesin->no_mesin)
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-        return view('mesins.show', compact('mesin', 'formperbaikan', 'formperbaikans'));
-    }
-
-    public function edit(Mesin $mesin)
-    {
-        return view('mesins.edit', compact('mesin'));
-    }
-
-    public function editIssue(Mesin $mesin)
-    {
-        // Ambil semua data issue dan issue_checked dari tabel detail_preventives
-        $detailPreventives = DB::table('detail_preventives')
-            ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
-            ->where('mesins.id', $mesin->id)
-            ->select('detail_preventives.issue', 'detail_preventives.issue_checked')
-            ->get();
-
-        // Ubah hasil query menjadi array asosiatif
-        $issues = [];
-        $checkedIssues = [];
-        foreach ($detailPreventives as $detailPreventive) {
-            $issues[] = $detailPreventive->issue;
-            $checkedIssues[] = $detailPreventive->issue_checked;
-        }
-
-        // Kirimkan data ke view
-        return view('maintenance.issue', compact('mesin', 'issues', 'checkedIssues'));
-    }
-
-
-    public function lihatIssue(Mesin $mesin)
-    {
-        // Ambil nilai issue dan issue_checked berdasarkan id_mesin dari Mesin
-        $issues = DB::table('detail_preventives')
-            ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
-            ->where('mesins.id', $mesin->id)
-            ->pluck('detail_preventives.issue')
-            ->toArray();
-
-        // Ambil nilai issue_checked
-        $checkedIssues = DB::table('detail_preventives')
-            ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
-            ->where('mesins.id', $mesin->id)
-            ->pluck('detail_preventives.issue_checked')
-            ->toArray();
-
-        // Kirimkan data ke view
-        return view('deptmtce.lihatissue', compact('mesin', 'issues', 'checkedIssues'));
-    }
-
-    public function lihatPerbaikan(Mesin $mesin)
-    {
-        // Ambil nilai perbaikan berdasarkan id_mesin dari Mesin
-        $perbaikans = DB::table('detail_preventives')
-            ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
-            ->where('mesins.id', $mesin->id)
-            ->pluck('detail_preventives.perbaikan')
-            ->toArray();
-
-        // Ambil nilai issue_checked
-        $checkedPerbaikans = DB::table('detail_preventives')
-            ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
-            ->where('mesins.id', $mesin->id)
-            ->pluck('detail_preventives.perbaikan_checked')
-            ->toArray();
-
-        return view('deptmtce.lihatperbaikan', compact('mesin', 'perbaikans', 'checkedPerbaikans'));
-    }
-
-    public function editPerbaikan(Mesin $mesin)
-    {
-        // Ambil nilai perbaikan berdasarkan id_mesin dari Mesin
-        $perbaikans = DB::table('detail_preventives')
-            ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
-            ->where('mesins.id', $mesin->id)
-            ->pluck('detail_preventives.perbaikan')
-            ->toArray();
-
-        // Ambil nilai issue_checked
-        $checkedPerbaikans = DB::table('detail_preventives')
-            ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
-            ->where('mesins.id', $mesin->id)
-            ->pluck('detail_preventives.perbaikan_checked')
-            ->toArray();
-
-        return view('maintenance.perbaikan', compact('mesin', 'perbaikans', 'checkedPerbaikans'));
-    }
-
     public function update(Request $request, Mesin $mesin, DetailPreventive $detail)
     {
         // Cek apakah ada file foto yang diunggah
@@ -189,17 +92,18 @@ class MesinController extends Controller
             // Perbarui path foto di database
             $mesin->foto = 'foto/' . $fotoName;
         }
-
         // Update data mesin
         $mesin->update([
-            'nama_mesin' => $request->nama_mesin ?? $mesin->nama_mesin,
+            'section' => $request->section ?? $mesin->section,
             'no_mesin' => $request->no_mesin ?? $mesin->no_mesin,
-            'merk' => $request->merk ?? $mesin->merk,
-            'type' => $request->type ?? $mesin->type,
-            'mfg_date' => $request->mfg_date ?? $mesin->mfg_date,
-            'acq_date' => $request->acq_date ?? $mesin->acq_date,
-            'age' => $request->age ?? $mesin->age,
-            'preventive_date' => $request->preventive_date ?? $mesin->preventive_date,
+            'tipe' => $request->tipe ?? $mesin->tipe,
+            'tanggal_dibuat' => $request->tanggal_dibuat ?? $mesin->tanggal_dibuat,
+            'umur' => $request->umur ?? $mesin->umur,
+            'spesifikasi' => $request->spesifikasi ?? $mesin->spesifikasi,
+            'lokasi' => $request->lokasi ?? $mesin->lokasi,
+            'tanggal_preventif' => $request->tanggal_preventif ?? $mesin->tanggal_preventif,
+            'foto' => $request->fotoPath ?? $mesin->foto,
+            'sparepart' => $request->sparepartPath ?? $mesin->sparepart,
         ]);
         // Simpan perubahan ke dalam database
         $mesin->save();
@@ -208,21 +112,21 @@ class MesinController extends Controller
     }
 
 
-    public function updatePreventive(Request $request, Mesin $mesin)
+    public function show(Mesin $mesin, FormFPP $formperbaikan)
     {
-        // Update the form data
-        $mesin->update($request->all());
-        $confirmed_preventive = $request->input('confirmed_preventive');
+        // Mengambil formperbaikans berdasarkan status 3 dan nomor_mesin dari mesin yang sama dengan mesin di formperbaikan
+        $formperbaikans = FormFPP::where('status', '3')
+            ->where('mesin', $mesin->no_mesin)
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
-        // Check if 'confirmed_finish' is submitted
-        if ($confirmed_preventive === '1') {
-            $mesin->update(['status' => '1']);
-            $mesin->save();
-        }
-
-        return redirect()->route('maintenance.dashpreventive')->with('success', 'Preventive updated successfully');
+        return view('mesins.show', compact('mesin', 'formperbaikan', 'formperbaikans'));
     }
 
+    public function edit(Mesin $mesin)
+    {
+        return view('mesins.edit', compact('mesin'));
+    }
 
     public function destroy(Mesin $mesin)
 
@@ -231,21 +135,119 @@ class MesinController extends Controller
         return redirect()->route('mesins.index')->with('success', 'Mesin deleted successfully');
     }
 
-    public function getIssue(Mesin $mesin)
-    {
-        // Ambil data issue untuk mesin tertentu
-        $issues = $mesin->issues()->get(); // Anda harus menyesuaikan dengan relasi antara Mesin dan Issue
+    // public function editIssue(Mesin $mesin)
+    // {
+    //     // Ambil semua data issue dan issue_checked dari tabel detail_preventives
+    //     $detailPreventives = DB::table('detail_preventives')
+    //         ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
+    //         ->where('mesins.id', $mesin->id)
+    //         ->select('detail_preventives.issue', 'detail_preventives.issue_checked')
+    //         ->get();
 
-        // Format data issue sesuai kebutuhan
-        $formattedIssues = $issues->map(function ($issue) {
-            return [
-                'id' => $issue->id,
-                'nama' => $issue->nama, // Sesuaikan dengan atribut yang sesuai dengan nama issue
-                'checked' => $issue->pivot->checked // Jika Anda menggunakan tabel pivot untuk relasi many-to-many
-            ];
-        });
+    //     // Ubah hasil query menjadi array asosiatif
+    //     $issues = [];
+    //     $checkedIssues = [];
+    //     foreach ($detailPreventives as $detailPreventive) {
+    //         $issues[] = $detailPreventive->issue;
+    //         $checkedIssues[] = $detailPreventive->issue_checked;
+    //     }
 
-        // Kembalikan data dalam format JSON
-        return response()->json($formattedIssues);
-    }
+    //     // Kirimkan data ke view
+    //     return view('maintenance.issue', compact('mesin', 'issues', 'checkedIssues'));
+    // }
+
+    // public function lihatIssue(Mesin $mesin)
+    // {
+    //     // Ambil nilai issue dan issue_checked berdasarkan id_mesin dari Mesin
+    //     $issues = DB::table('detail_preventives')
+    //         ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
+    //         ->where('mesins.id', $mesin->id)
+    //         ->pluck('detail_preventives.issue')
+    //         ->toArray();
+
+    //     // Ambil nilai issue_checked
+    //     $checkedIssues = DB::table('detail_preventives')
+    //         ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
+    //         ->where('mesins.id', $mesin->id)
+    //         ->pluck('detail_preventives.issue_checked')
+    //         ->toArray();
+
+    //     // Kirimkan data ke view
+    //     return view('deptmtce.lihatissue', compact('mesin', 'issues', 'checkedIssues'));
+    // }
+
+    // public function lihatPerbaikan(Mesin $mesin)
+    // {
+    //     // Ambil nilai perbaikan berdasarkan id_mesin dari Mesin
+    //     $perbaikans = DB::table('detail_preventives')
+    //         ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
+    //         ->where('mesins.id', $mesin->id)
+    //         ->pluck('detail_preventives.perbaikan')
+    //         ->toArray();
+
+    //     // Ambil nilai issue_checked
+    //     $checkedPerbaikans = DB::table('detail_preventives')
+    //         ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
+    //         ->where('mesins.id', $mesin->id)
+    //         ->pluck('detail_preventives.perbaikan_checked')
+    //         ->toArray();
+
+    //     return view('deptmtce.lihatperbaikan', compact('mesin', 'perbaikans', 'checkedPerbaikans'));
+    // }
+
+    // public function editPerbaikan(Mesin $mesin)
+    // {
+    //     // Ambil nilai perbaikan berdasarkan id_mesin dari Mesin
+    //     $perbaikans = DB::table('detail_preventives')
+    //         ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
+    //         ->where('mesins.id', $mesin->id)
+    //         ->pluck('detail_preventives.perbaikan')
+    //         ->toArray();
+
+    //     // Ambil nilai issue_checked
+    //     $checkedPerbaikans = DB::table('detail_preventives')
+    //         ->join('mesins', 'detail_preventives.id_mesin', '=', 'mesins.id')
+    //         ->where('mesins.id', $mesin->id)
+    //         ->pluck('detail_preventives.perbaikan_checked')
+    //         ->toArray();
+
+    //     return view('maintenance.perbaikan', compact('mesin', 'perbaikans', 'checkedPerbaikans'));
+    // }
+
+
+
+
+    // public function updatePreventive(Request $request, Mesin $mesin)
+    // {
+    //     // Update the form data
+    //     $mesin->update($request->all());
+    //     $confirmed_preventive = $request->input('confirmed_preventive');
+
+    //     // Check if 'confirmed_finish' is submitted
+    //     if ($confirmed_preventive === '1') {
+    //         $mesin->update(['status' => '1']);
+    //         $mesin->save();
+    //     }
+
+    //     return redirect()->route('maintenance.dashpreventive')->with('success', 'Preventive updated successfully');
+    // }
+
+
+    // public function getIssue(Mesin $mesin)
+    // {
+    //     // Ambil data issue untuk mesin tertentu
+    //     $issues = $mesin->issues()->get(); // Anda harus menyesuaikan dengan relasi antara Mesin dan Issue
+
+    //     // Format data issue sesuai kebutuhan
+    //     $formattedIssues = $issues->map(function ($issue) {
+    //         return [
+    //             'id' => $issue->id,
+    //             'nama' => $issue->nama, // Sesuaikan dengan atribut yang sesuai dengan nama issue
+    //             'checked' => $issue->pivot->checked // Jika Anda menggunakan tabel pivot untuk relasi many-to-many
+    //         ];
+    //     });
+
+    //     // Kembalikan data dalam format JSON
+    //     return response()->json($formattedIssues);
+    // }
 }

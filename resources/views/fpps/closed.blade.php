@@ -16,7 +16,7 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Form Lihat FPP</h5>
+                        <h5 class="card-title">Form Permintaan Perbaikan</h5>
 
                         <form id="closedForm" action="{{ route('formperbaikans.update', $formperbaikan->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -81,7 +81,7 @@
             <div class="col-lg-9">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">FPP Table</h5>
+                        <h5 class="card-title">Tabel History Progress</h5>
                         <div class="table-responsive">
                             <table class="table datatable w-100 table-striped table-bordered">
                                 <thead class="bg-primary text-white">
@@ -210,8 +210,8 @@
     function showConfirmationAlert() {
         // Tampilkan SweetAlert konfirmasi
         Swal.fire({
-            title: 'Closed',
-            text: 'Apakah Anda yakin ingin closed ini?',
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin mengubah statusnya menjadi Closed?',
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -226,9 +226,9 @@
                 // Menampilkan SweetAlert sukses
                 Swal.fire({
                     icon: 'success',
-                    title: 'Closed berhasil!',
+                    title: 'Status berhasil berubah menjadi Closed!',
                     showConfirmButton: false,
-                    timer: 2000 // Durasi notifikasi dalam milidetik
+                    timer: 3000 // Durasi notifikasi dalam milidetik
                 }).then(() => {
                     // Men-submit formulir setelah SweetAlert sukses tertutup
                     document.getElementById('closedForm').submit();

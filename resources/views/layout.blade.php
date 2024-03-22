@@ -228,6 +228,12 @@
                             <span>Data Form FPP</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="{{ route('fpps.history') }}">
+                            <i class="bi bi-list-check"></i>
+                            <span>History FPP</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             @endif
@@ -250,12 +256,12 @@
                     <span>Data Jadwal Preventive</span>
                 </a>
             </li>  --}}
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('blokMaintanence') }}">
                             <i class="bi bi-check2"></i>
                             <span>Blok Jadwal Preventive</span>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </li><!-- End Maint Received Nav -->
             @endif
@@ -290,12 +296,12 @@
                     <span>Data Jadwal Preventive</span>
                 </a>
             </li> -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link collapsed" href="{{ route('blokDeptMaintenance') }}">
                                 <i class="bi bi-check2"></i>
                                 <span>Blok Jadwal Preventive</span>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </li><!-- End Dept Maint Nav -->
                 <li class="nav-item">

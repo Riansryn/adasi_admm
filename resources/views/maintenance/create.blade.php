@@ -15,12 +15,19 @@
                 <div class="card">
                     <div class="accordion">
                         <div class="card-body">
-                            <h5 class="card-title">Form Lihat FPP</h5>
+                            <h5 class="card-title">Form Permintaan Perbaikan</h5>
                             <div class="collapse" id="updateProgress">
 
                                 <form id="FPPForm" action="{{ route('formperbaikans.update', $formperbaikan->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
+
+                                    <div class="mb-3">
+                                        <label for="pemohon" class="form-label">
+                                            Pemohon<span style="color: red;">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="pemohon" name="pemohon" value="{{ $formperbaikan->pemohon }}" readonly>
+                                    </div>
 
                                     <div class="mb-3">
                                         <label for="mesin" class="form-label">
@@ -87,7 +94,6 @@
                                 <form id="updateForm" action="{{ route('formperbaikans.update', $formperbaikan->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
-
                                     <!-- Tindak Lanjut -->
                                     <div class="mb-3">
                                         <label for="tindak_lanjut" class="form-label">Tindak Lanjut</label>
@@ -332,9 +338,9 @@
                 // Show success notification
                 Swal.fire({
                     icon: 'success',
-                    title: 'Status berhasil diubah!',
+                    title: 'Status berhasil diubah menjadi Finish!',
                     showConfirmButton: false,
-                    timer: 1500, // Durasi notifikasi dalam milidetik
+                    timer: 2000, // Durasi notifikasi dalam milidetik
                     didClose: () => {
                         // Submit the form after the success notification is closed
                         document.getElementById('updateForm').submit();

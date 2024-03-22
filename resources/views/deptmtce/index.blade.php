@@ -33,9 +33,9 @@
                                     <th scope="col">Lokasi</th>
                                     <th scope="col">Kendala</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Created Date</th>
+                                    <th scope="col">Tanggal Dibuat</th>
                                     <th scope="col">Last Update</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,49 +80,3 @@
 
 </main><!-- End #main -->
 @endsection
-<script>
-    function deleteSurat(id) {
-        Swal.fire({
-            title: 'Apakah Anda Yakin?',
-            text: "Data yang dihapus tidak bisa dipakai kembali!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // If user clicks "Ya, hapus!" button, perform the deletion
-                Swal.fire({
-                    title: "Berhasil!",
-                    text: "Nomor Surat Berhasil dihapus.",
-                    icon: "success",
-                    timer: 1000, // Penundaan (delay) sebelum mengeksekusi aksi berikutnya (dalam milidetik)
-                    showConfirmButton: false // Menyembunyikan tombol OK
-                }).then(() => {
-                    // Add a button "OK" after the confirmation
-                    Swal.fire({
-                        title: "Info",
-                        text: "Data berhasil dihapus!",
-                        icon: "info",
-                        showConfirmButton: true,
-                        confirmButtonText: "OK"
-                    }).then((okResult) => {
-                        // Check if the user clicked "OK"
-                        if (okResult.isConfirmed) {
-                            // Submit the form
-                            document.getElementById('suratForm_' + id).submit();
-                        }
-                    });
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire({
-                    title: "Gagal",
-                    text: "Nomor Surat gagal dihapus",
-                    icon: "error"
-                });
-            }
-        });
-    }
-</script>
