@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Handling;
 use App\Models\FormFPP;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DsController extends Controller
 {
@@ -47,7 +48,23 @@ class DsController extends Controller
             ->toArray();
         // Menambahkan consol log
         // dd($claimData, $complainData);
-        // // Mengirimkan data ke view
-        return view('dashboard.dashboardHandling', compact('complainData', 'formperbaikans', 'openCount', 'onProgressCount', 'finishCount', 'closedCount'));
+        // Ambil data dari database
+        // Mengambil data dari tabel handlings
+        $data = Handling::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->groupBy('month')
+        ->get();
+    
+        // dd($data);
+        return view('dashboard.dashboardHandling', compact('complainData', 'formperbaikans', 'openCount', 'onProgressCount', 'finishCount', 'closedCount', 'data'));
     }
+
+    // public function multipleCharts()
+    // {
+        
+    //     return view('dashboard.dashboardHandling', ['chartData' => $chartData]);
+    // }
 }

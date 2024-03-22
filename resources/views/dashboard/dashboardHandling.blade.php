@@ -269,7 +269,78 @@
                 updateCard('closed', 'Closed', 'check-circle', closedCount);
             }, 5000); // Update every 5 seconds
 
-            
+
+            // Fungsi untuk mengonversi angka bulan menjadi nama bulan dalam bahasa Inggris
+            function getMonthName(monthNumber) {
+                const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                ];
+                return monthNames[monthNumber - 1];
+            }
+
+            // Mendapatkan data dari controller Laravel
+            var chartData = {!! $data !!};
+
+            // Inisialisasi array untuk bulan-bulan
+            var months = [];
+            for (var i = 1; i <= 12; i++) {
+                months.push(getMonthName(i));
+            }
+
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = chartData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status1.push(found.total_status_2_0);
+                } else {
+                    status1.push(0);
+                }
+            }
+
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = chartData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status2.push(found.total_status_3);
+                } else {
+                    status2.push(0);
+                }
+            }
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Open', // label untuk status_2=0
+                        data: status1,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Close', // label untuk status=3
+                        data: status2,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         </script>
 
     </main><!-- End #main -->

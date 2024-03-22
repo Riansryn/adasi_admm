@@ -30,23 +30,7 @@ class HandlingController extends Controller
         return view('sales.handling', compact('data'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
-    public function barChart(){
-        // Mengambil data dari database
-        $handlings = Handling::select('status', 'status_2', 'created_at')->get();
     
-        // Mengonversi data ke format yang sesuai untuk JavaScript
-        $bulan = [];
-        $data1 = [];
-        $data2 = [];
-    
-        foreach ($handlings as $handling) {
-            $bulan[] = $handling->created_at->format('F'); // Formatkan tanggal menjadi nama bulan
-            $data1[] = $handling->status;
-            $data2[] = $handling->status_2;
-        }
-    
-        return view('dashboard.dashboardHandling', compact('bulan', 'data1', 'data2'));
-    }
     
 
     public function changeStatus($id)

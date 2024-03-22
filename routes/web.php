@@ -133,6 +133,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('download-excel/{tindaklanjut}', [FormFPPController::class, 'downloadAttachment'])->name('download.attachment');
     //DashboardforALL
     Route::get('dashboardHandling', [DsController::class, 'dashboardHandling'])->name('dashboardHandling');
+    // Route::get('dashboardHandling', [DsController::class, 'multipleCharts'])->name('multipleCharts');
     //sales
     Route::get('handling', [HandlingController::class, 'index'])->name('index');
     Route::get('create', [HandlingController::class, 'create'])->name('create');
