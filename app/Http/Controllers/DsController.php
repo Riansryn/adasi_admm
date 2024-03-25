@@ -67,18 +67,17 @@ class DsController extends Controller
             ->groupBy('month')
             ->get();
 
-<<<<<<< HEAD
         // Mengambil data menggunakan model Eloquent
         $sumarryData = FormFPP::selectRaw('MONTH(created_at) as month, section, COUNT(*) as total')
-                        ->whereIn('section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
-                        ->where('status', 3)
-                        ->groupBy('month', 'section')
-                        ->get();
+            ->whereIn('section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
+            ->where('status', 3)
+            ->groupBy('month', 'section')
+            ->get();
 
         $datacncbubut = Mesin::select(
             DB::raw('SUM(CASE WHEN LOWER(section) = "cnc bubut" THEN 1 ELSE 0 END) as total_cnc_bubut')
         )->first()->total_cnc_bubut ?? 0;
-=======
+
         $chartMachining = FormFPP::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
             DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
@@ -87,7 +86,6 @@ class DsController extends Controller
             ->where('section', 'machining') // Tambahkan kondisi untuk memeriksa nilai 'section'
             ->groupBy('month')
             ->get();
->>>>>>> a00b361de1bca1e26867ad3730aa74d0b339bd69
 
         $chartHeatTreatment = FormFPP::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
@@ -118,20 +116,11 @@ class DsController extends Controller
                 'finishCount',
                 'closedCount',
                 'data',
-<<<<<<< HEAD
-                'datacncbubut',
-                'datactbubut',
-                'datacutting',
-                'dataheattreatment',
-                'datamachining',
-                'chartCutting',
-                'sumarryData'
-=======
                 'chartCutting',
                 'chartMachining',
                 'chartHeatTreatment',
-                'chartCTBubut'
->>>>>>> a00b361de1bca1e26867ad3730aa74d0b339bd69
+                'chartCTBubut',
+                'sumarryData'
             )
         );
     }
