@@ -72,7 +72,6 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('historyfpp', [FormFPPController::class, 'HistoryFPP'])->name('fpps.history');
     Route::get('formproduction', [FormFPPController::class, 'FormProduction'])
         ->name('fpps.create');
-
     Route::get('lihatform/{formperbaikan}', [FormFPPController::class, 'LihatFPP'])
         ->name('fpps.show');
     Route::get('closedform/{formperbaikan}', [FormFPPController::class, 'ClosedFormProduction'])
@@ -86,14 +85,14 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('editmaintenance/{formperbaikan}', [FormFPPController::class, 'EditMaintenance'])
         ->name('maintenance.edit');
 
-    Route::get('mesins/editpreventive/{mesin}', [PreventiveController::class, 'EditMaintenancePreventive'])
-        ->name('maintenance.editpreventive');
-    Route::get('mesins/{mesin}/edit-issue', [MesinController::class, 'editIssue'])
-        ->name('mesins.issue');
-    Route::get('mesins/{mesin}/edit-perbaikan', [MesinController::class, 'editPerbaikan'])
-        ->name('mesins.perbaikan');
-    Route::put('mesins/{mesin}/update-preventive', [MesinController::class, 'updatePreventive'])
-        ->name('mesins.updatePreventive');
+    // Route::get('mesins/editpreventive/{mesin}', [PreventiveController::class, 'EditMaintenancePreventive'])
+    //     ->name('maintenance.editpreventive');
+    // Route::get('mesins/{mesin}/edit-issue', [MesinController::class, 'editIssue'])
+    //     ->name('mesins.issue');
+    // Route::get('mesins/{mesin}/edit-perbaikan', [MesinController::class, 'editPerbaikan'])
+    //     ->name('mesins.perbaikan');
+    // Route::put('mesins/{mesin}/update-preventive', [MesinController::class, 'updatePreventive'])
+    //     ->name('mesins.updatePreventive');
     Route::get('dashboardmesins', [MesinController::class, 'index'])->name('dashboardmesins');
 
     Route::put('mesins/{mesin}/update-issue', [DetailPreventiveController::class, 'updateIssue'])
@@ -102,14 +101,14 @@ Route::middleware(['web', 'auth'])->group(function () {
         ->name('detailpreventives.updatePerbaikan');
 
 
-    // Blok Jadwal Preventive
-    Route::get('events/edit/{event}', [EventController::class, 'edit']);
-    Route::get('events/editMaintenance/{event}', [EventController::class, 'editIssue']);
-    Route::put('events/update/{event}', [EventController::class, 'update'])
-        ->name('events.update');
-    Route::put('events/updateIssue/{event}', [EventController::class, 'updateIssue'])
-        ->name('events.updateIssue');
-    Route::delete('/events/delete/{event}', [EventController::class, 'destroy'])->name('events.delete');
+    // // Blok Jadwal Preventive
+    // Route::get('events/edit/{event}', [EventController::class, 'edit']);
+    // Route::get('events/editMaintenance/{event}', [EventController::class, 'editIssue']);
+    // Route::put('events/update/{event}', [EventController::class, 'update'])
+    //     ->name('events.update');
+    // Route::put('events/updateIssue/{event}', [EventController::class, 'updateIssue'])
+    //     ->name('events.updateIssue');
+    // Route::delete('/events/delete/{event}', [EventController::class, 'destroy'])->name('events.delete');
 
 
     //Dept Maintenance
@@ -119,12 +118,15 @@ Route::middleware(['web', 'auth'])->group(function () {
         ->name('deptmtce.show');
     Route::get('editdeptmtcepreventive/{mesin}', [PreventiveController::class, 'EditDeptMTCEPreventive'])
         ->name('deptmtce.lihatpreventive');
-    Route::get('mesins/{mesin}/lihat-issue', [MesinController::class, 'lihatIssue'])
-        ->name('mesins.lihatissue');
-    Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
-        ->name('mesins.lihatperbaikan');
-    Route::put('/mesins/{mesin}', [MesinController::class, 'update'])->name('mesins.update');
-    Route::get('dashboardPreventive', [EventController::class, 'dashboardPreventive'])->name('dashboardPreventive');
+    Route::get('', [FormFPPController::class, 'FormProduction'])
+        ->name('fpps.create');
+    Route::get('dashboardPreventive', [PreventiveController::class, 'dashboardPreventive'])->name('dashboardPreventive');
+    Route::get('formpreventif', [PreventiveController::class, 'create'])->name('preventives.create');
+    // Route::get('mesins/{mesin}/lihat-issue', [MesinController::class, 'lihatIssue'])
+    //     ->name('mesins.lihatissue');
+    // Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
+    //     ->name('mesins.lihatperbaikan');
+
 
     //Sales
     Route::get('dashboardfppsales', [FormFPPController::class, 'DashboardFPPSales'])

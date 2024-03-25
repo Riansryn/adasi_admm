@@ -11,6 +11,18 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Daftar Tabel Preventif</h5>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary btn-lg" href="{{ route('preventives.create') }}">
+                                <i class="bi bi-plus"></i> Tambah Preventif
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
                     <div class="card-body">
                         <!-- Calendar -->
                         <div class="table-responsive">

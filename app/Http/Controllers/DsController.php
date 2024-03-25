@@ -57,16 +57,17 @@ class DsController extends Controller
         )
             ->groupBy('month')
             ->get();
-        
+
         $chartCutting = FormFPP::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
             DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
             DB::raw('MONTH(created_at) as month')
         )
-        ->where('section', 'cutting') // Tambahkan kondisi untuk memeriksa nilai 'section'
-        ->groupBy('month')
-        ->get();
+            ->where('section', 'cutting') // Tambahkan kondisi untuk memeriksa nilai 'section'
+            ->groupBy('month')
+            ->get();
 
+<<<<<<< HEAD
         // Mengambil data menggunakan model Eloquent
         $sumarryData = FormFPP::selectRaw('MONTH(created_at) as month, section, COUNT(*) as total')
                         ->whereIn('section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
@@ -77,22 +78,34 @@ class DsController extends Controller
         $datacncbubut = Mesin::select(
             DB::raw('SUM(CASE WHEN LOWER(section) = "cnc bubut" THEN 1 ELSE 0 END) as total_cnc_bubut')
         )->first()->total_cnc_bubut ?? 0;
+=======
+        $chartMachining = FormFPP::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('MONTH(created_at) as month')
+        )
+            ->where('section', 'machining') // Tambahkan kondisi untuk memeriksa nilai 'section'
+            ->groupBy('month')
+            ->get();
+>>>>>>> a00b361de1bca1e26867ad3730aa74d0b339bd69
 
-        $datactbubut = Mesin::select(
-            DB::raw('SUM(CASE WHEN LOWER(section) = "ct bubut" THEN 1 ELSE 0 END) as total_ct_bubut')
-        )->first()->total_ct_bubut ?? 0;
+        $chartHeatTreatment = FormFPP::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('MONTH(created_at) as month')
+        )
+            ->where('section', 'heat treatment') // Tambahkan kondisi untuk memeriksa nilai 'section'
+            ->groupBy('month')
+            ->get();
 
-        $datacutting = Mesin::select(
-            DB::raw('SUM(CASE WHEN LOWER(section) = "cutting" THEN 1 ELSE 0 END) as total_cutting')
-        )->first()->total_cutting ?? 0;
-
-        $dataheattreatment = Mesin::select(
-            DB::raw('SUM(CASE WHEN LOWER(section) = "heat treatment" THEN 1 ELSE 0 END) as total_heat_treatment')
-        )->first()->total_heat_treatment ?? 0;
-
-        $datamachining = Mesin::select(
-            DB::raw('SUM(CASE WHEN LOWER(section) = "machining" THEN 1 ELSE 0 END) as total_machining')
-        )->first()->total_machining ?? 0;
+        $chartCTBubut = FormFPP::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('MONTH(created_at) as month')
+        )
+            ->where('section', 'ct bubut') // Tambahkan kondisi untuk memeriksa nilai 'section'
+            ->groupBy('month')
+            ->get();
 
         // dd($data);
         return view(
@@ -105,6 +118,7 @@ class DsController extends Controller
                 'finishCount',
                 'closedCount',
                 'data',
+<<<<<<< HEAD
                 'datacncbubut',
                 'datactbubut',
                 'datacutting',
@@ -112,6 +126,12 @@ class DsController extends Controller
                 'datamachining',
                 'chartCutting',
                 'sumarryData'
+=======
+                'chartCutting',
+                'chartMachining',
+                'chartHeatTreatment',
+                'chartCTBubut'
+>>>>>>> a00b361de1bca1e26867ad3730aa74d0b339bd69
             )
         );
     }
