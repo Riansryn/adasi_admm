@@ -277,12 +277,12 @@
                               </div>
                             </div>
                             <div class="col-sm-6">
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Chart Sumary Repair Maintenance</h5>
-
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Chart Sumary Repair Maintenance</h5>
+                                        <canvas id="sumarryData" width="200" height="50"></canvas>
+                                    </div>
                                 </div>
-                              </div>
                             </div>
                           </div>
                     </div>
@@ -615,6 +615,107 @@ var chartCTBubut = new Chart(ctx, {
             label: 'Close',
             data: status2,
             backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+            borderColor: 'rgba(0, 0, 0, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var sumarryData = {!! json_encode($sumarryData) !!};
+
+// Inisialisasi array untuk bulan-bulan
+var months = [];
+for (var i = 1; i <= 12; i++) {
+    months.push(getMonthName(i));
+}
+
+// Memetakan total status 1 (status_2=0) dari data
+var status1 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = sumarryData.find(function(item) {
+        return parseInt(item.month) === i && item.section === 'CUTTING';
+    });
+    if (found) {
+        status1.push(found.total);
+    } else {
+        status1.push(0);
+    }
+}
+
+// Memetakan total status 2 (status=3) dari data
+var status2 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = sumarryData.find(function(item) {
+        return parseInt(item.month) === i && item.section === 'HEAT TREATMENT';
+    });
+    if (found) {
+        status2.push(found.total);
+    } else {
+        status2.push(0);
+    }
+}
+
+// Memetakan total status 3 (status=3) dari data
+var status3 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = sumarryData.find(function(item) {
+        return parseInt(item.month) === i && item.section === 'MACHINING';
+    });
+    if (found) {
+        status3.push(found.total);
+    } else {
+        status3.push(0);
+    }
+}
+
+// Memetakan total status 4 (status=3) dari data
+var status4 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = sumarryData.find(function(item) {
+        return parseInt(item.month) === i && item.section === 'MACHINING CUSTOM';
+    });
+    if (found) {
+        status4.push(found.total);
+    } else {
+        status4.push(0);
+    }
+}
+
+var ctx = document.getElementById('sumarryData').getContext('2d');
+
+var sumarryChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [{
+            label: 'Cutting',
+            data: status1,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(0, 0, 0, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Heat Treatment',
+            data: status2,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(0, 0, 0, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Machining',
+            data: status3,
+            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+            borderColor: 'rgba(0, 0, 0, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Machining Custom',
+            data: status4,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(0, 0, 0, 1)',
             borderWidth: 1
         }]

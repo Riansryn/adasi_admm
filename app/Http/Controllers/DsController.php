@@ -49,7 +49,6 @@ class DsController extends Controller
             })
             ->toArray();
 
-
         $data = Handling::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
             DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
@@ -73,10 +72,6 @@ class DsController extends Controller
             ->where('status', 3)
             ->groupBy('month', 'section')
             ->get();
-
-        $datacncbubut = Mesin::select(
-            DB::raw('SUM(CASE WHEN LOWER(section) = "cnc bubut" THEN 1 ELSE 0 END) as total_cnc_bubut')
-        )->first()->total_cnc_bubut ?? 0;
 
         $chartMachining = FormFPP::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
