@@ -262,6 +262,12 @@
                             <span>Blok Jadwal Preventive</span>
                         </a>
                     </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="{{ route('dashboardPreventive') }}">
+                            <i class="bi bi-check2"></i>
+                            <span>Tabel Preventif</span>
+                        </a>
+                    </li>
                 </ul>
             </li><!-- End Maint Received Nav -->
             @endif
@@ -288,6 +294,12 @@
                             <a class="nav-link collapsed" href="{{ route('deptmtce.index') }}">
                                 <i class="bi bi-check2"></i>
                                 <span>Data Approved FPP</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="{{ route('dashboardPreventive') }}">
+                                <i class="bi bi-check2"></i>
+                                <span>Tabel Preventif</span>
                             </a>
                         </li>
                         <!-- <li class="nav-item">
@@ -437,8 +449,6 @@
 
     <!-- Menghubungkan ke jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
-
 
     @yield('scripts')
     <script>

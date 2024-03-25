@@ -19,6 +19,12 @@ class EventController extends Controller
      * @return response()
      */
 
+    public function dashboardPreventive(Request $request)
+    {
+        $mesins = Mesin::all();
+        return view('deptmtce.tabelpreventive', compact('mesins'))->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -289,20 +295,20 @@ class EventController extends Controller
 
     // public function dashboardMaintenance(DetailPreventive $detailpreventive, Event $event)
     // {
-    //     // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
-    //     $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
-    //     $events = Event::latest()->get();
+    //     // // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
+    //     // $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
+    //     // $events = Event::latest()->get();
 
-    //     // Menghitung jumlah form FPP berdasarkan status
-    //     $openCount = $formperbaikans->where('status', 0)->count();
-    //     $onProgressCount = $formperbaikans->where('status', 1)->count();
-    //     $finishCount = $formperbaikans->where('status', 2)->count();
-    //     $closedCount = $formperbaikans->where('status', 3)->count();
+    //     // // Menghitung jumlah form FPP berdasarkan status
+    //     // $openCount = $formperbaikans->where('status', 0)->count();
+    //     // $onProgressCount = $formperbaikans->where('status', 1)->count();
+    //     // $finishCount = $formperbaikans->where('status', 2)->count();
+    //     // $closedCount = $formperbaikans->where('status', 3)->count();
 
-    //     // Ambil detail preventive untuk setiap event dan issue
-    //     $issues = $event->detailPreventives()->pluck('issue')->toArray();
+    //     // // Ambil detail preventive untuk setiap event dan issue
+    //     // $issues = $event->detailPreventives()->pluck('issue')->toArray();
 
-    //     return view('dashboard.dashboardMaintenance', compact('formperbaikans', 'openCount', 'onProgressCount', 'finishCount', 'closedCount', 'issues', 'events'))->with('i', (request()->input('page', 1) - 1) * 5);
+    //     return view('dashboard.dashboardMaintenance');
     // }
 
     // public function import(Request $request)
