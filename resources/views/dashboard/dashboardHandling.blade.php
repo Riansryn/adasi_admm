@@ -239,7 +239,7 @@
                                 </div>
 
                             </div>
-                        </div><!-- Ending Reports -->
+                        </div><!-- End Reports -->
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="card">
@@ -432,7 +432,7 @@
             var status1 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'CUTTING';
+                    return parseInt(item.month) === i && item.section === 'Cutting';
                 });
                 if (found) {
                     status1.push(found.total);
@@ -445,7 +445,7 @@
             var status2 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'HEAT TREATMENT';
+                    return parseInt(item.month) === i && item.section === 'heat treatment';
                 });
                 if (found) {
                     status2.push(found.total);
@@ -458,7 +458,7 @@
             var status3 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'MACHINING';
+                    return parseInt(item.month) === i && item.section === 'machining';
                 });
                 if (found) {
                     status3.push(found.total);
@@ -471,7 +471,7 @@
             var status4 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'MACHINING CUSTOM';
+                    return parseInt(item.month) === i && item.section === 'machining custom';
                 });
                 if (found) {
                     status4.push(found.total);

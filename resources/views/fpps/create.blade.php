@@ -114,9 +114,10 @@
             var tanggal = document.getElementById('tanggal').value;
             var mesin = document.getElementById('mesin').value;
             var lokasi = document.getElementById('lokasi').value;
+            var section = document.getElementById('section').value;
             var kendala = document.getElementById('kendala').value;
 
-            if (pemohon === '' || tanggal === '' || mesin === '' || lokasi === '' || kendala === '') {
+            if (pemohon === '' || tanggal === '' || mesin === '' || lokasi === '' || kendala === '' || section === '') {
                 // Menampilkan SweetAlert jika ada isian yang kosong kecuali upload gambar
                 Swal.fire({
                     title: 'Data belum lengkap!',
