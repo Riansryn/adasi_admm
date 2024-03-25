@@ -102,6 +102,52 @@
                 </div><!-- End Revenue Card This Month -->
             </div>
 
+            <div class="row">
+                        <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Chart Cutting</h5>
+                                        <canvas id="chartCutting" width="200" height="50"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart Machining</h5>
+                                  <canvas id="chartMachining" width="200" height="50"></canvas>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart Heat Treatment</h5>
+                                  <canvas id="chartHeatTreatment" width="200" height="50"></canvas>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart CT Bubut</h5>
+                                  <canvas id="chartCTBubut" width="200" height="50"></canvas>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Chart Summary Repair Maintenance</h5>
+                                        <canvas id="sumarryData" width="200" height="50"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+
 
 
         </section>
@@ -240,51 +286,7 @@
 
                             </div>
                         </div><!-- End Reports -->
-                        <div class="row">
-                        <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Chart Cutting</h5>
-                                        <canvas id="chartCutting" width="200" height="50"></canvas>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="col-sm-6">
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Chart Machining</h5>
-                                  <canvas id="chartMachining" width="200" height="50"></canvas>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="col-sm-6">
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Chart Heat Treatment</h5>
-                                  <canvas id="chartHeatTreatment" width="200" height="50"></canvas>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="col-sm-6">
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Chart CT Bubut</h5>
-                                  <canvas id="chartCTBubut" width="200" height="50"></canvas>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Chart Sumary Repair Maintenance</h5>
-                                        <canvas id="sumarryData" width="200" height="50"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                          </div>
                     </div>
                 </div><!-- End Left side columns -->
             </div>
