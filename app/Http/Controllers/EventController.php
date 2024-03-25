@@ -19,12 +19,6 @@ class EventController extends Controller
      * @return response()
      */
 
-    public function dashboardPreventive(Request $request)
-    {
-        $mesins = Mesin::all();
-        return view('deptmtce.tabelpreventive', compact('mesins'))->with('i', (request()->input('page', 1) - 1) * 5);
-    }
-
     public function index(Request $request)
     {
         if ($request->ajax()) {
