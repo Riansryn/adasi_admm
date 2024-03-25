@@ -140,6 +140,7 @@
                                                 <th>Lokasi</th>
                                                 <th>Kendala</th>
                                                 <th>Status</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
 
@@ -163,6 +164,11 @@
                                                     ">
                                                         {{ $formperbaikan->ubahtext() }}
                                                     </div>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-warning" href="{{ route('fpps.show', $formperbaikan->id) }}">
+                                                        <i class="bi bi-eye-fill"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             @endforeach
