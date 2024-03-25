@@ -236,12 +236,28 @@
                                         </select>
                                         <canvas id="myChart" width="200" height="50"></canvas>
                                     </div>
-
                                 </div>
-
+                                
                             </div>
                         </div><!-- End Reports -->
-
+                        <div class="row">
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart Cutting</h5>
+                                  <canvas id="chartCutting" width="200" height="50"></canvas>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart Sumary Repair Maintenance</h5>
+                                  
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                     </div>
                 </div><!-- End Left side columns -->
 
@@ -251,7 +267,6 @@
 
         <script>
             // Function to update card based on data
-
             function updateCard(cardId, title, iconId, count) {
                 document.getElementById(cardId + 'Title').textContent = title;
                 document.getElementById(cardId + 'Icon').className = 'bi bi-' + iconId;
@@ -319,6 +334,7 @@
 
             var ctx = document.getElementById('myChart').getContext('2d');
 
+
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -345,6 +361,68 @@
                     }
                 }
             });
+
+            
+            
+            //data cutting chart
+            var cuttingData = {!! $chartCutting !!};
+
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = cuttingData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status1.push(found.total_status_2_0);
+                } else {
+                    status1.push(0);
+                }
+            }
+
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = cuttingData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status2.push(found.total_status_3);
+                } else {
+                    status2.push(0);
+                }
+            }
+
+            var ctx = document.getElementById('chartCutting').getContext('2d');
+
+            var chartCutting = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Open', // label untuk status_2=0
+                        data: status1,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Close', // label untuk status=3
+                        data: status2,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+
         </script>
 
     </main><!-- End #main -->

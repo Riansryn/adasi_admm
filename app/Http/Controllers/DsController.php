@@ -57,6 +57,15 @@ class DsController extends Controller
         )
             ->groupBy('month')
             ->get();
+        
+        $chartCutting = FormFPP::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->where('section', 'cutting') // Tambahkan kondisi untuk memeriksa nilai 'section'
+        ->groupBy('month')
+        ->get();
 
         $datacncbubut = Mesin::select(
             DB::raw('SUM(CASE WHEN LOWER(section) = "cnc bubut" THEN 1 ELSE 0 END) as total_cnc_bubut')
@@ -93,7 +102,8 @@ class DsController extends Controller
                 'datactbubut',
                 'datacutting',
                 'dataheattreatment',
-                'datamachining'
+                'datamachining',
+                'chartCutting'
             )
         );
     }
