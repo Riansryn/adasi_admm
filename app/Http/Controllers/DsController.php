@@ -14,6 +14,7 @@ class DsController extends Controller
     //
     public function dashboardHandling()
     {
+        //Start Function
         // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
         $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
         $mesins = Mesin::orderBy('updated_at', 'desc')->get();

@@ -239,7 +239,7 @@
                                 </div>
 
                             </div>
-                        </div><!-- End Reports -->
+                        </div><!-- Ending Reports -->
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="card">
