@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Mesin extends Model
 {
@@ -32,6 +33,11 @@ class Mesin extends Model
     public function formFPP()
     {
         return $this->belongsTo(FormFPP::class, 'id_fpp', 'id_fpp');
+    }
+
+    public function time_line(): HasMany
+    {
+        return $this->hasMany(TimeLine::class);
     }
 
     public function preventives()
