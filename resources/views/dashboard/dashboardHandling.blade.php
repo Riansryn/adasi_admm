@@ -240,6 +240,7 @@
 
                             </div>
                         </div><!-- End Reports -->
+                        <!-- Buat Chart Cutting -->
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="card">
