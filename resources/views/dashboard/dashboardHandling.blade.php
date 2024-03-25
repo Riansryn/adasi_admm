@@ -237,7 +237,7 @@
                                         <canvas id="myChart" width="200" height="50"></canvas>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div><!-- End Reports -->
                         <div class="row">
@@ -249,11 +249,39 @@
                                 </div>
                               </div>
                             </div>
+
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart Machining</h5>
+                                  <canvas id="chartMachining" width="200" height="50"></canvas>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart Heat Treatment</h5>
+                                  <canvas id="chartHeatTreatment" width="200" height="50"></canvas>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Chart CT Bubut</h5>
+                                  <canvas id="chartCTBubut" width="200" height="50"></canvas>
+                                </div>
+                              </div>
+                            </div>
+
                             <div class="col-sm-6">
                               <div class="card">
                                 <div class="card-body">
                                   <h5 class="card-title">Chart Sumary Repair Maintenance</h5>
-                                  
+
                                 </div>
                               </div>
                             </div>
@@ -340,18 +368,18 @@
                 data: {
                     labels: months,
                     datasets: [{
-                        label: 'Open', // label untuk status_2=0
-                        data: status1,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Close', // label untuk status=3
-                        data: status2,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }]
+    label: 'Open',
+    data: status1,
+    backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}, {
+    label: 'Close',
+    data: status2,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}]
                 },
                 options: {
                     scales: {
@@ -362,8 +390,8 @@
                 }
             });
 
-            
-            
+
+
             //data cutting chart
             var cuttingData = {!! $chartCutting !!};
 
@@ -400,18 +428,20 @@
                 data: {
                     labels: months,
                     datasets: [{
-                        label: 'Open', // label untuk status_2=0
-                        data: status1,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Close', // label untuk status=3
-                        data: status2,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }]
+    label: 'Open',
+    data: status1,
+    backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}, {
+    label: 'Close',
+    data: status2,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}]
+
+
                 },
                 options: {
                     scales: {
@@ -423,6 +453,185 @@
             });
 
 
+            //data Machining Chart
+            var machiningData = {!! $chartMachining !!};
+
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = machiningData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status1.push(found.total_status_2_0);
+                } else {
+                    status1.push(0);
+                }
+            }
+
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = machiningData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status2.push(found.total_status_3);
+                } else {
+                    status2.push(0);
+                }
+            }
+
+            var ctx = document.getElementById('chartMachining').getContext('2d');
+
+            var chartCutting = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+    label: 'Open',
+    data: status1,
+    backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}, {
+    label: 'Close',
+    data: status2,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}]
+
+
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+               //data Heat Treatment Chart
+               var heattreatmentData = {!! $chartHeatTreatment !!};
+
+// Memetakan total status 1 (status_2=0) dari data
+var status1 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = heattreatmentData.find(function(item) {
+        return parseInt(item.month) === i;
+    });
+    if (found) {
+        status1.push(found.total_status_2_0);
+    } else {
+        status1.push(0);
+    }
+}
+
+// Memetakan total status 2 (status=3) dari data
+var status2 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = heattreatmentData.find(function(item) {
+        return parseInt(item.month) === i;
+    });
+    if (found) {
+        status2.push(found.total_status_3);
+    } else {
+        status2.push(0);
+    }
+}
+
+var ctx = document.getElementById('chartHeatTreatment').getContext('2d');
+
+var chartCutting = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [{
+    label: 'Open',
+    data: status1,
+    backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}, {
+    label: 'Close',
+    data: status2,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}]
+
+
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+  //data Heat Treatment Chart
+  var ctbubutData = {!! $chartCTBubut !!};
+
+// Memetakan total status 1 (status_2=0) dari data
+var status1 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = ctbubutData.find(function(item) {
+        return parseInt(item.month) === i;
+    });
+    if (found) {
+        status1.push(found.total_status_2_0);
+    } else {
+        status1.push(0);
+    }
+}
+
+// Memetakan total status 2 (status=3) dari data
+var status2 = [];
+for (var i = 1; i <= 12; i++) {
+    var found = ctbubutData.find(function(item) {
+        return parseInt(item.month) === i;
+    });
+    if (found) {
+        status2.push(found.total_status_3);
+    } else {
+        status2.push(0);
+    }
+}
+
+var ctx = document.getElementById('chartCTBubut').getContext('2d');
+
+var chartCutting = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [{
+    label: 'Open',
+    data: status1,
+    backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}, {
+    label: 'Close',
+    data: status2,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}]
+
+
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
         </script>
 
     </main><!-- End #main -->
