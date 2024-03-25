@@ -223,21 +223,29 @@
                                                 <td class="text-center py-3">{{ $row->schedule }}</td>
                                                 <td class="text-center py-3">{{ $row->pic }}</td>
                                                 <td class="text-center py-3">{{ $row->due_date }}</td>
-                                                <td class="text-center py-3">{{ $row->handlings->type_1 }}</td>
-                                                <td class="text-center py-3">{{ $row->handlings->type_2 }}</td>
+                                                <td class="text-center py-3">
+                                                    @if ($row->history_type == 1)
+                                                        Komplain
+                                                    @endif
+                                                </td>
+                                                <td class="text-center py-3">
+                                                    @if ($row->history_type == 1)
+                                                        Klaim
+                                                    @endif
+                                                </td>
                                                 <td class="text-center pt-3">
                                                     @if (in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['pdf']))
-                                                        <a href="{{ asset('assets/image/' . $row->file) }}"
+                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-pdf fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['xlsx', 'xls']))
-                                                        <a href="{{ asset('assets/image/'. $row->file) }}"
+                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-excel fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
-                                                        <a href="{{ asset('assets/image/' . $row->file) }}"
+                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <img src="{{ asset('/storage/handling/' . $row->file) }}"
                                                                 class="img-fluid rounded"
@@ -248,6 +256,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

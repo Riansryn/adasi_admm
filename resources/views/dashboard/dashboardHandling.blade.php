@@ -230,6 +230,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Chart Klaim dan Komplain <span></span></h5>
                                     <div>
+                                        <label for="yearDropdown">Pilih Tahun:</label>
+                                        <select id="yearDropdown" onchange="updateChart()" style="margin-bottom: 1%">
+                                            <!-- Opsi tahun akan diisi melalui JavaScript -->
+                                        </select>
                                         <canvas id="myChart" width="200" height="50"></canvas>
                                     </div>
 
