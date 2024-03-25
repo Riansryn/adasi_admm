@@ -433,7 +433,7 @@
             var status1 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'Cutting';
+                    return parseInt(item.month) === i && item.section === 'CUTTING';
                 });
                 if (found) {
                     status1.push(found.total);
@@ -446,7 +446,7 @@
             var status2 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'heat treatment';
+                    return parseInt(item.month) === i && item.section === 'HEAT TREATMENT';
                 });
                 if (found) {
                     status2.push(found.total);
@@ -459,7 +459,7 @@
             var status3 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'machining';
+                    return parseInt(item.month) === i && item.section === 'MACHINING';
                 });
                 if (found) {
                     status3.push(found.total);
@@ -472,7 +472,7 @@
             var status4 = [];
             for (var i = 1; i <= 12; i++) {
                 var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'machining custom';
+                    return parseInt(item.month) === i && item.section === 'MACHINING CUSTOM';
                 });
                 if (found) {
                     status4.push(found.total);
