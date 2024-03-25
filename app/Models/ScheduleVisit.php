@@ -19,6 +19,7 @@ class ScheduleVisit extends Model
         'pic',
         'file',
         'file_name',
+        'history_type',
         'status',
     ];
 

@@ -155,9 +155,16 @@ class DeptManController extends Controller
         $handlings = Handling::findOrFail($id);
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
-        $data = ScheduleVisit::where('handling_id', $id)->with('handlings')->get();
+        $data = ScheduleVisit::where('handling_id', $id)
+                            ->whereHas('handlings', function ($query) {
+                                $query->where('type_1', 'Komplain')
+                                      ->orWhere('type_2', 'Klaim');
+                            })
+                            ->with('handlings')
+                            ->get();
 
-        return view('deptman.showCloseProgres', compact('handlings', 'customers', 'type_materials', 'data'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptman.showCloseProgres', compact('handlings', 'customers', 'type_materials', 'data'))
+        ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -265,6 +272,7 @@ class DeptManController extends Controller
                 $scheduleVisit->pic = $request->pic;
                 $scheduleVisit->file = $filename;
                 $scheduleVisit->file_name = $originalFilename;
+                $scheduleVisit->history_type = '1';
                 $scheduleVisit->status = '1';
                 $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
                 $scheduleVisit->save();

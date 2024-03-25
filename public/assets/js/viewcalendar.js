@@ -4,7 +4,7 @@ $(document).ready(function() {
         defaultView: 'month',
         events: scheduleVisits.map(function(visit) {
             return {
-                title: 'Melakukan Schedule Visit ke ' + visit.name_customer,
+                title: visit.name_customer,
                 start: visit.schedule,
                 end: visit.due_date,
                 results: visit.results, // tambahkan deskripsi jika diperlukan
