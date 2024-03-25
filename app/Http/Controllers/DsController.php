@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Handling;
 use App\Models\FormFPP;
+use App\Models\Mesin;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,7 @@ class DsController extends Controller
     {
         // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
         $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
+        $mesins = Mesin::orderBy('updated_at', 'desc')->get();
 
         // Menghitung jumlah form FPP berdasarkan status
         $openCount = $formperbaikans->where('status', 0)->count();
@@ -46,25 +48,53 @@ class DsController extends Controller
                 return count($item);
             })
             ->toArray();
-        // Menambahkan consol log
-        // dd($claimData, $complainData);
-        // Ambil data dari database
-        // Mengambil data dari tabel handlings
+
+
         $data = Handling::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
             DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
             DB::raw('MONTH(created_at) as month')
         )
-        ->groupBy('month')
-        ->get();
-    
-        // dd($data);
-        return view('dashboard.dashboardHandling', compact('complainData', 'formperbaikans', 'openCount', 'onProgressCount', 'finishCount', 'closedCount', 'data'));
-    }
+            ->groupBy('month')
+            ->get();
 
-    // public function multipleCharts()
-    // {
-        
-    //     return view('dashboard.dashboardHandling', ['chartData' => $chartData]);
-    // }
+        $datacncbubut = Mesin::select(
+            DB::raw('SUM(CASE WHEN LOWER(section) = "cnc bubut" THEN 1 ELSE 0 END) as total_cnc_bubut')
+        )->first()->total_cnc_bubut ?? 0;
+
+        $datactbubut = Mesin::select(
+            DB::raw('SUM(CASE WHEN LOWER(section) = "ct bubut" THEN 1 ELSE 0 END) as total_ct_bubut')
+        )->first()->total_ct_bubut ?? 0;
+
+        $datacutting = Mesin::select(
+            DB::raw('SUM(CASE WHEN LOWER(section) = "cutting" THEN 1 ELSE 0 END) as total_cutting')
+        )->first()->total_cutting ?? 0;
+
+        $dataheattreatment = Mesin::select(
+            DB::raw('SUM(CASE WHEN LOWER(section) = "heat treatment" THEN 1 ELSE 0 END) as total_heat_treatment')
+        )->first()->total_heat_treatment ?? 0;
+
+        $datamachining = Mesin::select(
+            DB::raw('SUM(CASE WHEN LOWER(section) = "machining" THEN 1 ELSE 0 END) as total_machining')
+        )->first()->total_machining ?? 0;
+
+        // dd($data);
+        return view(
+            'dashboard.dashboardHandling',
+            compact(
+                'complainData',
+                'formperbaikans',
+                'openCount',
+                'onProgressCount',
+                'finishCount',
+                'closedCount',
+                'data',
+                'datacncbubut',
+                'datactbubut',
+                'datacutting',
+                'dataheattreatment',
+                'datamachining'
+            )
+        );
+    }
 }
