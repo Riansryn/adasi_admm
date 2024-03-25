@@ -40,6 +40,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('full-calender-AJAX', [EventController::class, 'ajax']);
     Route::get('generate-pdf/{mesin}', [PDFController::class, 'generatePDF'])->name('pdf.mesin');
     Route::get('dashboardMaintenance', [EventController::class, 'dashboardMaintenance'])->name('dashboardMaintenance');
+
     Route::resource('mesins', MesinController::class);
     Route::resource('users', UserController::class);
     Route::resource('customers', CustomerController::class);
@@ -123,6 +124,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
         ->name('mesins.lihatperbaikan');
     Route::put('/mesins/{mesin}', [MesinController::class, 'update'])->name('mesins.update');
+    Route::get('dashboardPreventive', [EventController::class, 'dashboardPreventive'])->name('dashboardPreventive');
 
     //Sales
     Route::get('dashboardfppsales', [FormFPPController::class, 'DashboardFPPSales'])
