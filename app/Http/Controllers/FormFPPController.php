@@ -200,6 +200,7 @@ class FormFPPController extends Controller
 
         // Add 'status' field with a default value of 'open'
         $request->merge(['status' => 0]);
+        $request->merge(['status_2' => 0]);
         $request->merge(['note' => 'Form FPP Dibuat']);
 
         // Simpan data mesin beserta path gambar dan file attachment ke database
@@ -208,6 +209,7 @@ class FormFPPController extends Controller
             'pemohon' => $request->pemohon,
             'tanggal' => $request->tanggal,
             'mesin' => $request->mesin,
+            'section' => $request->section,
             'lokasi' => $request->lokasi,
             'kendala' => $request->kendala,
             'gambar' => $gambarPath,

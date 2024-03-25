@@ -12,7 +12,7 @@ class FormFPP extends Model
     use HasFactory;
     protected $fillable = [
         'id', 'id_fpp', 'pemohon', 'tanggal',
-        'mesin', 'lokasi',
+        'mesin', 'section', 'lokasi',
         'kendala', 'gambar', 'status'
     ];
 

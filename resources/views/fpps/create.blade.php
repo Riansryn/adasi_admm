@@ -49,11 +49,18 @@
                                     <select class="form-control" id="mesin" name="mesin">
                                         <option value="">Pilih Mesin</option>
                                         @foreach($mesins as $mesin)
-                                        <option value="{{ $mesin->no_mesin }}" data-lokasi="{{$mesin->lokasi}}">
+                                        <option value="{{ $mesin->no_mesin }}" data-section="{{$mesin->section}}" data-lokasi=" {{$mesin->lokasi}}">
                                             {{ $mesin->section }} | {{ $mesin->tipe }} | {{ $mesin->no_mesin }}
                                         </option>
                                         @endforeach
                                     </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="section" class="form-label">
+                                        Section<span style="color: red;">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="section" name="section" readonly>
                                 </div>
 
                                 <div class="mb-3">
@@ -180,6 +187,7 @@
             // Ambil elemen-elemen yang diperlukan
             var MesinSelect = document.getElementById('mesin');
             var lokasiInput = document.getElementById('lokasi');
+            var sectionInput = document.getElementById('section');
             // Tambahkan event listener untuk perubahan pada pilihan nama_mesin
             MesinSelect.addEventListener('change', function() {
                 // Ambil opsi yang dipilih
@@ -187,6 +195,7 @@
 
                 // Set nilai type, no_mesin, dan mfg_date sesuai data yang dipilih
                 lokasiInput.value = selectedOption.getAttribute('data-lokasi');
+                sectionInput.value = selectedOption.getAttribute('data-section');
             });
         });
     </script>
