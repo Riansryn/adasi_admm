@@ -70,8 +70,6 @@ Route::middleware(['web', 'auth'])->group(function () {
     //Production
     Route::get('dashboardproduction', [FormFPPController::class, 'DashboardProduction'])->name('fpps.index');
     Route::get('historyfpp', [FormFPPController::class, 'HistoryFPP'])->name('fpps.history');
-    Route::get('formproduction', [FormFPPController::class, 'FormProduction'])
-        ->name('fpps.create');
     Route::get('lihatform/{formperbaikan}', [FormFPPController::class, 'LihatFPP'])
         ->name('fpps.show');
     Route::get('closedform/{formperbaikan}', [FormFPPController::class, 'ClosedFormProduction'])
@@ -118,8 +116,6 @@ Route::middleware(['web', 'auth'])->group(function () {
         ->name('deptmtce.show');
     Route::get('editdeptmtcepreventive/{mesin}', [PreventiveController::class, 'EditDeptMTCEPreventive'])
         ->name('deptmtce.lihatpreventive');
-    Route::get('', [FormFPPController::class, 'FormProduction'])
-        ->name('fpps.create');
     Route::get('dashboardPreventive', [PreventiveController::class, 'dashboardPreventive'])->name('dashboardPreventive');
     Route::get('formpreventif', [PreventiveController::class, 'create'])->name('preventives.create');
     // Route::get('mesins/{mesin}/lihat-issue', [MesinController::class, 'lihatIssue'])

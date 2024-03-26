@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class DsController extends Controller
 {
-    //
+    // Buat Dashboard dan Chart
     public function dashboardHandling()
     {
         // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
@@ -49,6 +49,7 @@ class DsController extends Controller
             })
             ->toArray();
 
+
         $data = Handling::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
             DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
@@ -63,6 +64,15 @@ class DsController extends Controller
             DB::raw('MONTH(created_at) as month')
         )
             ->where('section', 'cutting') // Tambahkan kondisi untuk memeriksa nilai 'section'
+            ->groupBy('month')
+            ->get();
+
+        $chartMachiningCustom = FormFPP::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('MONTH(created_at) as month')
+        )
+            ->where('section', 'machining custom') // Tambahkan kondisi untuk memeriksa nilai 'section'
             ->groupBy('month')
             ->get();
 
@@ -112,10 +122,11 @@ class DsController extends Controller
                 'closedCount',
                 'data',
                 'chartCutting',
+                'sumarryData',
+                'chartCutting',
                 'chartMachining',
+                'chartMachiningCustom',
                 'chartHeatTreatment',
-                'chartCTBubut',
-                'sumarryData'
             )
         );
     }

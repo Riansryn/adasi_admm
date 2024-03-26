@@ -133,11 +133,13 @@
                             <div class="col-sm-6">
                               <div class="card">
                                 <div class="card-body">
-                                  <h5 class="card-title">Chart CT Bubut</h5>
-                                  <canvas id="chartCTBubut" width="200" height="50"></canvas>
+                                  <h5 class="card-title">Chart Machining Custom</h5>
+                                  <canvas id="chartMachiningCustom" width="200" height="50"></canvas>
                                 </div>
                               </div>
                             </div>
+
+                            <!-- Summary buat Claim dan Complain -->
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body">
@@ -573,12 +575,12 @@ var chartMachining = new Chart(ctx, {
 });
 
 // Data CT Bubut Chart
-var ctbubutData = {!! $chartCTBubut !!};
+var machiningcustomData = {!! $chartMachiningCustom !!};
 
 // Memetakan total status 1 (status_2=0) dari data
 var status1 = [];
 for (var i = 1; i <= 12; i++) {
-    var found = ctbubutData.find(function(item) {
+    var found = machiningcustomData.find(function(item) {
         return parseInt(item.month) === i;
     });
     if (found) {
@@ -591,7 +593,7 @@ for (var i = 1; i <= 12; i++) {
 // Memetakan total status 2 (status=3) dari data
 var status2 = [];
 for (var i = 1; i <= 12; i++) {
-    var found = ctbubutData.find(function(item) {
+    var found = machiningcustomData.find(function(item) {
         return parseInt(item.month) === i;
     });
     if (found) {
@@ -601,7 +603,7 @@ for (var i = 1; i <= 12; i++) {
     }
 }
 
-var ctx = document.getElementById('chartCTBubut').getContext('2d');
+var ctx = document.getElementById('chartMachiningCustom').getContext('2d');
 
 var chartCTBubut = new Chart(ctx, {
     type: 'bar',
