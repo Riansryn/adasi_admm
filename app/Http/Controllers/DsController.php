@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class DsController extends Controller
 {
-    //
+    // Buat Dashboard dan Chart
     public function dashboardHandling()
     {
         // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru

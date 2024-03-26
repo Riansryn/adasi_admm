@@ -138,6 +138,8 @@
                                 </div>
                               </div>
                             </div>
+
+                            <!-- Summary buat Claim dan Complain -->
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body">

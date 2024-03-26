@@ -214,6 +214,7 @@ class FormFPPController extends Controller
             'kendala' => $request->kendala,
             'gambar' => $gambarPath,
             'status' => $request->status,
+            'status_2' => $request->status_2,
         ]);
 
         TindakLanjut::create([

@@ -33,6 +33,7 @@ Route::post('/', [AuthController::class, 'login'])->name('login');
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//Autentikasi Login terlebih dahulu baru bisa buka page
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('full-calender', [EventController::class, 'blokMaintanence'])->name('blokMaintanence');
     Route::get('full-calenderDept', [EventController::class, 'blokDeptMaintenance'])->name('blokDeptMaintenance');
