@@ -20,74 +20,68 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2">No</th>
-                                        <th rowspan="2">Nomor Mesin</th>
-                                        <th rowspan="2">Tipe</th>
-                                        @for ($i = 1; $i <= 12; $i++) <th colspan="2">{{ \Carbon\Carbon::create(null, $i, null)->format('F') }}</th>
-                                            @endfor
-                                    </tr>
-                                    <tr>
-                                        @for ($i = 0; $i < 12; $i++) <th>Plan</th>
-                                            <th>Actual</th>
-                                            @endfor
-                                    </tr>
-                                </thead>
-                                <tbody>
-    @php
-        // Grouping data berdasarkan nomor mesin dan bulan
-        $groupedPreventives = $preventives->groupBy(function($preventive) {
-            return $preventive->nomor_mesin . '-' . \Carbon\Carbon::parse($preventive->jadwal_rencana)->format('m');
-        });
-    @endphp
-
+                        <table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th rowspan="2">No</th>
+            <th rowspan="2">Nomor Mesin</th>
+            <th rowspan="2">Tipe</th>
+            @for ($i = 1; $i <= 12; $i++)
+            <th colspan="2">{{ \Carbon\Carbon::create(null, $i, null)->format('F') }}</th>
+            @endfor
+        </tr>
+        <tr>
+            @for ($i = 0; $i < 12; $i++)
+            <th>Plan</th>
+            <th>Actual</th>
+            @endfor
+        </tr>
+    </thead>
+    <tbody>
     @if(isset($groupedPreventives))
-        @foreach ($groupedPreventives as $groupedPreventive)
-            @php
-                $preventive = $groupedPreventive->first(); // Ambil salah satu data sebagai representasi
-                $nomor_mesin = $preventive->nomor_mesin;
-                $tipe = $preventive->tipe;
-                $month = \Carbon\Carbon::parse($preventive->jadwal_rencana)->month;
-            @endphp
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $nomor_mesin }}</td>
-                <td>{{ $tipe }}</td>
-                @for ($i = 1; $i <= 12; $i++)
-                    @php
-                        $plan = '';
-                        $actual = '';
+@foreach ($groupedPreventives as $machineMonthKey => $preventives)
+@php
+    $machineMonthArray = explode('-', $machineMonthKey);
+    $nomor_mesin = $machineMonthArray[0];
+    $tipe = $preventives->first()->tipe;
 
-                        // Ambil data jadwal rencana untuk bulan yang sesuai
-                        $planPreventive = $groupedPreventive->first(function($item) use ($i) {
-                            return \Carbon\Carbon::parse($item->jadwal_rencana)->month == $i;
-                        });
+    $planData = [];
+    $actualData = [];
 
-                        // Ambil data actual untuk bulan yang sesuai
-                        $actualPreventive = $groupedPreventive->first(function($item) use ($i) {
-                            return \Carbon\Carbon::parse($item->updated_at)->month == $i;
-                        });
+    // Inisialisasi data plan dan actual untuk setiap bulan
+    for ($i = 1; $i <= 12; $i++) {
+        $planData[$i] = '';
+        $actualData[$i] = '';
+    }
 
-                        if ($planPreventive) {
-                            $plan = $planPreventive->jadwal_rencana ? \Carbon\Carbon::createFromFormat('Y-m-d', $planPreventive->jadwal_rencana)->format('d/m/Y') : '';
-                        }
+    // Mengisi data plan dan actual berdasarkan preventives yang ada
+    foreach ($preventives as $preventive) {
+        $month = \Carbon\Carbon::parse($preventive->jadwal_rencana)->month;
+        $planData[$month] = $preventive->jadwal_rencana ? \Carbon\Carbon::createFromFormat('Y-m-d', $preventive->jadwal_rencana)->format('d/m/Y') : '';
 
-                        if ($actualPreventive) {
-                            $actual = \Carbon\Carbon::parse($actualPreventive->updated_at)->format('d/m/Y');
-                        }
-                    @endphp
-                    <td>{{ $plan }}</td>
-                    <td class="editable actual">{{ $actual }}</td>
-                @endfor
-            </tr>
-        @endforeach
-    @endif
-</tbody>
+        // Cek apakah ada data actual untuk bulan yang sama
+        if ($preventive->updated_at) {
+            $actualData[$month] = \Carbon\Carbon::parse($preventive->updated_at)->format('d/m/Y');
+        }
+    }
+@endphp
+<tr>
+    <td>{{ $loop->iteration }}</td>
+    <td>{{ $nomor_mesin }}</td>
+    <td>{{ $tipe }}</td>
+    @for ($i = 1; $i <= 12; $i++)
+    <td>{{ $planData[$i] }}</td>
+    <td class="editable actual">{{ $actualData[$i] }}</td>
+    @endfor
+</tr>
+@endforeach
+@endif
 
 
-                            </table>
+
+    </tbody>
+</table>
+
                         </div>
                     </div>
                 </div>
@@ -97,14 +91,31 @@
 </main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Sertakan jQuery dan jQuery UI di halaman Anda -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script>
     $(function() {
-        $('table').on('click', 'td.editable', function(e) {
+        // Inisialisasi Datepicker untuk input tanggal
+        $('table').on('focus', 'input[type="date"]', function() {
+            $(this).datepicker({
+                dateFormat: 'yy-mm-dd', // Format tanggal yang diinginkan (sesuaikan kebutuhan Anda)
+                showAnim: 'slideDown', // Animasi ketika kalender muncul
+                onSelect: function(dateText) {
+                    $(this).val(dateText); // Set nilai input menjadi tanggal yang dipilih
+                    $(this).trigger('change'); // Trigger event change untuk memicu penyimpanan ke database
+                }
+            });
+        });
+
+        $('table').on('click', 'td.editable.actual', function(e) {
             var $this = $(this);
             var currentValue = $this.text().trim();
-            var inputType = $this.hasClass('plan') ? 'number' : 'text';
+            var inputType = 'date';
 
-            // Buat elemen input untuk mengedit nilai
+            // Buat elemen input untuk mengedit tanggal
             var $input = $('<input>', {
                 type: inputType,
                 value: currentValue
@@ -115,25 +126,6 @@
 
             // Fokus pada input
             $input.focus();
-
-            // Reaksi ketika input kehilangan fokus
-            $input.on('blur', function() {
-                var newValue = $(this).val().trim();
-
-                // Perbarui nilai hanya jika berbeda
-                if (newValue !== currentValue) {
-                    $this.text(newValue);
-                    // Panggil fungsi untuk menyimpan ke database
-                    saveToDatabase(newValue, $this);
-                }
-            });
-
-            // Tangani event keydown untuk tombol Enter
-            $input.on('keydown', function(event) {
-                if (event.which === 13) { // 13 adalah kode tombol Enter
-                    $input.trigger('blur'); // Panggil event blur
-                }
-            });
         });
 
         // Fungsi untuk menyimpan ke database
@@ -157,6 +149,14 @@
                 },
                 success: function(response) {
                     console.log('Data berhasil disimpan ke database');
+                    // Tampilkan notifikasi SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses!',
+                        text: 'Data berhasil disimpan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error('Terjadi kesalahan:', error);
@@ -165,4 +165,8 @@
         }
     });
 </script>
+
+
+
+
 @endsection

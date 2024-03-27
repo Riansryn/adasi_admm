@@ -18,9 +18,15 @@ class PreventiveController extends Controller
         // Mengambil data jadwal preventif berdasarkan bulan
         $preventives = JadwalPreventif::all();
 
+        // Grouping data berdasarkan nomor mesin dan bulan
+        $groupedPreventives = $preventives->groupBy(function ($preventive) {
+            return $preventive->nomor_mesin . '-' . \Carbon\Carbon::parse($preventive->jadwal_rencana)->format('m');
+        });
+
         // Mengirimkan data ke tampilan
-        return view('deptmtce.tabelpreventive', compact('mesins', 'preventives'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptmtce.tabelpreventive', compact('mesins', 'groupedPreventives'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
+
 
     public function create()
     {
