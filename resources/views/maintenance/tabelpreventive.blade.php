@@ -44,8 +44,8 @@
                                             @endphp
                                             <td>
                                                 @if($preventif)
-                                                <a class="btn btn-warning" href="{{ route('preventives.editpreventive', $preventif->id) }}">
-                                                    <i class="bi bi-eye-fill"></i>
+                                                <a class="btn btn-primary" href="{{ route('preventives.editpreventive', $preventif->id) }}">
+                                                    <i class="bi bi-pencil-fill"></i>
                                                 </a>
                                                 @endif
                                             </td>
