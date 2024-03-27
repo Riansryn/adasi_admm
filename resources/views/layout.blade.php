@@ -231,7 +231,7 @@
                     <li>
                         <a class="nav-link" href="{{ route('fpps.history') }}">
                             <i class="bi bi-list-check"></i>
-                            <span>History FPP</span>
+                            <span>Riwayat FPP</span>
                         </a>
                     </li>
                 </ul>
@@ -248,6 +248,12 @@
                         <a class="nav-link collapsed" href="{{ asset('dashboardmaintenance') }}">
                             <i class="bi bi-file-earmark-text-fill"></i>
                             <span>Data Received FPP</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ route('fpps.history') }}">
+                            <i class="bi bi-list-check"></i>
+                            <span>Riwayat FPP</span>
                         </a>
                     </li>
                     {{-- <li class="nav-item">
@@ -294,6 +300,12 @@
                             <a class="nav-link collapsed" href="{{ route('deptmtce.index') }}">
                                 <i class="bi bi-check2"></i>
                                 <span>Data Approved FPP</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ route('fpps.history') }}">
+                                <i class="bi bi-list-check"></i>
+                                <span>Riwayat FPP</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -352,6 +364,12 @@
                             <a class="nav-link collapsed" href="{{ route('sales.index') }}">
                                 <i class="bi bi-list-check"></i>
                                 <span>Data Form FPP</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ route('fpps.history') }}">
+                                <i class="bi bi-list-check"></i>
+                                <span>Riwayat FPP</span>
                             </a>
                         </li>
                     </ul>

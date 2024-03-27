@@ -123,6 +123,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     // Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
     //     ->name('mesins.lihatperbaikan');
 
+    Route::put('/update-preventive',  [PreventiveController::class, 'update'])->name('updatePreventive');
 
     //Sales
     Route::get('dashboardfppsales', [FormFPPController::class, 'DashboardFPPSales'])

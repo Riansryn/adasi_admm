@@ -35,11 +35,18 @@
                                     <select class="form-control" id="mesin" name="mesin">
                                         <option value="">Pilih Mesin</option>
                                         @foreach($mesins as $mesin)
-                                        <option value="{{ $mesin->no_mesin }}" data-section="{{$mesin->section}}" data-lokasi=" {{$mesin->lokasi}}">
+                                        <option value="{{ $mesin->no_mesin }}" data-tipe="{{$mesin->tipe}}">
                                             {{ $mesin->section }} | {{ $mesin->tipe }} | {{ $mesin->no_mesin }}
                                         </option>
                                         @endforeach
                                     </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="tipe" class="form-label">
+                                        Tipe<span style="color: red;">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="tipe" name="tipe" readonly>
                                 </div>
 
                                 <div class="mb-3">
@@ -70,3 +77,19 @@
 
 </main><!-- End #main -->
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen-elemen yang diperlukan
+        var MesinSelect = document.getElementById('mesin');
+        var tipeInput = document.getElementById('tipe');
+        // Tambahkan event listener untuk perubahan pada pilihan nama_mesin
+        MesinSelect.addEventListener('change', function() {
+            // Ambil opsi yang dipilih
+            var selectedOption = MesinSelect.options[MesinSelect.selectedIndex];
+
+            // Set nilai type, no_mesin, dan mfg_date sesuai data yang dipilih
+            tipeInput.value = selectedOption.getAttribute('data-tipe');
+        });
+    });
+</script>

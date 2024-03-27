@@ -12,8 +12,13 @@ class PreventiveController extends Controller
 {
     public function dashboardPreventive(Request $request)
     {
+        // Mengambil data mesin
         $mesins = Mesin::all();
+
+        // Mengambil data jadwal preventif berdasarkan bulan
         $preventives = JadwalPreventif::all();
+
+        // Mengirimkan data ke tampilan
         return view('deptmtce.tabelpreventive', compact('mesins', 'preventives'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -26,14 +31,45 @@ class PreventiveController extends Controller
     public function store(Request $request)
     {
         $request->merge(['status' => 0]);
+
+        // Buat entri baru untuk setiap bulan yang belum ada
+        $jadwal_rencana = \Carbon\Carbon::createFromFormat('Y-m-d', $request->jadwal_rencana);
+
+        $existingJadwals = JadwalPreventif::where('nomor_mesin', $request->mesin)
+            ->get()
+            ->groupBy(function ($item) {
+                return \Carbon\Carbon::createFromFormat('Y-m-d', $item->jadwal_rencana)->format('Y-m');
+            });
+
+        $bulan = $jadwal_rencana->format('Y-m');
+        if ($existingJadwals->has($bulan)) {
+            // Jika jadwal untuk bulan yang sama sudah ada, tidak lakukan apa-apa
+            return redirect()->route('dashboardPreventive')->with('success', 'Jadwal already exists for this month');
+        }
+
+        // Jika tidak, buat entri baru
         JadwalPreventif::create([
-            'id_mesin' => $request->mesin,
-            'jadwal_rencana' => $request->jadwal_rencana,
+            'nomor_mesin' => $request->mesin,
+            'tipe' => $request->tipe,
+            'jadwal_rencana' => $jadwal_rencana,
             'status' => $request->status
         ]);
 
         return redirect()->route('dashboardPreventive')->with('success', 'Jadwal created successfully');
     }
+
+
+    public function update(Request $request, JadwalPreventif $jadwalPreventif)
+    {
+        // Update nilai aktual dan jadwal rencana
+        $jadwalPreventif->actual = $request->updated_at;
+
+        // Simpan perubahan ke database
+        $jadwalPreventif->save();
+
+        return redirect()->route('dashboardPreventive')->with('success', 'Jadwal updated successfully');
+    }
+
 
 
 

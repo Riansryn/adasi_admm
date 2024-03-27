@@ -13,7 +13,7 @@ class FormFPP extends Model
     protected $fillable = [
         'id', 'id_fpp', 'pemohon', 'tanggal',
         'mesin', 'section', 'lokasi',
-        'kendala', 'gambar', 'status'
+        'kendala', 'gambar', 'status', 'status_2'
     ];
 
     public function mesins()

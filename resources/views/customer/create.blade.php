@@ -85,11 +85,11 @@
             var customer_code = document.getElementById('customer_code').value.trim();
             var name_customer = document.getElementById('name_customer').value.trim();
             var area = document.getElementById('area').value.trim();
-            var email = document.getElementById('email').value.trim();
-            var no_telp = document.getElementById('no_telp').value.trim();
+            // var email = document.getElementById('email').value.trim();
+            // var no_telp = document.getElementById('no_telp').value.trim();
 
             // Melakukan validasi input
-            if (customer_code === '' || name_customer === '' || area === '' || email === '' || no_telp === '') {
+            if (customer_code === '' || name_customer === '' || area === '') {
                 // Menampilkan SweetAlert jika ada isian yang kosong
                 Swal.fire({
                     title: 'Peringatan!',

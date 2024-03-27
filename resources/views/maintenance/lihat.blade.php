@@ -28,6 +28,13 @@
                                     </div>
 
                                     <div class="mb-3">
+                                        <label for="date" class="form-label">
+                                            Tanggal<span style="color: red;">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $formperbaikan->tanggal }}" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label for="mesin" class="form-label">
                                             Mesin<span style="color: red;">*</span>
                                         </label>
