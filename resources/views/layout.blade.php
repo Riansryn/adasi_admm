@@ -183,13 +183,13 @@
                 </a>
                 <ul id="dashboard-admin-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                        <a class="nav-link" href="{{ route('dashboardusers') }}">
+                        <a class="nav-link collapsed" href="{{ route('dashboardusers') }}">
                             <i class="bi bi-list-check"></i>
                             <span>Daftar Pengguna</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{ route('dashboardcustomers') }}">
+                        <a class="nav-link collapsed" href="{{ route('dashboardcustomers') }}">
                             <i class="bi bi-list-check"></i>
                             <span>Daftar Pelanggan</span>
                         </a>
@@ -205,7 +205,7 @@
                 </a>
                 <ul id="dashboard-menu-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                        <a class="nav-link" href="{{ route('dashboardHandling') }}">
+                        <a class="nav-link collapsed" href="{{ route('dashboardHandling') }}">
                             <i class="bi bi-list-check"></i>
                             <span>Dashboard DMS ADASI</span>
                         </a>
@@ -223,13 +223,13 @@
                 </a>
                 <ul id="prod-forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                        <a class="nav-link" href="{{ route('fpps.index') }}">
+                        <a class="nav-link collapsed" href="{{ route('fpps.index') }}">
                             <i class="bi bi-list-check"></i>
                             <span>Data Form FPP</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{ route('fpps.history') }}">
+                        <a class="nav-link collapsed" href="{{ route('fpps.history') }}">
                             <i class="bi bi-list-check"></i>
                             <span>Riwayat FPP</span>
                         </a>
@@ -251,7 +251,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{ route('fpps.history') }}">
+                        <a class="nav-link collapsed" href="{{ route('fpps.history') }}">
                             <i class="bi bi-list-check"></i>
                             <span>Riwayat FPP</span>
                         </a>
@@ -303,7 +303,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{ route('fpps.history') }}">
+                            <a class="nav-link collapsed" href="{{ route('fpps.history') }}">
                                 <i class="bi bi-list-check"></i>
                                 <span>Riwayat FPP</span>
                             </a>
@@ -367,7 +367,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{ route('fpps.history') }}">
+                            <a class="nav-link collapsed" href="{{ route('fpps.history') }}">
                                 <i class="bi bi-list-check"></i>
                                 <span>Riwayat FPP</span>
                             </a>
