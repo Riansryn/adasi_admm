@@ -56,9 +56,7 @@
                                             </td>
                                             <td>
                                                 @if($preventif && $preventif->jadwal_aktual)
-                                                <a class="btn btn-warning" href="{{ route('preventives.lihatpreventive', $preventif->id) }}">
-                                                    <i class="bi bi-eye-fill"></i>
-                                                </a>
+                                                {{$preventif->jadwal_aktual}}
                                                 @endif
                                             </td>
                                             @endfor
