@@ -16,6 +16,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExcelCSVController;
 use App\Http\Controllers\DetailPreventiveController;
 use App\Http\Controllers\UserController;
+use App\Models\JadwalPreventif;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,13 @@ Route::middleware(['web', 'auth'])->group(function () {
         ->name('maintenance.lihat');
     Route::get('editmaintenance/{formperbaikan}', [FormFPPController::class, 'EditMaintenance'])
         ->name('maintenance.edit');
+    Route::get('preventives/edit-issue/{preventive}', [PreventiveController::class, 'editIssue'])
+        ->name('preventives.editpreventive');
+    Route::get('preventives/lihat-issue/{preventive}', [PreventiveController::class, 'lihatIssue'])
+        ->name('preventives.lihatpreventive');
+    Route::put('preventives/update-issue/{preventive}', [PreventiveController::class, 'updateIssue'])
+        ->name('preventives.updateIssue');
+
 
     // Route::get('mesins/editpreventive/{mesin}', [PreventiveController::class, 'EditMaintenancePreventive'])
     //     ->name('maintenance.editpreventive');
@@ -117,7 +125,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('editdeptmtcepreventive/{mesin}', [PreventiveController::class, 'EditDeptMTCEPreventive'])
         ->name('deptmtce.lihatpreventive');
     Route::get('dashboardPreventive', [PreventiveController::class, 'dashboardPreventive'])->name('dashboardPreventive');
+    Route::get('dashboardPreventiveMaintenance', [PreventiveController::class, 'dashboardPreventiveMaintenance'])->name('dashboardPreventiveMaintenance');
     Route::get('formpreventif', [PreventiveController::class, 'create'])->name('preventives.create');
+    Route::get('editpreventive', [PreventiveController::class, 'edit'])->name('preventives.edit');
     // Route::get('mesins/{mesin}/lihat-issue', [MesinController::class, 'lihatIssue'])
     //     ->name('mesins.lihatissue');
     // Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])

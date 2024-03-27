@@ -256,6 +256,12 @@
                             <span>Riwayat FPP</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="{{ route('dashboardPreventiveMaintenance') }}">
+                            <i class="bi bi-check2"></i>
+                            <span>Tabel Preventif</span>
+                        </a>
+                    </li>
                     {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="">
                     <i class="bi bi-calendar"></i>
@@ -268,12 +274,6 @@
                             <span>Blok Jadwal Preventive</span>
                         </a>
                     </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ route('dashboardPreventive') }}">
-                            <i class="bi bi-check2"></i>
-                            <span>Tabel Preventif</span>
-                        </a>
-                    </li>
                 </ul>
             </li><!-- End Maint Received Nav -->
             @endif
@@ -314,6 +314,7 @@
                                 <span>Tabel Preventif</span>
                             </a>
                         </li>
+
                         <!-- <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ asset('deptmtcepreventive') }}">
                     <i class="bi bi-check2"></i>

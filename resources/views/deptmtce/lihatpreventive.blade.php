@@ -2,145 +2,157 @@
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
 
 <main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Form Elements</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Forms</li>
+                <li class="breadcrumb-item active">Form Jadwal Preventif</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
     <section class="section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="card-title">Preventive Maintenance</h2>
-                            <form id="FPPForm" action="{{ route('mesins.updatePreventive', $mesin->id) }}" method="POST" enctype="multipart/form-data">
+                            <h5 class="card-title">Buat Jadwal Preventif</h5>
+
+                            <form id="preventiveForm" method="POST" action="{{ route('preventives.updateIssue', $preventive->id) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
                                 <div class="mb-3">
-                                    <label for="nama_mesin" class="form-label">
-                                        Nama Mesin<span style="color: red;">*</span>
-                                    </label>
-                                    <input type="text" class="form-control" id="nama_mesin" name="nama_mesin" value="{{ $mesin->nama_mesin }}" disabled>
+                                    <label for="mesin" class="form-label">Pilih Mesin<span style="color: red;">*</span></label>
+                                    <select class="form-control" id="mesin" name="mesin" disabled>
+                                        <option value="">Pilih Mesin</option>
+                                        @foreach($mesins as $mesin)
+                                        <option value="{{ $mesin->no_mesin }}" data-tipe="{{ $mesin->tipe }}" {{ $selected_mesin_nomor == $mesin->no_mesin ? 'selected' : '' }}>
+                                            {{ $mesin->section }} | {{ $mesin->tipe }} | {{ $mesin->no_mesin }}
+                                        </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="no_mesin" class="form-label">
-                                        No Mesin<span style="color: red;">*</span>
-                                    </label>
-                                    <input type="text" class="form-control" id="no_mesin" name="no_mesin" value="{{ $mesin->no_mesin }}" disabled>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="type" class="form-label">
+                                    <label for="tipe" class="form-label">
                                         Type<span style="color: red;">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="type" name="type" value="{{ $mesin->type }}" disabled>
+                                    <input type="text" class="form-control" id="tipe" name="tipe" value="{{$preventive->tipe}}" readonly>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="mfg_date" class="form-label">
-                                        Manufacturing date<span style="color: red;">*</span>
+                                    <label for="jadwal_rencana" class="form-label">
+                                        Schedule Plan<span style="color: red;">*</span>
                                     </label>
-                                    <input type="number" class="form-control" id="mfg_date" name="mfg_date" placeholder="YYYY" min="1900" max="{{ date('Y') }}" value="{{ $mesin->mfg_date }}" disabled>
+                                    <input type="date" class="form-control" id="jadwal_rencana" name="jadwal_rencana" value="{{$preventive->jadwal_rencana}}" readonly>
+
                                 </div>
 
+                                <!-- Input issue -->
+                                <div id="input-container">
+                                    <!-- Input awal issue -->
+                                    <label for="issues[]" class="form-label">
+                                        Issue<span style="color: red;">*</span>
+                                    </label>
+                                    @foreach ($issues as $key => $issue)
+                                    <div class="mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <input type="checkbox" name="checked[]" value="{{ $key }}" @if($checkedIssues[$key]==1) checked @endif disabled>
+                                            </span>
+                                            <input type="text" class="form-control" name="issue[]" value="{{ $issue }}" readonly>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                <input type="hidden" name="confirmed_event" id="confirmed_event" value='0'>
+
+                                <div class="mb-3">
+                                    <a href="{{route('dashboardPreventiveMaintenance') }}" class="btn btn-primary">Cancel</a>
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-title">Tabel Checklist Pengecekan</h2>
-                            <div class="table-responsive">
-                                <!-- Your table goes here -->
-                                <table class="table datatable w-100">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">No</th>
-                                            <th scope="col">Aktivitas</th>
-                                            <th scope="col">Checklist</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php $i = 0 @endphp
-                                        @foreach ($detailPreventives as $detailPreventive)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-                                            <td>{{ $detailPreventive->perbaikan }}</td>
-                                            <td>
-                                                <span class="status-badge {{ $detailPreventive->checked_status_color }}">
-                                                    @if ($detailPreventive->perbaikan_checked === 1)
-                                                    Sudah Terceklis
-                                                    @else
-                                                    Belum Terceklis
-                                                    @endif
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+        </div>
     </section>
-</main>
+
+</main><!-- End #main -->
 @endsection
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Menangkap elemen input file
-        var gambarInput = document.getElementById('gambar');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen-elemen yang diperlukan
+        var MesinSelect = document.getElementById('mesin');
+        var jadwalRencanaInput = document.getElementById('jadwal_rencana');
+        var tipeInput = document.getElementById('tipe');
+        // Tambahkan event listener untuk perubahan pada pilihan nama_mesin
+        MesinSelect.addEventListener('change', function() {
+            // Ambil opsi yang dipilih
+            var selectedOption = MesinSelect.options[MesinSelect.selectedIndex];
 
-        // Menangkap elemen gambar
-        var gambarPreview = document.getElementById('gambarPreview');
+            // Set nilai type, no_mesin, dan mfg_date sesuai data yang dipilih
+            jadwalRencanaInput.value = selectedOption.getAttribute('data-jadwalRencana');
+            tipeInput.value = selectedOption.getAttribute('data-tipe');
+        });
+    });
+</script>
 
-        // Mengatur listener untuk input file
-        fotoInput.addEventListener('change', function() {
-            previewImage(this, gambarPreview);
+<script>
+    function handleFinishButtonClick() {
+        // Check if all issues are checked
+        var allChecked = true;
+        var issueCheckboxes = document.querySelectorAll('input[name="checked[]"]');
+        issueCheckboxes.forEach(function(checkbox) {
+            if (!checkbox.checked) {
+                allChecked = false;
+            }
         });
 
-        // Fungsi untuk menampilkan preview gambar
-        function previewImage(input, previewElement) {
-            var file = input.files[0];
-            var reader = new FileReader();
+        // Show SweetAlert confirmation if all issues are checked and end date is not empty
+        if (allChecked) {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin mengubah status menjadi Finish?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Set the value of confirmed_finish to 1 before submitting the form
+                    document.getElementById('confirmed_event').value = '1';;
 
-            reader.onload = function(e) {
-                previewElement.src = e.target.result;
-            };
-
-            reader.readAsDataURL(file);
+                    // Show success notification
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Status berhasil diubah!',
+                        showConfirmButton: false,
+                        timer: 1500, // Durasi notifikasi dalam milidetik
+                        didClose: () => {
+                            // Submit the form after the success notification is closed
+                            document.getElementById('preventiveForm').submit();
+                        }
+                    });
+                }
+            });
+        } else if (!allChecked) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: 'Semua issue harus dichecklist sebelum menyelesaikan acara.'
+            });
         }
-    });
+    }
 </script>
-<script>
-    $(document).ready(function() {
-        $('.datatable').DataTable();
-    });
-</script>
-
-<style>
-    .status-badge {
-        display: inline-block;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        font-weight: bold;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-    }
-
-    .checked {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .unchecked {
-        background-color: #F44336;
-        color: white;
-    }
-</style>
