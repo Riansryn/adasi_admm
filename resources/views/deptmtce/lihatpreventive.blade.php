@@ -77,7 +77,7 @@
                                 <input type="hidden" name="confirmed_event" id="confirmed_event" value='0'>
 
                                 <div class="mb-3">
-                                    <a href="{{route('dashboardPreventiveMaintenance') }}" class="btn btn-primary">Cancel</a>
+                                    <a href="{{route('dashboardPreventive') }}" class="btn btn-primary">Cancel</a>
                                 </div>
                             </form>
                         </div>

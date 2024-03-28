@@ -83,7 +83,7 @@
 
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+                                    <a href="{{route('dashboardPreventive') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                         </div>
