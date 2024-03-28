@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
-                            <h5 class="card-title">Daftar Tabel Preventif</h5>
+                            <h5 class="card-title">Tabel Preventif Dept.Maintenance</h5>
                         </div>
                         <div>
                             <a class="btn btn-primary btn-lg" href="{{ route('preventives.create') }}">
