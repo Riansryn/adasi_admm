@@ -103,52 +103,52 @@
             </div>
 
             <div class="row">
-                        <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Chart Cutting</h5>
-                                        <canvas id="chartCutting" width="200" height="50"></canvas>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chart Cutting</h5>
+                            <canvas id="chartCutting" width="200" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="col-sm-6">
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Chart Machining</h5>
-                                  <canvas id="chartMachining" width="200" height="50"></canvas>
-                                </div>
-                              </div>
-                            </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chart Machining</h5>
+                            <canvas id="chartMachining" width="200" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="col-sm-6">
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Chart Heat Treatment</h5>
-                                  <canvas id="chartHeatTreatment" width="200" height="50"></canvas>
-                                </div>
-                              </div>
-                            </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chart Heat Treatment</h5>
+                            <canvas id="chartHeatTreatment" width="200" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="col-sm-6">
-                              <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Chart Machining Custom</h5>
-                                  <canvas id="chartMachiningCustom" width="200" height="50"></canvas>
-                                </div>
-                              </div>
-                            </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chart Machining Custom</h5>
+                            <canvas id="chartMachiningCustom" width="200" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-                            <!-- Summary buat Claim dan Complain -->
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Chart Summary Repair Maintenance</h5>
-                                        <canvas id="sumarryData" width="200" height="50"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                          </div>
+                <!-- Summary buat Claim dan Complain -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chart Summary Repair Maintenance</h5>
+                            <canvas id="sumarryData" width="200" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -258,37 +258,48 @@
                         </div><!-- End Customers Card -->
 
                         <!-- Reports -->
-                        <div class="col-12">
+                        <div class="col-sm-6">
                             <div class="card">
-
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i
-                                            class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-
-                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
-                                </div>
-
                                 <div class="card-body">
                                     <h5 class="card-title">Chart Klaim dan Komplain <span></span></h5>
                                     <div>
                                         <label for="yearDropdown">Pilih Tahun:</label>
-                                        <select id="yearDropdown" onchange="updateChart()" style="margin-bottom: 1%">
+                                        <select id="yearDropdown" onchange="updateChart()" style="margin-bottom: 5%">
                                             <!-- Opsi tahun akan diisi melalui JavaScript -->
                                         </select>
-                                        <canvas id="myChart" width="200" height="50"></canvas>
+                                        <canvas id="myChart" width="200" height="113"></canvas>
                                     </div>
                                 </div>
-
                             </div>
-                        </div><!-- End Reports -->
-
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Chart Periode</h5>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="start_month">Bulan Mulai:</label>
+                                            <input type="date" id="start_month" name="start_month"
+                                                class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="end_month">Bulan Akhir:</label>
+                                            <input type="date" id="end_month" name="end_month" class="form-control">
+                                        </div>
+                                        <div class="input-group-append" style="margin-top: 3%">
+                                            <button class="btn btn-primary" type="button"
+                                                id="submit_dates">Submit</button>
+                                            <a href="{{ route('dashboardHandling') }}" class="btn btn-primary btn-sm"
+                                                style="font-size: 18px;">
+                                                Muat Ulang
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <canvas id="chartAllPeriode" width="200" height="90"
+                                        style="margin-top: 5%"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div><!-- End Left side columns -->
             </div>
@@ -296,6 +307,140 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
+            document.getElementById('submit_dates').addEventListener('click', function() {
+                var startDate = document.getElementById('start_month').value;
+                var endDate = document.getElementById('end_month').value;
+                // Validasi apakah kedua tanggal sudah dipilih
+                if (startDate === "" || endDate === "") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Harap pilih tanggal mulai dan tanggal akhir.'
+                    });
+                    return; // Hentikan eksekusi jika tanggal belum dipilih
+                }
+                // Kirim data ke backend menggunakan AJAX
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/getChartData?start_date=' + startDate + '&end_date=' + endDate, true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        // Tangani data yang diterima dari backend
+                        var data = JSON.parse(xhr.responseText);
+                        drawChart(data);
+                    }
+                };
+                xhr.send();
+            });
+
+            function drawChart(data) {
+                var labels = Object.keys(data);
+                var values = Object.values(data);
+
+                var ctx = document.getElementById('chartAllPeriode').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Status',
+                            data: values,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+            // Tambahkan event listener untuk inputan tanggal mulai dan tanggal akhir
+            // document.getElementById("start_month").addEventListener("change", updateChart);
+            // document.getElementById("end_month").addEventListener("change", updateChart);
+            // Fungsi untuk memperbarui chart berdasarkan tanggal mulai dan tanggal akhir yang dipilih
+            // function updateChart() {
+            //     var startMonth = document.getElementById("start_month").value;
+            //     var endMonth = document.getElementById("end_month").value;
+
+            //     // Lakukan AJAX request untuk mengambil data chart berdasarkan tanggal mulai dan tanggal akhir yang dipilih
+            //     $.ajax({
+            //         url: '/dashboardHandling', // Ganti dengan endpoint yang sesuai di backend Anda
+            //         type: 'GET',
+            //         data: {
+            //             start_month: startMonth,
+            //             end_month: endMonth
+            //         },
+            //         success: function(response) {
+            //             // Respons dari server berisi data yang sesuai dengan rentang tanggal yang dipilih
+            //             // Gunakan data ini untuk memperbarui chart
+            //             updateChartWithData(response);
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error(xhr.responseText);
+            //         }
+            //     });
+            // }
+            // // Fungsi untuk memperbarui kedua chart dengan data yang diterima dari server
+            // function updateChartWithData(data) {
+            //     // Di sini Anda dapat menggunakan data yang diterima dari server untuk memperbarui kedua chart
+            //     // Pastikan Anda telah memiliki logika untuk memperbarui kedua chart sesuai dengan data yang diterima
+            // }
+            // var years = {!! $years !!};
+
+            // // Mendapatkan konteks dari canvas
+            // var ctx = document.getElementById('chartAllPeriode').getContext('2d');
+
+            // // Membuat array untuk label tahun
+            // var yearLabels = years.map(function(yearData) {
+            //     return yearData.years;
+            // });
+
+            // // Membuat array untuk total_status_2_0
+            // var totalStatus2Data = years.map(function(yearData) {
+            //     return yearData.total_status_2_0;
+            // });
+
+            // // Membuat array untuk total_status_3
+            // var totalStatus3Data = years.map(function(yearData) {
+            //     return yearData.total_status_3;
+            // });
+
+            // // Membuat chart
+            // var myChart = new Chart(ctx, {
+            //     type: 'bar',
+            //     data: {
+            //         labels: yearLabels,
+            //         datasets: [{
+            //             label: 'Open',
+            //             data: totalStatus2Data,
+            //             backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            //             borderColor: 'rgba(255, 99, 132, 1)',
+            //             borderWidth: 1
+            //         }, {
+            //             label: 'Close',
+            //             data: totalStatus3Data,
+            //             backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            //             borderColor: 'rgba(54, 162, 235, 1)',
+            //             borderWidth: 1
+            //         }]
+            //     },
+            //     options: {
+            //         scales: {
+            //             yAxes: [{
+            //                 ticks: {
+            //                     beginAtZero: true
+            //                 }
+            //             }]
+            //         }
+            //     }
+            // });
+
             // Function to update card based on data
             function updateCard(cardId, title, iconId, count) {
                 document.getElementById(cardId + 'Title').textContent = title;
@@ -370,18 +515,18 @@
                 data: {
                     labels: months,
                     datasets: [{
-            label: 'Open',
-            data: status1,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)', // Warna hijau untuk 'Open'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Close',
-            data: status2,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)', // Warna hitam yang lebih gelap untuk 'Close'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }]
+                        label: 'Open',
+                        data: status1,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Warna hijau untuk 'Open'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Close',
+                        data: status2,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)', // Warna hitam yang lebih gelap untuk 'Close'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
                 },
                 options: {
                     scales: {
@@ -393,350 +538,345 @@
             });
 
 
-// Data cutting chart
-var cuttingData = {!! $chartCutting !!};
+            // Data cutting chart
+            var cuttingData = {!! $chartCutting !!};
 
-// Inisialisasi array untuk bulan-bulan
-var months = [];
-for (var i = 1; i <= 12; i++) {
-    months.push(getMonthName(i));
-}
-
-// Memetakan total status 1 (status_2=0) dari data
-var status1 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = cuttingData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status1.push(found.total_status_2_0);
-    } else {
-        status1.push(0);
-    }
-}
-
-// Memetakan total status 2 (status=3) dari data
-var status2 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = cuttingData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status2.push(found.total_status_3);
-    } else {
-        status2.push(0);
-    }
-}
-
-var ctx = document.getElementById('chartCutting').getContext('2d');
-
-var chartCutting = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: months,
-        datasets: [{
-            label: 'Open',
-            data: status1,
-            backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Close',
-            data: status2,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+            // Inisialisasi array untuk bulan-bulan
+            var months = [];
+            for (var i = 1; i <= 12; i++) {
+                months.push(getMonthName(i));
             }
-        }
-    }
-});
 
-
-// Data Heat Treatment chart
-var heattreatmentData = {!! $chartHeatTreatment !!};
-
-// Memetakan total status 1 (status_2=0) dari data
-var status1 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = heattreatmentData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status1.push(found.total_status_2_0);
-    } else {
-        status1.push(0);
-    }
-}
-
-// Memetakan total status 2 (status=3) dari data
-var status2 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = heattreatmentData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status2.push(found.total_status_3);
-    } else {
-        status2.push(0);
-    }
-}
-
-var ctx = document.getElementById('chartHeatTreatment').getContext('2d');
-
-var chartHeatTreatment = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: months,
-        datasets: [{
-            label: 'Open',
-            data: status1,
-            backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Close',
-            data: status2,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = cuttingData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status1.push(found.total_status_2_0);
+                } else {
+                    status1.push(0);
+                }
             }
-        }
-    }
-});
 
-// Data Machining Chart
-var machiningData = {!! $chartMachining !!};
-
-// Memetakan total status 1 (status_2=0) dari data
-var status1 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = machiningData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status1.push(found.total_status_2_0);
-    } else {
-        status1.push(0);
-    }
-}
-
-// Memetakan total status 2 (status=3) dari data
-var status2 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = machiningData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status2.push(found.total_status_3);
-    } else {
-        status2.push(0);
-    }
-}
-
-var ctx = document.getElementById('chartMachining').getContext('2d');
-
-var chartMachining = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: months,
-        datasets: [{
-            label: 'Open',
-            data: status1,
-            backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Close',
-            data: status2,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = cuttingData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status2.push(found.total_status_3);
+                } else {
+                    status2.push(0);
+                }
             }
-        }
-    }
-});
 
-// Data CT Bubut Chart
-var machiningcustomData = {!! $chartMachiningCustom !!};
+            var ctx = document.getElementById('chartCutting').getContext('2d');
 
-// Memetakan total status 1 (status_2=0) dari data
-var status1 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = machiningcustomData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status1.push(found.total_status_2_0);
-    } else {
-        status1.push(0);
-    }
-}
+            var chartCutting = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Open',
+                        data: status1,
+                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Close',
+                        data: status2,
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
-// Memetakan total status 2 (status=3) dari data
-var status2 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = machiningcustomData.find(function(item) {
-        return parseInt(item.month) === i;
-    });
-    if (found) {
-        status2.push(found.total_status_3);
-    } else {
-        status2.push(0);
-    }
-}
 
-var ctx = document.getElementById('chartMachiningCustom').getContext('2d');
+            // Data Heat Treatment chart
+            var heattreatmentData = {!! $chartHeatTreatment !!};
 
-var chartCTBubut = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: months,
-        datasets: [{
-            label: 'Open',
-            data: status1,
-            backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Close',
-            data: status2,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = heattreatmentData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status1.push(found.total_status_2_0);
+                } else {
+                    status1.push(0);
+                }
             }
-        }
-    }
-});
 
-var sumarryData = {!! json_encode($sumarryData) !!};
-
-// Inisialisasi array untuk bulan-bulan
-var months = [];
-for (var i = 1; i <= 12; i++) {
-    months.push(getMonthName(i));
-}
-
-// Memetakan total status 1 (status_2=0) dari data
-var status1 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = sumarryData.find(function(item) {
-        return parseInt(item.month) === i && item.section === 'CUTTING';
-    });
-    if (found) {
-        status1.push(found.total);
-    } else {
-        status1.push(0);
-    }
-}
-
-// Memetakan total status 2 (status=3) dari data
-var status2 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = sumarryData.find(function(item) {
-        return parseInt(item.month) === i && item.section === 'HEAT TREATMENT';
-    });
-    if (found) {
-        status2.push(found.total);
-    } else {
-        status2.push(0);
-    }
-}
-
-// Memetakan total status 3 (status=3) dari data
-var status3 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = sumarryData.find(function(item) {
-        return parseInt(item.month) === i && item.section === 'MACHINING';
-    });
-    if (found) {
-        status3.push(found.total);
-    } else {
-        status3.push(0);
-    }
-}
-
-// Memetakan total status 4 (status=3) dari data
-var status4 = [];
-for (var i = 1; i <= 12; i++) {
-    var found = sumarryData.find(function(item) {
-        return parseInt(item.month) === i && item.section === 'MACHINING CUSTOM';
-    });
-    if (found) {
-        status4.push(found.total);
-    } else {
-        status4.push(0);
-    }
-}
-
-var ctx = document.getElementById('sumarryData').getContext('2d');
-
-var sumarryChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: months,
-        datasets: [{
-            label: 'Cutting',
-            data: status1,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Heat Treatment',
-            data: status2,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Machining',
-            data: status3,
-            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Machining Custom',
-            data: status4,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(0, 0, 0, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = heattreatmentData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status2.push(found.total_status_3);
+                } else {
+                    status2.push(0);
+                }
             }
-        }
-    }
-});
 
+            var ctx = document.getElementById('chartHeatTreatment').getContext('2d');
 
+            var chartHeatTreatment = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Open',
+                        data: status1,
+                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Close',
+                        data: status2,
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
+            // Data Machining Chart
+            var machiningData = {!! $chartMachining !!};
 
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = machiningData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status1.push(found.total_status_2_0);
+                } else {
+                    status1.push(0);
+                }
+            }
 
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = machiningData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status2.push(found.total_status_3);
+                } else {
+                    status2.push(0);
+                }
+            }
+
+            var ctx = document.getElementById('chartMachining').getContext('2d');
+
+            var chartMachining = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Open',
+                        data: status1,
+                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Close',
+                        data: status2,
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Data CT Bubut Chart
+            var machiningcustomData = {!! $chartMachiningCustom !!};
+
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = machiningcustomData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status1.push(found.total_status_2_0);
+                } else {
+                    status1.push(0);
+                }
+            }
+
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = machiningcustomData.find(function(item) {
+                    return parseInt(item.month) === i;
+                });
+                if (found) {
+                    status2.push(found.total_status_3);
+                } else {
+                    status2.push(0);
+                }
+            }
+
+            var ctx = document.getElementById('chartMachiningCustom').getContext('2d');
+
+            var chartCTBubut = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Open',
+                        data: status1,
+                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Close',
+                        data: status2,
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var sumarryData = {!! json_encode($sumarryData) !!};
+
+            // Inisialisasi array untuk bulan-bulan
+            var months = [];
+            for (var i = 1; i <= 12; i++) {
+                months.push(getMonthName(i));
+            }
+
+            // Memetakan total status 1 (status_2=0) dari data
+            var status1 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = sumarryData.find(function(item) {
+                    return parseInt(item.month) === i && item.section === 'CUTTING';
+                });
+                if (found) {
+                    status1.push(found.total);
+                } else {
+                    status1.push(0);
+                }
+            }
+
+            // Memetakan total status 2 (status=3) dari data
+            var status2 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = sumarryData.find(function(item) {
+                    return parseInt(item.month) === i && item.section === 'HEAT TREATMENT';
+                });
+                if (found) {
+                    status2.push(found.total);
+                } else {
+                    status2.push(0);
+                }
+            }
+
+            // Memetakan total status 3 (status=3) dari data
+            var status3 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = sumarryData.find(function(item) {
+                    return parseInt(item.month) === i && item.section === 'MACHINING';
+                });
+                if (found) {
+                    status3.push(found.total);
+                } else {
+                    status3.push(0);
+                }
+            }
+
+            // Memetakan total status 4 (status=3) dari data
+            var status4 = [];
+            for (var i = 1; i <= 12; i++) {
+                var found = sumarryData.find(function(item) {
+                    return parseInt(item.month) === i && item.section === 'MACHINING CUSTOM';
+                });
+                if (found) {
+                    status4.push(found.total);
+                } else {
+                    status4.push(0);
+                }
+            }
+
+            var ctx = document.getElementById('sumarryData').getContext('2d');
+
+            var sumarryChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Cutting',
+                        data: status1,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Heat Treatment',
+                        data: status2,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Machining',
+                        data: status3,
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Machining Custom',
+                        data: status4,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         </script>
 
     </main><!-- End #main -->

@@ -80,7 +80,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="row mb-3">
                                 <label for="area" class="col-sm-2 col-form-label">Area Pelanggan</label>
                                 <div class="col-sm-10">
