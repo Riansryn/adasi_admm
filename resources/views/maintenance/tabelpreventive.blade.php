@@ -8,12 +8,7 @@
                 <div class="card">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
-                            <h5 class="card-title">Tabel Preventif Dept.Maintenance</h5>
-                        </div>
-                        <div>
-                            <a class="btn btn-primary btn-lg" href="{{ route('preventives.create') }}">
-                                <i class="bi bi-plus"></i> Tambah Preventif
-                            </a>
+                            <h5 class="card-title">Tabel Preventif Maintenance</h5>
                         </div>
                     </div>
                 </div>
@@ -49,7 +44,7 @@
                                             @endphp
                                             <td>
                                                 @if($preventif)
-                                                <a class="btn btn-primary" href="{{ route('preventives.lihatpreventive', $preventif->id) }}">
+                                                <a class="btn btn-primary" href="{{ route('preventives.editpreventive', $preventif->id) }}">
                                                     <i class="bi bi-pencil-fill"></i>
                                                 </a>
                                                 @endif
@@ -66,82 +61,17 @@
                                 </tbody>
 
                             </table>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </section>
 </main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(function() {
-        $('table').on('click', 'td.editable.actual', function(e) {
-            var $this = $(this);
-            var currentValue = $this.text().trim();
 
-            // Buat elemen input untuk mengedit tanggal
-            var $input = $('<input>', {
-                type: 'date',
-                value: currentValue
-            });
-
-            // Ganti nilai dengan elemen input
-            $this.html($input);
-
-            // Fokus pada input
-            $input.focus();
-
-            // Reaksi ketika input kehilangan fokus
-            $input.on('blur', function() {
-                var newValue = $(this).val().trim();
-
-                // Perbarui nilai hanya jika berbeda
-                if (newValue !== currentValue) {
-                    $this.text(newValue);
-                    // Panggil fungsi untuk menyimpan ke database
-                    saveToDatabase(newValue, $this);
-                }
-            });
-        });
-
-        // Fungsi untuk menyimpan ke database
-        function saveToDatabase(newValue, $element) {
-            var rowData = $element.closest('tr').find('td').map(function() {
-                return $(this).text().trim();
-            }).get();
-
-            var data = {
-                nomor_mesin: rowData[1], // Menggunakan nomor_mesin sebagai identifikasi
-                newValue: newValue
-            };
-
-            // Kirim data ke server menggunakan AJAX
-            $.ajax({
-                url: '{{ route("updatePreventive") }}', // Sesuaikan dengan route Anda
-                method: 'POST',
-                data: data,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    console.log('Data berhasil disimpan ke database');
-                    // Tampilkan notifikasi SweetAlert
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Sukses!',
-                        text: 'Data berhasil disimpan.',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Terjadi kesalahan:', error);
-                }
-            });
-        }
-    });
-</script>
 
 @endsection

@@ -11,8 +11,8 @@ class DetailPreventive extends Model
     protected $table = 'detail_preventives';
 
     protected $fillable = [
-        'id_mesin', 'issue', 'perbaikan', 'issue_checked',
-        'start', 'end',
+        'nomor_mesin', 'issue', 'perbaikan', 'issue_checked',
+        'jadwal_rencana', 'jadwal_aktual',
         'perbaikan_checked'
     ];
 

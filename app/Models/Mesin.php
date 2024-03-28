@@ -50,6 +50,11 @@ class Mesin extends Model
         return $this->hasMany(DetailPreventive::class, 'id_mesin', 'id');
     }
 
+    public function preventifs()
+    {
+        return $this->hasMany(JadwalPreventif::class, 'nomor_mesin', 'no_mesin');
+    }
+
     public function getStatusBackgroundColorAttribute()
     {
         $status = strtolower($this->attributes['status']);
