@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,6 +31,14 @@ class Handling extends Model
         'status',
         'status_2'
     ];
+
+    public static function countDataBetweenDates($start_date, $end_date)
+    {
+        return self::whereBetween('created_at', [$start_date, $end_date])
+            ->where('status_2', 0)
+            ->where('status', 3)
+            ->count();
+    }
 
     public function customers(): BelongsTo
     {

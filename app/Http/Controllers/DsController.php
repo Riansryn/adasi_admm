@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class DsController extends Controller
 {
     // Buat Dashboard dan Chart
-    public function dashboardHandling()
+    public function dashboardHandling(Request $request)
     {
         // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
         $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
@@ -23,7 +23,7 @@ class DsController extends Controller
         $onProgressCount = $formperbaikans->where('status', 1)->count();
         $finishCount = $formperbaikans->where('status', 2)->count();
         $closedCount = $formperbaikans->where('status', 3)->count();
-
+    
         // Mendapatkan data dari database berdasarkan tahun ini pada kolom created_at dan status 3
         $claimData = Handling::whereYear('created_at', date('Y'))
             ->where('type_1', 'Claim')
@@ -56,6 +56,24 @@ class DsController extends Controller
             DB::raw('MONTH(created_at) as month')
         )
             ->groupBy('month')
+            ->get();
+
+        $years = Handling::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('YEAR(created_at) as years')
+             // Menggunakan YEAR() untuk mengambil tahun
+        )
+            ->groupBy('years') // Mengelompokkan berdasarkan years (tahun)
+            ->get();
+
+        $countPeriode = Handling::select(
+            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('YEAR(created_at) as years') // Menggunakan YEAR() untuk mengambil tahun
+        )
+            ->groupBy('years', 'month') // Mengelompokkan berdasarkan years (tahun)
             ->get();
 
         $chartCutting = FormFPP::select(
@@ -127,7 +145,10 @@ class DsController extends Controller
                 'chartMachining',
                 'chartMachiningCustom',
                 'chartHeatTreatment',
+                'years',
+                'countPeriode',
             )
         );
     }
+    
 }

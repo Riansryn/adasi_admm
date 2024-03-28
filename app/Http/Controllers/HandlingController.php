@@ -30,7 +30,20 @@ class HandlingController extends Controller
         return view('sales.handling', compact('data'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
-    
+    public function getChartData(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Query untuk mengambil data berdasarkan tanggal mulai dan tanggal selesai
+        $data = Handling::whereBetween('created_at', [$startDate, $endDate])
+                        ->selectRaw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as Open')
+                        ->selectRaw('COUNT(CASE WHEN status = 3 THEN 1 END) as Close')
+                        ->first();
+
+        // Mengembalikan data dalam format JSON
+        return response()->json($data);
+    }
     
 
     public function changeStatus($id)
