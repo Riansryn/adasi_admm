@@ -28,7 +28,62 @@
                                 <h5 class="card-title">Form Lihat Mesin</h5>
                                 <!-- Form di sini -->
                                 <div class="collapse" id="updateProgress">
-                                    <form enctype="multipart/form-data">
+                                    <form id="mesinForm" action="{{ route('mesins.update', $mesin->id) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <div class="mb-3">
+                                            <label for="section" class="form-label">
+                                                Section<span style="color: red;">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="section" name="section" value="{{ $mesin->section }}" readonly>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="tipe" class="form-label">
+                                                Tipe<span style="color: red;">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="tipe" name="tipe" value="{{ $mesin->tipe }}" readonly>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="no_mesin" class="form-label">
+                                                Nomor Mesin<span style="color: red;">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="no_mesin" name="no_mesin" value="{{ $mesin->no_mesin }}" readonly>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="tanggal_dibuat" class="form-label">
+                                                Manufacturing Year<span style="color: red;">*</span>
+                                            </label>
+                                            <input type="number" class="form-control" id="tanggal_dibuat" name="tanggal_dibuat" value="{{ $mesin->tanggal_dibuat }}" min="1900" max="2099" onchange="hitungUmur()" readonly>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="umur" class="form-label">Umur<span style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="umur" name="umur" value="{{ $mesin->umur }}" readonly>
+                                            <!-- Jika Anda ingin melakukan perhitungan Age secara otomatis, Anda perlu menambahkan JavaScript untuk menghitungnya. -->
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="spesifikasi" class="form-label">
+                                                Spesifikasi<span style="color: red;">*</span>
+                                            </label>
+                                            <textarea class="form-control" id="spesifikasi" name="spesifikasi" readonly>{{ $mesin->spesifikasi }}</textarea>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="lokasi" class="form-label">
+                                                Lokasi Mesin<span style="color: red;">*</span>
+                                            </label>
+                                            <select class="form-select" id="lokasi" name="lokasi" disabled>
+                                                <option value="" disabled>Pilih Lokasi Mesin</option>
+                                                <option value="Deltamas" {{ strtoupper($mesin->lokasi) === 'DELTAMAS' ? 'selected' : '' }}>Deltamas</option>
+                                                <option value="DS8" {{ strtoupper($mesin->lokasi) === 'DS8' ? 'selected' : '' }}>DS8</option>
+                                                <option value="Surabaya" {{ strtoupper($mesin->lokasi) === 'SURABAYA' ? 'selected' : '' }}>Surabaya</option>
+                                            </select>
+                                        </div>
 
                                         <div class="mb-3">
                                             <label for="foto" class="form-label">Foto</label>
@@ -41,45 +96,15 @@
                                             </div>
                                         </div>
 
-
                                         <div class="mb-3">
-                                            <label for="nama_mesin" class="form-label">Nama Mesin</label>
-                                            <input type="text" class="form-control" id="nama_mesin" name="nama_mesin" value="{{ $mesin->nama_mesin }}" readonly>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="no_mesin" class="form-label">No Mesin</label>
-                                            <input type="text" class="form-control" id="no_mesin" name="no_mesin" value="{{ $mesin->no_mesin }}" readonly>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="merk" class="form-label">Merk</label>
-                                            <input type="text" class="form-control" id="merk" name="merk" value="{{ $mesin->merk }}" readonly>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="type" class="form-label">Type</label>
-                                            <input type="text" class="form-control" id="type" name="type" value="{{ $mesin->type }}" readonly>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="mfg_date" class="form-label">Manufacturing date</label>
-                                            <input type="number" class="form-control" id="mfg_date" name="mfg_date" placeholder="YYYY" min="1900" max="{{ date('Y') }}" value="{{ $mesin->mfg_date }}" readonly>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="acq_date" class="form-label">Acquisition date</label>
-                                            <input type="number" class="form-control" id="acq_date" name="acq_date" placeholder="YYYY" min="1900" max="{{ date('Y') }}" value="{{ $mesin->acq_date }}" readonly>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="age" class="form-label">Age</label>
-                                            <input type="text" class="form-control" id="age" name="age" readonly value="{{ $mesin->age }}">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="preventive_date" class="form-label">Schedule Preventive Date</label>
-                                            <input type="date" class="form-control" id="preventive_date" name="preventive_date" value="{{ $mesin->preventive_date }}">
+                                            <label for="sparepart" class="form-label">Sparepart</label>
+                                            <div>
+                                                @if($mesin->sparepart)
+                                                <img id="fotoPreview" src="{{ asset($mesin->sparepart) }}" alt="Preview Sparepart" style="max-width: 200px;">
+                                                @else
+                                                <p>No image available</p>
+                                                @endif
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -95,6 +120,18 @@
                                     <h5 class="card-title">Table List Sparepart</h5>
                                 </b>
                                 <div class="collapse" id="updateProgress">
+                                    <form action="{{ route('spareparts.import') }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <input type="file" name="file" class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-success">Import Sparepart</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <br><br>
                                     <table class="table table-bordered datatable" id="table1" style="width:100%">
                                         <!-- Isi tabel 1 disini -->
                                         <thead>
@@ -143,7 +180,6 @@
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
                                             @foreach($formperbaikans as $formperbaikan)
                                             <tr>
@@ -155,13 +191,13 @@
                                                 <td>{{ $formperbaikan->kendala }}</td>
                                                 <td>
                                                     <div style="background-color: {{ $formperbaikan->status_background_color }};
-                                                     border-radius: 5px; /* Rounded corners */
-                                                    padding: 5px 10px; /* Padding inside the div */
-                                                    color: white; /* Text color, adjust as needed */
-                                                    font-weight: bold; /* Bold text */
-                                                    text-align: center; /* Center-align text */
-                                                    text-transform: uppercase; /* Uppercase text */
-                                                    ">
+                                        border-radius: 5px; /* Rounded corners */
+                                        padding: 5px 10px; /* Padding inside the div */
+                                        color: white; /* Text color, adjust as needed */
+                                        font-weight: bold; /* Bold text */
+                                        text-align: center; /* Center-align text */
+                                        text-transform: uppercase; /* Uppercase text */
+                                    ">
                                                         {{ $formperbaikan->ubahtext() }}
                                                     </div>
                                                 </td>
@@ -179,6 +215,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         </div>

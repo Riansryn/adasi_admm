@@ -144,14 +144,20 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Chart Summary Repair Maintenance</h5>
-                            <canvas id="sumarryData" width="200" height="50"></canvas>
+                            <canvas id="summaryData" width="200" height="50"></canvas>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Waktu Pengerjaan Repair Maintenance</h5>
+                <canvas id="summaryData2" width="200" height="50"></canvas>
             </div>
-
-
-
+        </div>
+    </div>
+            </div>
         </section>
 
         <hr>
@@ -777,107 +783,137 @@
                 }
             });
 
-            var sumarryData = {!! json_encode($sumarryData) !!};
+            var summaryData = {!! json_encode($summaryData) !!};
 
-            // Inisialisasi array untuk bulan-bulan
-            var months = [];
-            for (var i = 1; i <= 12; i++) {
-                months.push(getMonthName(i));
+// Initialize array for months
+var months = [];
+for (var i = 1; i <= 12; i++) {
+    months.push(getMonthName(i));
+}
+
+// Function to find data for a specific section in a month
+function findData(month, section) {
+    var found = summaryData.find(function(item) {
+        return parseInt(item.month) === month && item.section.toUpperCase() === section.toUpperCase();
+    });
+    return found ? found : { total_status_2_0: 0, total_status_3: 0 };
+}
+
+// Map total status for each section and month
+var statusData = {};
+['CUTTING', 'HEAT TREATMENT', 'MACHINING', 'MACHINING CUSTOM'].forEach(function(section) {
+    var openData = [];
+    var closedData = [];
+    for (var i = 1; i <= 12; i++) {
+        var data = findData(i, section);
+        openData.push(data.total_status_2_0);
+        closedData.push(data.total_status_3);
+    }
+    statusData[section] = { open: openData, closed: closedData };
+});
+
+// Save different colors for each section
+const colors = {
+    'CUTTING': {
+        open: 'rgba(0, 255, 0, 0.2)',
+        closed: 'rgba(0, 0, 0, 0.4)'
+    },
+    'HEAT TREATMENT': {
+        open: 'rgba(0, 255, 0, 0.2)',
+        closed: 'rgba(0, 0, 0, 0.4)'
+    },
+    'MACHINING': {
+        open: 'rgba(0, 255, 0, 0.2)',
+        closed: 'rgba(0, 0, 0, 0.4)'
+    },
+    'MACHINING CUSTOM': {
+        open: 'rgba(0, 255, 0, 0.2)',
+        closed: 'rgba(0, 0, 0, 0.4)'
+    }
+};
+
+var ctx = document.getElementById('summaryData').getContext('2d');
+
+var sumarryChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [
+            { label: 'Cutting (Open)', data: statusData['CUTTING'].open, backgroundColor: colors['CUTTING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+            { label: 'Cutting (Closed)', data: statusData['CUTTING'].closed, backgroundColor: colors['CUTTING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+            { label: 'Heat Treatment (Open)', data: statusData['HEAT TREATMENT'].open, backgroundColor: colors['HEAT TREATMENT'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+            { label: 'Heat Treatment (Closed)', data: statusData['HEAT TREATMENT'].closed, backgroundColor: colors['HEAT TREATMENT'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+            { label: 'Machining (Open)', data: statusData['MACHINING'].open, backgroundColor: colors['MACHINING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+            { label: 'Machining (Closed)', data: statusData['MACHINING'].closed, backgroundColor: colors['MACHINING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+            { label: 'Machining Custom (Open)', data: statusData['MACHINING CUSTOM'].open, backgroundColor: colors['MACHINING CUSTOM'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+            { label: 'Machining Custom (Closed)', data: statusData['MACHINING CUSTOM'].closed, backgroundColor: colors['MACHINING CUSTOM'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 }
+        ]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+});
+
+           // Mengambil data dari PHP dan menetapkannya ke dalam variabel JavaScript
+var summaryData2 = {!! json_encode($summaryData2) !!};
+
+// Inisialisasi variabel totalDifference, count, labels, dan data
+var totalDifference = 0;
+var count = 0;
+var labels = [];
+var data = [];
+
+// Iterasi melalui setiap item dalam summaryData2
+summaryData2.forEach(function(item) {
+    // Mengambil perbedaan waktu dalam jam
+    var differenceInHours = item.time_difference_hour;
+
+    // Menambahkan perbedaan waktu dalam jam ke totalDifference
+    totalDifference += differenceInHours;
+
+    // Menambahkan 1 ke count
+    count++;
+
+    // Membuat label dengan menggabungkan id_fpp dan section
+    var label = item.id_fpp + " " + item.section;
+
+    // Menambahkan label ke dalam array labels
+    labels.push(label);
+
+    // Menambahkan perbedaan waktu dalam jam ke dalam array data
+    data.push(differenceInHours);
+});
+
+// Menghitung rata-rata perbedaan waktu
+var averageDifference = count > 0 ? totalDifference / count : 0;
+
+// Mendapatkan konteks dari elemen canvas dengan ID "summaryData2"
+var ctx = document.getElementById('summaryData2').getContext('2d');
+
+// Membuat chart menggunakan library Chart.js
+var summaryData2Chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Selisih Waktu (Dalam satuan Jam)',
+            data: data,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
             }
+        }
+    }
+});
 
-            // Memetakan total status 1 (status_2=0) dari data
-            var status1 = [];
-            for (var i = 1; i <= 12; i++) {
-                var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'CUTTING';
-                });
-                if (found) {
-                    status1.push(found.total);
-                } else {
-                    status1.push(0);
-                }
-            }
 
-            // Memetakan total status 2 (status=3) dari data
-            var status2 = [];
-            for (var i = 1; i <= 12; i++) {
-                var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'HEAT TREATMENT';
-                });
-                if (found) {
-                    status2.push(found.total);
-                } else {
-                    status2.push(0);
-                }
-            }
-
-            // Memetakan total status 3 (status=3) dari data
-            var status3 = [];
-            for (var i = 1; i <= 12; i++) {
-                var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'MACHINING';
-                });
-                if (found) {
-                    status3.push(found.total);
-                } else {
-                    status3.push(0);
-                }
-            }
-
-            // Memetakan total status 4 (status=3) dari data
-            var status4 = [];
-            for (var i = 1; i <= 12; i++) {
-                var found = sumarryData.find(function(item) {
-                    return parseInt(item.month) === i && item.section === 'MACHINING CUSTOM';
-                });
-                if (found) {
-                    status4.push(found.total);
-                } else {
-                    status4.push(0);
-                }
-            }
-
-            var ctx = document.getElementById('sumarryData').getContext('2d');
-
-            var sumarryChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Cutting',
-                        data: status1,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Heat Treatment',
-                        data: status2,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Machining',
-                        data: status3,
-                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Machining Custom',
-                        data: status4,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
         </script>
+
+
 
     </main><!-- End #main -->
 @endsection

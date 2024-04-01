@@ -15,6 +15,7 @@ use App\Http\Controllers\PreventiveController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExcelCSVController;
 use App\Http\Controllers\DetailPreventiveController;
+use App\Http\Controllers\SparepartController;
 use App\Http\Controllers\UserController;
 use App\Models\JadwalPreventif;
 
@@ -52,6 +53,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('preventives', PreventiveController::class);
     Route::resource('detailpreventive', DetailPreventiveController::class);
     Route::resource('events', EventController::class);
+    Route::resource('spareparts', SparepartController::class);
 
     //Admin
     Route::get('dashboardusers', [UserController::class, 'index'])->name('dashboardusers');
@@ -128,6 +130,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('dashboardPreventiveMaintenance', [PreventiveController::class, 'dashboardPreventiveMaintenance'])->name('dashboardPreventiveMaintenance');
     Route::get('formpreventif', [PreventiveController::class, 'create'])->name('preventives.create');
     Route::get('editpreventive', [PreventiveController::class, 'edit'])->name('preventives.edit');
+    Route::post('sparepart-import', [SparepartController::class, 'import'])->name('spareparts.import');
     // Route::get('mesins/{mesin}/lihat-issue', [MesinController::class, 'lihatIssue'])
     //     ->name('mesins.lihatissue');
     // Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
@@ -141,12 +144,14 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('lihatfppsales/{formperbaikan}', [FormFPPController::class, 'LihatFPPSales'])
         ->name('sales.lihat');
 
-    //Download Excel
+    //Download File
     Route::get('download-excel/{tindaklanjut}', [FormFPPController::class, 'downloadAttachment'])->name('download.attachment');
     //DashboardforALL
     Route::get('dashboardHandling', [DsController::class, 'dashboardHandling'])->name('dashboardHandling');
     Route::get('/getChartData', [HandlingController::class, 'getChartData']);
     // Route::get('dashboardHandling', [DsController::class, 'multipleCharts'])->name('multipleCharts');
+
+
     //sales
     Route::get('handling', [HandlingController::class, 'index'])->name('index');
     Route::get('create', [HandlingController::class, 'create'])->name('create');

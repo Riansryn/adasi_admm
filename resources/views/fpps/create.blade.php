@@ -43,30 +43,30 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="mesin" class="form-label">
-                                        Pilih Mesin<span style="color: red;">*</span>
-                                    </label>
+                                    <label for="mesin" class="form-label">Pilih Mesin<span style="color: red;">*</span></label>
                                     <select class="form-control" id="mesin" name="mesin">
                                         <option value="">Pilih Mesin</option>
                                         @foreach($mesins as $mesin)
-                                        <option value="{{ $mesin->no_mesin }}" data-section="{{$mesin->section}}" data-lokasi=" {{$mesin->lokasi}}">
-                                            {{ $mesin->tipe }} | {{ $mesin->no_mesin }}
+                                        <option value="{{ $mesin->no_mesin }}" data-section="{{ $mesin->section }}" data-lokasi="{{ $mesin->lokasi }}">
+                                            {{ $mesin->no_mesin }} | {{ $mesin->tipe }}
                                         </option>
                                         @endforeach
+                                        <option value="Others">Others</option> <!-- Tambahkan opsi Others -->
                                     </select>
                                 </div>
 
+                                <div class="mb-3" id="namaMesinDiv" style="display: none;">
+                                    <label for="namaMesin" class="form-label">Nama Alat Bantu<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="namaMesin" name="namaMesin">
+                                </div>
+
                                 <div class="mb-3">
-                                    <label for="section" class="form-label">
-                                        Section<span style="color: red;">*</span>
-                                    </label>
+                                    <label for="section" class="form-label">Section<span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" id="section" name="section" readonly>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="lokasi" class="form-label">
-                                        Lokasi<span style="color: red;">*</span>
-                                    </label>
+                                    <label for="lokasi" class="form-label">Lokasi<span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" id="lokasi" name="lokasi" readonly>
                                 </div>
 
@@ -185,22 +185,36 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ambil elemen-elemen yang diperlukan
-            var MesinSelect = document.getElementById('mesin');
-            var lokasiInput = document.getElementById('lokasi');
-            var sectionInput = document.getElementById('section');
-            // Tambahkan event listener untuk perubahan pada pilihan nama_mesin
-            MesinSelect.addEventListener('change', function() {
-                // Ambil opsi yang dipilih
-                var selectedOption = MesinSelect.options[MesinSelect.selectedIndex];
+            var mesinSelect = document.getElementById('mesin');
+            var namaMesinDiv = document.getElementById('namaMesinDiv');
 
-                // Set nilai type, no_mesin, dan mfg_date sesuai data yang dipilih
-                lokasiInput.value = selectedOption.getAttribute('data-lokasi');
-                sectionInput.value = selectedOption.getAttribute('data-section');
+            mesinSelect.addEventListener('change', function() {
+                var selectedOption = mesinSelect.options[mesinSelect.selectedIndex];
+                var namaMesinInput = document.getElementById('namaMesin');
+                var lokasiInput = document.getElementById('lokasi');
+                var sectionInput = document.getElementById('section');
+
+                if (selectedOption.value === "Others") {
+                    namaMesinDiv.style.display = 'block';
+                    lokasiInput.removeAttribute('readonly');
+                    sectionInput.removeAttribute('readonly');
+                } else {
+                    namaMesinDiv.style.display = 'none';
+                    namaMesinInput.value = selectedOption.text;
+                    lokasiInput.value = selectedOption.getAttribute('data-lokasi');
+                    sectionInput.value = selectedOption.getAttribute('data-section');
+
+                    lokasiInput.setAttribute('readonly', true);
+                    sectionInput.setAttribute('readonly', true);
+                }
+            });
+
+            // Jika nilai input nama mesin diubah, atur nilainya ke nilai mesin yang dipilih
+            document.getElementById('namaMesin').addEventListener('input', function() {
+                var selectedOption = mesinSelect.options[mesinSelect.selectedIndex];
+                selectedOption.value = this.value;
             });
         });
     </script>
-
-
-</main><!-- End #main -->
+</main>
 @endsection

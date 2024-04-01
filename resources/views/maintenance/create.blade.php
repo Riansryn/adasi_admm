@@ -50,16 +50,6 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="lokasi" class="form-label">
-                                            Lokasi Mesin<span style="color: red;">*</span>
-                                        </label>
-                                        <select class="form-select" id="lokasi" name="lokasi" disabled>
-                                            <option value="{{ $formperbaikan->lokasi }}" selected>{{ $formperbaikan->lokasi }}</option>
-                                        </select>
-                                        <input type="hidden" name="lokasi" value="{{ $formperbaikan->lokasi }}">
-                                    </div>
-
-                                    <div class="mb-3">
                                         <label for="kendala" class="form-label">
                                             Kendala<span style="color: red;">*</span>
                                         </label>

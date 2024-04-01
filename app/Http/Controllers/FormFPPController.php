@@ -64,7 +64,7 @@ class FormFPPController extends Controller
         return view('sales.index', compact('formperbaikans', 'tindaklanjuts'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    public function create()
+    public function create(Mesin $mesin)
     {
         $mesins = Mesin::orderBy('updated_at', 'desc')->get();
         return view('fpps.create', compact('mesins'));
@@ -203,12 +203,18 @@ class FormFPPController extends Controller
         $request->merge(['status_2' => 0]);
         $request->merge(['note' => 'Form FPP Dibuat']);
 
-        // Simpan data mesin beserta path gambar dan file attachment ke database
+        $mesin = $request->mesin;
+        // Periksa apakah opsi yang dipilih adalah "Others"
+        if ($request->mesin === "Others") {
+            // Jika "Others" dipilih, gunakan nilai dari inputan "Nama Mesin"
+            $mesin = $request->namaMesin;
+        }
+
         $createdFormFPP = FormFPP::create([
             'id_fpp' => $request->id_fpp,
             'pemohon' => $request->pemohon,
             'tanggal' => $request->tanggal,
-            'mesin' => $request->mesin,
+            'mesin' => $mesin, // Gunakan nilai yang telah ditentukan di atas
             'section' => $request->section,
             'lokasi' => $request->lokasi,
             'kendala' => $request->kendala,
@@ -216,6 +222,7 @@ class FormFPPController extends Controller
             'status' => $request->status,
             'status_2' => $request->status_2,
         ]);
+
 
         TindakLanjut::create([
             'id_fpp' => $createdFormFPP->id_fpp,
