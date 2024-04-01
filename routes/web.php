@@ -149,6 +149,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     //DashboardforALL
     Route::get('dashboardHandling', [DsController::class, 'dashboardHandling'])->name('dashboardHandling');
     Route::get('/getChartData', [HandlingController::class, 'getChartData']);
+    Route::get('/get-data-by-year', [HandlingController::class, 'getDataByYear']);
     // Route::get('dashboardHandling', [DsController::class, 'multipleCharts'])->name('multipleCharts');
 
 

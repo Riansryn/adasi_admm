@@ -146,6 +146,13 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil:
+                                    (optional)</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required>{{ $handlings->results }}</textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <label for="process_type" class="col-sm-2 col-form-label">Jenis Proses</label>
                                 <div class="col-sm-10">
                                     <select name="process_type" class="form-control" id="process_type" required disabled>

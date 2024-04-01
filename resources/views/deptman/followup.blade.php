@@ -35,7 +35,7 @@
                                 </div>
                                 <!-- Customer Code -->
                                 <div class="row mb-3">
-                                    <label for="customer_code" class="col-sm-2 col-form-label">Customer Code</label>
+                                    <label for="customer_code" class="col-sm-2 col-form-label">Kode Pelanggan</label>
                                     <div class="col-sm-3">
                                         <select name="customer_id" id="customer_id_code" class="w-100 select2"
                                             style="width: 400px;" disabled>
@@ -50,7 +50,7 @@
                                 </div>
                                 <!-- Customer Name -->
                                 <div class="row mb-3">
-                                    <label for="customer_name" class="col-sm-2 col-form-label">Customer Name</label>
+                                    <label for="customer_name" class="col-sm-2 col-form-label">Nama Pelanggan</label>
                                     <div class="col-sm-3">
                                         <select name="customer_id" id="customer_id_name" class="w-100 select2"
                                             style="width: 400px;" disabled>
@@ -65,7 +65,7 @@
                                 </div>
                                 <!-- Area -->
                                 <div class="row mb-3">
-                                    <label for="area" class="col-sm-2 col-form-label">Area</label>
+                                    <label for="area" class="col-sm-2 col-form-label">Area Pelanggan</label>
                                     <div class="col-sm-3">
                                         <select name="customer_id" id="customer_id_area" class="w-100 select2"
                                             style="width: 400px;" disabled>
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="area" class="col-sm-2 col-form-label">Type Material</label>
+                                    <label for="area" class="col-sm-2 col-form-label">Tipe Material</label>
                                     <div class="col-sm-10">
                                         <select name="type_id" id="type_id" style="width: 400px;" disabled>
                                             @foreach ($type_materials as $typeMaterial)
@@ -143,29 +143,29 @@
                             <div class="col-md-4">
                                 <div class="col-md-7 mt-2">
                                     <div class="ps-4">
-                                        <label for="schedule" class="form-label">Schedule Visit:</label>
+                                        <label for="schedule" class="form-label">Jadwal Kunjungan:</label>
                                         <input type="datetime-local" class="form-control input-sm" id="schedule"
                                             name="schedule" style="max-width: 250px;">
                                     </div>
                                     <div class="input-group ps-4" style="margin-top: 10px;">
                                         <div class="col-md-5">
-                                            <label for="hasil_tindak_lanjut" class="form-label">Result Note
+                                            <label for="hasil_tindak_lanjut" class="form-label">Catatan Hasil:
                                                 (optional)</label>
                                             <textarea class="form-control" rows="5" id="results" name="results"></textarea>
                                         </div>
                                         <div class="col">
-                                            <label for="duedate" class="form-label">Due Date: (optional)</label>
+                                            <label for="duedate" class="form-label">Batas Akhir: (optional):</label>
                                             <input type="datetime-local" class="form-control input-sm" id="due_date"
                                                 name="due_date" style="max-width: 250px;">
                                         </div>
                                     </div>
                                     <div class="ps-4" style="margin-top: 10px;">
-                                        <label for="schedule_visit" class="form-label">PIC</label>
+                                        <label for="schedule_visit" class="form-label">PIC:</label>
                                         <input type="text" class="form-control input-sm" id="pic"
                                             name="pic" style="max-width: 480px;" placeholder="PIC" required>
                                     </div>
                                     <div class="mb-2 ps-4" style="max-width: 500px;">
-                                        <label for="upload_file" class="form-label" style="margin-top: 10px;">Upload File
+                                        <label for="upload_file" class="form-label" style="margin-top: 10px;">Unggah File
                                             (optional):</label>
                                         <div class="input-group">
                                             <input class="form-control" type="file" id="upload_file"
@@ -180,7 +180,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="row mb-3">
-                                        <label for="category" class="col-sm-2 col-form-label">Category (NG)</label>
+                                        <label for="category" class="col-sm-2 col-form-label">Kategori (NG):</label>
                                         <div class="col-sm-10">
                                             <select name="category" class="form-control" id="category"
                                                 style="width: 400px;" required disabled>
@@ -197,7 +197,14 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="process_type" class="col-sm-2 col-form-label">Proses Type</label>
+                                        <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil:
+                                            (optional)</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required>{{ $handlings->results }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="process_type" class="col-sm-2 col-form-label">Jenis Proses:</label>
                                         <div class="col-sm-10">
                                             <select name="process_type" class="form-control" id="process_type"
                                                 style="width: 400px;" required disabled>
@@ -216,7 +223,7 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="type_1" class="col-sm-2 col-form-label">Type</label>
+                                        <label for="type_1" class="col-sm-2 col-form-label">Jenis:</label>
                                         <div class="col-sm-10">
                                             <div class="form-check mr-2">
                                                 <input type="checkbox" class="form-check-input" id="type_1"

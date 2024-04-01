@@ -31,7 +31,7 @@
                                 <label for="image_upload" class="col-sm-2 col-form-label">Unggah Gambar</label>
                                 <div class="col-sm-4">
                                     <div class="d-flex align-items-center">
-                                        <input class="form-control @error('image') is-invalid @enderror"" type="file"
+                                        <input class="form-control @error('image') is-invalid @enderror" type="file"
                                             id="formFile" name="image" accept="image/*"
                                             style="width: calc(100% - 100px);" onchange="previewImage(event);" required>
                                         <button type="button" id="cancelUpload" class="btn btn-danger ms-2"
@@ -54,8 +54,8 @@
                             </div>
                             <div class="row mb-3">
                                 <label for="customer_code" class="col-sm-2 col-form-label">Kode Pelanggan</label>
-                                <div class="col-sm-10">
-                                    <select id="customer_id" name="customer_id" class="form-control" style="width: 400px;"
+                                <div class="col-sm-4">
+                                    <select id="customer_id" name="customer_id" class="form-control" style="width: 74%;"
                                         required>
                                         <option value="" disabled selected>🔍 Search or select customer</option>
                                         @foreach ($customers as $customer)
@@ -162,6 +162,12 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil: (optional)</label>
+                                <div class="col-sm-10">
+                                <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <label for="process_type" class="col-sm-2 col-form-label">Jenis Proses</label>
                                 <div class="col-sm-10">
                                     <select name="process_type" class="form-control" id="process_type"
@@ -223,7 +229,7 @@
                 });
             });
 
-        
+
             function validateCreate() {
                 event.preventDefault();
 
@@ -235,11 +241,12 @@
                 var qty = document.getElementById('qty').value.trim();
                 var pcs = document.getElementById('pcs').value.trim();
                 var category = document.getElementById('category').value.trim();
+                var results = document.getElementById('results').value.trim();
                 var process_type = document.getElementById('process_type').value.trim();
                 var type_1 = document.getElementById('type_1').value.trim();
 
                 // Memeriksa apakah ada input yang kosong
-                if (!no_wo || !image || !customerName || !customerCode || !area || !qty || !pcs || !category || !process_type ||
+                if (!no_wo || !image || !customerName || !customerCode || !area || !qty || !pcs || !category || !results || !process_type ||
                     type_1.length === 0) {
                     // Menampilkan sweet alert error jika ada input yang kosong
                     Swal.fire({

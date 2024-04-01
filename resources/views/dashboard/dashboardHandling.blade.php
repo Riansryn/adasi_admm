@@ -264,48 +264,37 @@
                         </div><!-- End Customers Card -->
 
                         <!-- Reports -->
-                        <div class="col-sm-6">
+                        <div class="col-sm-9">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Chart Klaim dan Komplain <span></span></h5>
                                     <div>
                                         <label for="yearDropdown">Pilih Tahun:</label>
-                                        <select id="yearDropdown" onchange="updateChart()" style="margin-bottom: 5%">
-                                            <!-- Opsi tahun akan diisi melalui JavaScript -->
-                                        </select>
-                                        <canvas id="myChart" width="200" height="113"></canvas>
+                                        <select id='date-dropdown' style="width: 7%"></select>
+                                        <canvas id="myChart" width="200" height="50"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="card">
-                                <div class="card-body">
+                                <div class="card-body" style="height: 430px; overflow-y: auto;">
                                     <h5 class="card-title">Chart Periode</h5>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <label for="start_month">Bulan Mulai:</label>
-                                            <input type="date" id="start_month" name="start_month"
-                                                class="form-control">
+                                            <input type="date" id="start_month" name="start_month" class="form-control">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <label for="end_month">Bulan Akhir:</label>
                                             <input type="date" id="end_month" name="end_month" class="form-control">
                                         </div>
-                                        <div class="input-group-append" style="margin-top: 3%">
-                                            <button class="btn btn-primary" type="button"
-                                                id="submit_dates">Submit</button>
-                                            <a href="{{ route('dashboardHandling') }}" class="btn btn-primary btn-sm"
-                                                style="font-size: 18px;">
-                                                Muat Ulang
-                                            </a>
-                                        </div>
+                                        <canvas id="chartAllPeriode" height="260" style="margin-top: 5%;"></canvas>
                                     </div>
-                                    <canvas id="chartAllPeriode" width="200" height="90"
-                                        style="margin-top: 5%"></canvas>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div><!-- End Left side columns -->
             </div>
@@ -313,18 +302,34 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
-            document.getElementById('submit_dates').addEventListener('click', function() {
+            //dropdownYear
+            let dateDropdown = document.getElementById('date-dropdown');
+
+            let currentYear = new Date().getFullYear();
+            let earliestYear = 2020;
+            while (currentYear >= earliestYear) {
+                let dateOption = document.createElement('option');
+                dateOption.text = currentYear;
+                dateOption.value = currentYear;
+                dateDropdown.add(dateOption);
+                currentYear -= 1;
+            }
+
+            // Tambahkan event listener untuk input tanggal
+            document.getElementById('start_month').addEventListener('change', updateChart);
+            document.getElementById('end_month').addEventListener('change', updateChart);
+
+            document.getElementById('end_month').addEventListener('change', function() {
+                console.log('End date changed:', this.value); // Tambahkan console.log untuk memeriksa perubahan tanggal
+                updateChartPeriode(); // Panggil fungsi updateChart saat nilai end_month berubah
+            });
+            var Periode; // Variabel untuk menyimpan referensi ke objek Chart
+
+            // Fungsi untuk mengupdate chart
+            function updateChartPeriode() {
                 var startDate = document.getElementById('start_month').value;
                 var endDate = document.getElementById('end_month').value;
-                // Validasi apakah kedua tanggal sudah dipilih
-                if (startDate === "" || endDate === "") {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Oops...',
-                        text: 'Harap pilih tanggal mulai dan tanggal akhir.'
-                    });
-                    return; // Hentikan eksekusi jika tanggal belum dipilih
-                }
+
                 // Kirim data ke backend menggunakan AJAX
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', '/getChartData?start_date=' + startDate + '&end_date=' + endDate, true);
@@ -332,121 +337,83 @@
                     if (xhr.status === 200) {
                         // Tangani data yang diterima dari backend
                         var data = JSON.parse(xhr.responseText);
+
+                        // Hancurkan chart yang ada jika sudah ada
+                        if (Periode) {
+                            Periode.destroy();
+                        }
+                        // Buat chart baru
                         drawChart(data);
                     }
                 };
                 xhr.send();
-            });
+            }
 
+            // Fungsi untuk membuat chart
             function drawChart(data) {
-                var labels = Object.keys(data);
+                var labels = ['Status 2', 'Status'];
                 var values = Object.values(data);
 
                 var ctx = document.getElementById('chartAllPeriode').getContext('2d');
-                var myChart = new Chart(ctx, {
+                Periode = new Chart(ctx, {
                     type: 'bar',
+                    
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Status',
                             data: values,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.5)', // Biru dengan transparansi 0.5
+                                'rgba(255, 99, 132, 0.5)', // Merah dengan transparansi 0.5
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)', // Biru solid
+                                'rgba(255, 99, 132, 1)', // Merah solid
+                            ],
+                            borderWidth: 2
                         }]
                     },
                     options: {
+                        animation: {
+                            duration: 2000, // Animasi durasi 2 detik
+                            easing: 'easeInOutQuart' // Efek animasi
+                        },
                         scales: {
                             yAxes: [{
                                 ticks: {
-                                    beginAtZero: true
+                                    beginAtZero: true,
+                                    fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu Y
+                                    fontSize: 14 // Ukuran font label sumbu Y
+                                },
+                                gridLines: {
+                                    color: 'rgba(0, 0, 0, 0.1)' // Warna garis grid
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu X
+                                    fontSize: 14 // Ukuran font label sumbu X
+                                },
+                                gridLines: {
+                                    display: false // Sembunyikan garis grid sumbu X
                                 }
                             }]
+                        },
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: 'rgba(0, 0, 0, 0.7)', // Warna teks legenda
+                                fontSize: 14, // Ukuran font teks legenda
+                                usePointStyle: true // Menggunakan simbol titik pada legenda
+                            },
+                            onClick: null, // Menonaktifkan interaktivitas pada legenda
+                            position: 'bottom', // Letak legenda
                         }
                     }
                 });
             }
-            // Tambahkan event listener untuk inputan tanggal mulai dan tanggal akhir
-            // document.getElementById("start_month").addEventListener("change", updateChart);
-            // document.getElementById("end_month").addEventListener("change", updateChart);
-            // Fungsi untuk memperbarui chart berdasarkan tanggal mulai dan tanggal akhir yang dipilih
-            // function updateChart() {
-            //     var startMonth = document.getElementById("start_month").value;
-            //     var endMonth = document.getElementById("end_month").value;
 
-            //     // Lakukan AJAX request untuk mengambil data chart berdasarkan tanggal mulai dan tanggal akhir yang dipilih
-            //     $.ajax({
-            //         url: '/dashboardHandling', // Ganti dengan endpoint yang sesuai di backend Anda
-            //         type: 'GET',
-            //         data: {
-            //             start_month: startMonth,
-            //             end_month: endMonth
-            //         },
-            //         success: function(response) {
-            //             // Respons dari server berisi data yang sesuai dengan rentang tanggal yang dipilih
-            //             // Gunakan data ini untuk memperbarui chart
-            //             updateChartWithData(response);
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.error(xhr.responseText);
-            //         }
-            //     });
-            // }
-            // // Fungsi untuk memperbarui kedua chart dengan data yang diterima dari server
-            // function updateChartWithData(data) {
-            //     // Di sini Anda dapat menggunakan data yang diterima dari server untuk memperbarui kedua chart
-            //     // Pastikan Anda telah memiliki logika untuk memperbarui kedua chart sesuai dengan data yang diterima
-            // }
-            // var years = {!! $years !!};
-
-            // // Mendapatkan konteks dari canvas
-            // var ctx = document.getElementById('chartAllPeriode').getContext('2d');
-
-            // // Membuat array untuk label tahun
-            // var yearLabels = years.map(function(yearData) {
-            //     return yearData.years;
-            // });
-
-            // // Membuat array untuk total_status_2_0
-            // var totalStatus2Data = years.map(function(yearData) {
-            //     return yearData.total_status_2_0;
-            // });
-
-            // // Membuat array untuk total_status_3
-            // var totalStatus3Data = years.map(function(yearData) {
-            //     return yearData.total_status_3;
-            // });
-
-            // // Membuat chart
-            // var myChart = new Chart(ctx, {
-            //     type: 'bar',
-            //     data: {
-            //         labels: yearLabels,
-            //         datasets: [{
-            //             label: 'Open',
-            //             data: totalStatus2Data,
-            //             backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            //             borderColor: 'rgba(255, 99, 132, 1)',
-            //             borderWidth: 1
-            //         }, {
-            //             label: 'Close',
-            //             data: totalStatus3Data,
-            //             backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            //             borderColor: 'rgba(54, 162, 235, 1)',
-            //             borderWidth: 1
-            //         }]
-            //     },
-            //     options: {
-            //         scales: {
-            //             yAxes: [{
-            //                 ticks: {
-            //                     beginAtZero: true
-            //                 }
-            //             }]
-            //         }
-            //     }
-            // });
-
+            //Chart Handling /year
             // Function to update card based on data
             function updateCard(cardId, title, iconId, count) {
                 document.getElementById(cardId + 'Title').textContent = title;
@@ -469,21 +436,64 @@
                 updateCard('closed', 'Closed', 'check-circle', closedCount);
             }, 5000); // Update every 5 seconds
 
-
             // Fungsi untuk mengonversi angka bulan menjadi nama bulan dalam bahasa Inggris
             function getMonthName(monthNumber) {
                 const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
                     "Juli", "Agustus", "September", "Oktober", "November", "Desember"
                 ];
-                return monthNames[monthNumber - 1];
+                return monthNames[monthNumber];
             }
 
+            // Event listener untuk menangkap perubahan pada dropdown tahun
+            dateDropdown.addEventListener('change', function() {
+                var selectedYear = this.value; // Mendapatkan tahun yang dipilih dari dropdown
+                // Buat permintaan AJAX ke server dengan tahun yang dipilih
+                $.ajax({
+                    url: '/get-data-by-year', // Ganti dengan URL yang sesuai
+                    type: 'GET',
+                    data: {
+                        year: selectedYear
+                    }, // Mengirim tahun yang dipilih ke server
+                    success: function(response) {
+                        // Update chart dengan data baru dari respons server
+                        updateChart(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error); // Tampilkan pesan error jika terjadi kesalahan
+                    }
+                });
+            });
+
+            // Fungsi untuk memperbarui chart dengan data baru
+            function updateChart(data) {
+                // Memetakan data baru ke status1 dan status2
+                var status1 = [];
+                var status2 = [];
+                for (var i = 0; i < 12; i++) {
+                    var found = data.find(function(item) {
+                        return parseInt(item.month) === i + 1; // Ubah indeks bulan menjadi dimulai dari 1
+                    });
+                    if (found) {
+                        status1.push(found.total_status_2_0);
+                        status2.push(found.total_status_3);
+                    } else {
+                        status1.push(0);
+                        status2.push(0);
+                    }
+                }
+
+                // Perbarui data chart
+                myChart.data.datasets[0].data = status1; // Update data untuk status1 (Open)
+                myChart.data.datasets[1].data = status2; // Update data untuk status2 (Close)
+                myChart.update(); // Perbarui chart
+            }
             // Mendapatkan data dari controller Laravel
             var chartData = {!! $data !!};
 
             // Inisialisasi array untuk bulan-bulan
+            // Inisialisasi array untuk bulan-bulan (dimulai dari Januari)
             var months = [];
-            for (var i = 1; i <= 12; i++) {
+            for (var i = 0; i < 12; i++) {
                 months.push(getMonthName(i));
             }
 
@@ -523,26 +533,51 @@
                     datasets: [{
                         label: 'Open',
                         data: status1,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Warna hijau untuk 'Open'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)', // Warna biru untuk 'Open'
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2
                     }, {
                         label: 'Close',
                         data: status2,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)', // Warna hitam yang lebih gelap untuk 'Close'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)', // Warna merah untuk 'Close'
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)' // Warna grid sumbu y
+                            },
+                            ticks: {
+                                color: 'rgba(0, 0, 0, 0.7)' // Warna label sumbu y
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)' // Warna grid sumbu x
+                            },
+                            ticks: {
+                                color: 'rgba(0, 0, 0, 0.7)' // Warna label sumbu x
+                            }
                         }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(0, 0, 0, 0.7)' // Warna label legenda
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500, // Durasi animasi
+                        easing: 'easeInOutQuart' // Efek animasi
                     }
                 }
             });
-
+            //end
 
             // Data cutting chart
             var cuttingData = {!! $chartCutting !!};

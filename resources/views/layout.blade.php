@@ -237,7 +237,7 @@
                 </ul>
             </li>
             @endif
-            @if (Auth::user()->role_id == 6 || Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
+            @if (Auth::user()->role_id == 6 || Auth::user()->role_id == 1)
             <li class="nav-label">Maintenance</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#maint-received-nav" data-bs-toggle="collapse" href="#">
@@ -280,7 +280,7 @@
             <!-- End Prod Forms Nav -->
             <ul class="sidebar-nav">
 
-                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 6)
+                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                 {{-- Role ID untuk Maintenance --}}
                 {{-- Tampilkan sidebar untuk Maintenance --}}
                 <li class="nav-label">Engineering</li>
