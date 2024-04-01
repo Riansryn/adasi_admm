@@ -242,19 +242,19 @@
                                                 </td>
                                                 <td class="text-center pt-3">
                                                     @if (in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['pdf']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
+                                                        <a href="{{ asset('assets/image/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-pdf fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['xlsx', 'xls']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
+                                                        <a href="{{ asset('assets/image/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
                                                             <i class="fas fa-file-excel fs-4"></i>
                                                         </a>
                                                     @elseif(in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
-                                                        <a href="{{ asset('/storage/handling/' . $row->file) }}"
+                                                        <a href="{{ asset('assets/image/' . $row->file) }}"
                                                             download="{{ $row->file_name }}">
-                                                            <img src="{{ asset('/storage/handling/' . $row->file) }}"
+                                                            <img src="{{ asset('assets/image/' . $row->file) }}"
                                                                 class="img-fluid rounded"
                                                                 style="max-width: 100%; height: auto;">
                                                         </a>

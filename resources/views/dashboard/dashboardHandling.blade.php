@@ -351,7 +351,7 @@
 
             // Fungsi untuk membuat chart
             function drawChart(data) {
-                var labels = ['Status 2', 'Status'];
+                var labels = ['Open', 'Close'];
                 var values = Object.values(data);
 
                 var ctx = document.getElementById('chartAllPeriode').getContext('2d');
@@ -370,7 +370,8 @@
                                 'rgba(54, 162, 235, 1)', // Biru solid
                                 'rgba(255, 99, 132, 1)', // Merah solid
                             ],
-                            borderWidth: 2
+                            borderWidth: 2,
+                            barThickness: 23 // Ukuran batang
                         }]
                     },
                     options: {

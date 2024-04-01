@@ -17,8 +17,8 @@ $(document).ready(function() {
         eventClick: function(calEvent, jsEvent, view) {
            // Menampilkan detail acara beserta nama pelanggan
            $('#eventModal #eventDetails').html(
-            '<p><strong>Tanggal:</strong> ' + calEvent.start.format('YYYY-MM-DD') + '</p>' +
             '<p><strong>' + calEvent.title + '</strong></p>' +
+            '<p><strong>Tanggal:</strong> ' + calEvent.start.format('YYYY-MM-DD') + '</p>' +
             '<p><strong>Schedule:</strong> ' + calEvent.schedule + '</p>' +
             '<p><strong>Results:</strong> ' + (calEvent.results ? calEvent.results : 'Belum adanya hasil') + '</p>' +
             '<p><strong>Due Date:</strong> ' + calEvent.duedate + '</p>' +
