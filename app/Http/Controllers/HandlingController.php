@@ -45,6 +45,23 @@ class HandlingController extends Controller
         return response()->json($data);
     }
     
+    public function getDataByYear(Request $request)
+    {
+        // Ambil tahun dari request
+        $year = $request->input('year');
+
+        // Query untuk mengambil data berdasarkan tahun
+        $data = Handling::select(
+                \DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+                \DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+                \DB::raw('MONTH(created_at) as month')
+            )
+            ->whereYear('created_at', $year) // Filter berdasarkan tahun
+            ->groupBy('month')
+            ->get();
+
+        return response()->json($data); // Mengembalikan data dalam format JSON
+    }
 
     public function changeStatus($id)
     {
@@ -128,6 +145,7 @@ class HandlingController extends Controller
             'qty'               => $request->qty,
             'pcs'               => $request->pcs,
             'category'          => $request->category,
+            'results'           => $request->results,
             'process_type'      => $request->process_type,
             'type_1'            => $request->type_1,
             'image'             => $imagePath, // Simpan nama file gambar atau null jika tidak ada gambar yang diunggah
@@ -213,6 +231,7 @@ class HandlingController extends Controller
                 'qty'                   => $request->qty,
                 'pcs'                   => $request->pcs,
                 'category'              => $request->category,
+                'results'           => $request->results,
                 'process_type'          => $request->process_type,
                 'type_1'                => $request->type_1,
                 'image'                 => $imagePath,
@@ -233,6 +252,7 @@ class HandlingController extends Controller
                 'qty'                   => $request->qty,
                 'pcs'                   => $request->pcs,
                 'category'              => $request->category,
+                'results'           => $request->results,
                 'process_type'          => $request->process_type,
                 'type_1'                => $request->type_1,
                 'status'                => 0

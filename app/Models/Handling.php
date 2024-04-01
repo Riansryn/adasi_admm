@@ -24,6 +24,7 @@ class Handling extends Model
         'qty',
         'pcs',
         'category',
+        'results',
         'process_type',
         'type_1',
         'type_2',

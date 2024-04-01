@@ -55,6 +55,7 @@ class DsController extends Controller
             DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
             DB::raw('MONTH(created_at) as month')
         )
+            ->whereYear('created_at', date('Y')) // Menambahkan filter tahun
             ->groupBy('month')
             ->get();
 

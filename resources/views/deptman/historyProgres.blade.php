@@ -131,6 +131,13 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil:
+                                    (optional)</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required>{{ $handlings->results }}</textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <label for="category" class="col-sm-2 col-form-label">Kategori (NG)</label>
                                 <div class="col-sm-10">
                                     <select name="category" class="form-control" id="category" required disabled>
