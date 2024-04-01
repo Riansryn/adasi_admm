@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FormFPP;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Mesin;
+use App\Models\Sparepart;
 use App\Models\DetailPreventive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -111,7 +112,6 @@ class MesinController extends Controller
         return redirect()->route('mesins.index')->with('success', 'Mesin updated successfully');
     }
 
-
     public function show(Mesin $mesin, FormFPP $formperbaikan)
     {
         // Mengambil formperbaikans berdasarkan status 3 dan nomor_mesin dari mesin yang sama dengan mesin di formperbaikan
@@ -120,7 +120,10 @@ class MesinController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        return view('mesins.show', compact('mesin', 'formperbaikan', 'formperbaikans'));
+        // Mengambil daftar sparepart berdasarkan nomor mesin
+        $spareparts = Sparepart::where('nomor_mesin', $mesin->no_mesin)->get();
+
+        return view('mesins.show', compact('mesin', 'formperbaikan', 'formperbaikans', 'spareparts'));
     }
 
     public function edit(Mesin $mesin)

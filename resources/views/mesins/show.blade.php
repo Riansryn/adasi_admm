@@ -120,7 +120,7 @@
                                     <h5 class="card-title">Table List Sparepart</h5>
                                 </b>
                                 <div class="collapse" id="updateProgress">
-                                    <form action="{{ route('spareparts.import') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('spareparts.import', ['nomor_mesin' => $mesin->no_mesin]) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-8">
@@ -133,24 +133,26 @@
                                     </form>
                                     <br><br>
                                     <table class="table table-bordered datatable" id="table1" style="width:100%">
-                                        <!-- Isi tabel 1 disini -->
                                         <thead>
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Sparepart</th>
-                                                <th>Vendor</th>
-                                                <th>Leadtime</th>
+                                                <th>Deskripsi</th>
+                                                <th>Jumlah Stok</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($spareparts as $index => $sparepart)
                                             <tr>
-                                                <td>1</td>
-                                                <td>Item 1</td>
-                                                <td>Vendor A</td>
-                                                <td>3 Hari</td>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $sparepart->nama }}</td>
+                                                <td>{{ $sparepart->deskripsi }}</td>
+                                                <td>{{ $sparepart->jumlah }}</td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
+
                                 </div>
                             </div>
                         </div>

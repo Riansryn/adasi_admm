@@ -11,9 +11,9 @@ class Sparepart extends Model
 
     protected $fillable = [
         'nomor_mesin',
-        'Nama',
-        'Deskripsi',
-        'Jumlah Stok',
+        'nama',
+        'deskripsi',
+        'jumlah',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
