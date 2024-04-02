@@ -6,18 +6,15 @@
         <div class="pagetitle">
             <h1>Dashboard Maintenance Handling</h1>
             <nav>
-                <ol class="breadcrumb">
+                <!-- <ol class="breadcrumb">
                     <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
+                </ol> -->
             </nav>
         </div><!-- End Page Title -->
-
-        <hr>
-
         <section class="section dashboard">
             <div class="row">
                 <h3 style="display: flex;
-            justify-content: center;">Daftar Form Permintaan Perbaikan</h3>
+            justify-content: center;">Dashboard Form Permintaan Perbaikan</h3>
                 <div class="col-xxl-3 col-md-6">
                     <div class="card info-card sales-card">
                         <div class="card-body">
@@ -106,7 +103,7 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Chart Cutting</h5>
+                            <h5 class="card-title">Mesin Cutting</h5>
                             <canvas id="chartCutting" width="200" height="50"></canvas>
                         </div>
                     </div>
@@ -115,7 +112,7 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Chart Machining</h5>
+                            <h5 class="card-title">Mesin Machining</h5>
                             <canvas id="chartMachining" width="200" height="50"></canvas>
                         </div>
                     </div>
@@ -124,7 +121,7 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Chart Heat Treatment</h5>
+                            <h5 class="card-title">Mesin Heat Treatment</h5>
                             <canvas id="chartHeatTreatment" width="200" height="50"></canvas>
                         </div>
                     </div>
@@ -133,7 +130,7 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Chart Machining Custom</h5>
+                            <h5 class="card-title">Mesin Machining Custom</h5>
                             <canvas id="chartMachiningCustom" width="200" height="50"></canvas>
                         </div>
                     </div>
@@ -143,7 +140,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Chart Summary Repair Maintenance</h5>
+                            <h5 class="card-title">Summary Repair Maintenance</h5>
                             <canvas id="summaryData" width="200" height="50"></canvas>
                         </div>
                     </div>
@@ -164,7 +161,7 @@
 
         <section class="section dashboard">
             <div class="row">
-                <h3 style="display: flex; justify-content: center;">Daftar Form Claim dan Complain</h3>
+                <h3 style="display: flex; justify-content: center;">Dashboard Form Claim dan Complain</h3>
 
 
                 <!-- Left side columns -->
@@ -294,7 +291,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div><!-- End Left side columns -->
             </div>
@@ -357,7 +354,7 @@
                 var ctx = document.getElementById('chartAllPeriode').getContext('2d');
                 Periode = new Chart(ctx, {
                     type: 'bar',
-                    
+
                     data: {
                         labels: labels,
                         datasets: [{
@@ -909,7 +906,7 @@ summaryData2.forEach(function(item) {
     count++;
 
     // Membuat label dengan menggabungkan id_fpp dan section
-    var label = item.id_fpp + " " + item.section;
+    var label = item.id_fpp + " - " + item.mesin;
 
     // Menambahkan label ke dalam array labels
     labels.push(label);
@@ -930,7 +927,7 @@ var summaryData2Chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Selisih Waktu (Dalam satuan Jam)',
+            label: 'Waktu Pengerjaan (Dalam satuan Jam)',
             data: data,
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',

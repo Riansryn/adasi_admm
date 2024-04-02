@@ -105,7 +105,7 @@ class DsController extends Controller
             ->groupBy('month', 'section')
             ->get();
 
-        $summaryData2 = FormFPP::selectRaw('id_fpp, section, TIMESTAMPDIFF(SECOND, created_at, updated_at) / 3600 as time_difference_hour')
+        $summaryData2 = FormFPP::selectRaw('id_fpp, section, mesin, TIMESTAMPDIFF(SECOND, created_at, updated_at) / 3600 as time_difference_hour')
             ->get();
 
         $chartMachining = FormFPP::select(
