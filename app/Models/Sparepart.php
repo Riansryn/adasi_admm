@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Sparepart extends Model
 {
     use HasFactory;
+    public $timestamps = true;
+    protected $table = 'spareparts';
 
     protected $fillable = [
-        'nomor_mesin',
-        'nama',
+        'nama_sparepart',
         'deskripsi',
-        'jumlah',
+        'jumlah_stok',
+        'nomor_mesin'
     ];
 
     protected $dates = ['created_at', 'updated_at'];

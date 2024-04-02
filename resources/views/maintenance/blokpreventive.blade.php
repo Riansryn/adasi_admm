@@ -25,6 +25,14 @@
                                 <i class="bi bi-plus"></i> Tambah Event
                             </a>
                         </div> -->
+                        <form method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" class="form-control">
+                            <br>
+                            <button class="btn btn-success">
+                                Import Preventive
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
