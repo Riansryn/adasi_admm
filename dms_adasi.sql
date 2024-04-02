@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 01 Apr 2024 pada 10.30
+-- Waktu pembuatan: 02 Apr 2024 pada 08.43
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -608,13 +608,7 @@ CREATE TABLE `form_f_p_p_s` (
 --
 
 INSERT INTO `form_f_p_p_s` (`id`, `id_fpp`, `pemohon`, `tanggal`, `mesin`, `section`, `lokasi`, `kendala`, `gambar`, `status`, `status_2`, `created_at`, `updated_at`) VALUES
-(1, 'FP0001', 'Mas Medi', '2024-03-27', 'M2', 'MACHINING', 'Deltamas', 'Parts Rusak', 'assets/gambar/parts.jpeg', 3, 0, '2024-03-27 00:35:12', '2024-03-27 00:39:02'),
-(2, 'FP0002', 'Mas Mula', '2024-03-21', 'M2', 'MACHINING', 'Deltamas', 'Salah Isi', 'assets/gambar/parts.jpeg', 3, 0, '2024-03-27 18:39:41', '2024-03-27 20:34:26'),
-(3, 'FP0003', 'Mas Mula', '2024-03-12', 'B6', 'CNC BUBUT', 'DS8', 'Sparepart Rusak', 'assets/gambar/preventif.png', 0, 0, '2024-03-27 20:30:33', '2024-03-27 20:30:33'),
-(4, 'FP0004', 'Mas Rian', '2024-04-20', 'M4', 'MACHINING', 'Deltamas', 'Salah Sparepart', 'assets/gambar/parts.jpeg', 0, 0, '2024-03-31 20:40:02', '2024-03-31 20:40:02'),
-(5, 'FP0005', 'Mas Medi', '2024-04-01', 'Others', 'Parts', 'DS8', 'Parts Rusak', 'assets/gambar/parts.jpeg', 0, 0, '2024-03-31 20:40:59', '2024-03-31 20:40:59'),
-(6, 'FP0006', 'Mas Mash', '2024-04-02', 'Special Tools', 'Tools', 'Deltamas', 'Parts Rusak', 'assets/gambar/parts.jpeg', 0, 0, '2024-03-31 20:49:35', '2024-03-31 20:49:35'),
-(7, 'FP0007', 'Rina Suryani', '2024-04-19', 'Gergaji Mesin', 'Special Tools', 'Deltamas', 'Parts Rusak', 'assets/gambar/Logo-Adasi-tab.png', 3, 0, '2024-04-01 08:18:35', '2024-04-01 08:21:31');
+(1, 'FPP0001', 'Mas Medi', '2024-04-02', 'Gergaji Mesin', 'Tools', 'Deltamas', 'Gergaji Rusak', 'assets/gambar/parts.jpeg', 0, 0, '2024-04-02 01:20:19', '2024-04-02 01:20:19');
 
 -- --------------------------------------------------------
 
@@ -866,10 +860,10 @@ INSERT INTO `schedule_visits` (`id`, `handling_id`, `schedule`, `results`, `due_
 
 CREATE TABLE `spareparts` (
   `id` bigint(20) NOT NULL,
-  `nomor_mesin` varchar(25) NOT NULL,
-  `nama` varchar(50) NOT NULL,
+  `nama_sparepart` varchar(50) NOT NULL,
   `deskripsi` varchar(100) NOT NULL,
-  `jumlah` int(11) NOT NULL,
+  `jumlah_stok` int(11) NOT NULL,
+  `nomor_mesin` varchar(25) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -878,10 +872,13 @@ CREATE TABLE `spareparts` (
 -- Dumping data untuk tabel `spareparts`
 --
 
-INSERT INTO `spareparts` (`id`, `nomor_mesin`, `nama`, `deskripsi`, `jumlah`, `created_at`, `updated_at`) VALUES
-(1, 'T5', 'Linggis', 'Ukuran Tebal', 25, '2024-04-01 08:30:02', '2024-04-01 08:30:02'),
-(2, 'T5', 'Kunci Inggris', 'Special Tools', 21, '2024-04-01 08:30:02', '2024-04-01 08:30:02'),
-(3, 'T5', 'Tank', 'Special Tools', 20, '2024-04-01 08:30:02', '2024-04-01 08:30:02');
+INSERT INTO `spareparts` (`id`, `nama_sparepart`, `deskripsi`, `jumlah_stok`, `nomor_mesin`, `created_at`, `updated_at`) VALUES
+(1, 'Linggis', 'Special Tools', 12, 'Q - 3', '2024-04-02 07:19:00', '2024-04-02 07:19:00'),
+(2, 'Kunci Inggris', 'Special Tools', 12, 'Q - 3', '2024-04-02 07:19:00', '2024-04-02 07:19:00'),
+(3, 'Parts', 'Special Tools', 12, 'Q - 3', '2024-04-02 07:19:00', '2024-04-02 07:19:00'),
+(4, 'Linggis', 'Special Tools', 12, 'T5', '2024-04-02 07:23:15', '2024-04-02 07:30:24'),
+(5, 'Kunci Inggris', 'Special Tools', 12, 'T5', '2024-04-02 07:23:15', '2024-04-02 07:30:24'),
+(6, 'Parts', 'Special Tools', 12, 'T5', '2024-04-02 07:23:15', '2024-04-02 07:30:24');
 
 -- --------------------------------------------------------
 
@@ -907,29 +904,7 @@ CREATE TABLE `tindak_lanjuts` (
 --
 
 INSERT INTO `tindak_lanjuts` (`id`, `id_fpp`, `tindak_lanjut`, `due_date`, `schedule_pengecekan`, `attachment_file`, `status`, `note`, `created_at`, `updated_at`) VALUES
-(1, 'FP0001', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-03-27 00:35:12', '2024-03-27 00:35:12'),
-(2, 'FP0001', NULL, NULL, NULL, '', 1, 'Sedang Ditindaklanjuti', '2024-03-27 00:37:53', '2024-03-27 00:37:53'),
-(3, 'FP0001', 'Sparepart Sudah Diganti', NULL, NULL, 'assets/attachment/preventif.png', 1, 'Sedang Ditindaklanjuti', '2024-03-27 00:38:18', '2024-03-27 00:38:18'),
-(4, 'FP0001', NULL, NULL, NULL, '', 2, 'Disubmit Maintenance', '2024-03-27 00:38:36', '2024-03-27 00:38:36'),
-(5, 'FP0001', NULL, NULL, NULL, '', 2, 'Dikonfirmasi Dept.Maintenance', '2024-03-27 00:38:50', '2024-03-27 00:38:50'),
-(6, 'FP0001', NULL, NULL, NULL, '', 3, 'Diclosed Production', '2024-03-27 00:39:02', '2024-03-27 00:39:02'),
-(7, 'FP0002', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-03-27 18:39:41', '2024-03-27 18:39:41'),
-(8, 'FP0002', NULL, NULL, NULL, '', 1, 'Sedang Ditindaklanjuti', '2024-03-27 18:40:07', '2024-03-27 18:40:07'),
-(9, 'FP0002', NULL, NULL, NULL, '', 2, 'Disubmit Maintenance', '2024-03-27 18:44:04', '2024-03-27 18:44:04'),
-(10, 'FP0003', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-03-27 20:30:33', '2024-03-27 20:30:33'),
-(11, 'FP0002', NULL, NULL, NULL, '', 2, 'Dikonfirmasi Dept.Maintenance', '2024-03-27 20:31:51', '2024-03-27 20:31:51'),
-(12, 'FP0002', NULL, NULL, NULL, '', 3, 'Diclosed Production', '2024-03-27 20:34:26', '2024-03-27 20:34:26'),
-(13, 'FP0004', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-03-31 20:40:02', '2024-03-31 20:40:02'),
-(14, 'FP0005', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-03-31 20:40:59', '2024-03-31 20:40:59'),
-(15, 'FP0006', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-03-31 20:49:35', '2024-03-31 20:49:35'),
-(16, 'FP0007', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-04-01 08:18:35', '2024-04-01 08:18:35'),
-(17, 'FP0007', NULL, NULL, NULL, '', 1, 'Sedang Ditindaklanjuti', '2024-04-01 08:19:00', '2024-04-01 08:19:00'),
-(18, 'FP0007', 'Sudah Ditindaklanjuti', NULL, NULL, 'assets/attachment/History Kerusakan Mesin - CC3.pdf', 1, 'Sedang Ditindaklanjuti', '2024-04-01 08:19:56', '2024-04-01 08:19:56'),
-(19, 'FP0007', NULL, NULL, NULL, '', 2, 'Disubmit Maintenance', '2024-04-01 08:20:14', '2024-04-01 08:20:14'),
-(20, 'FP0007', NULL, NULL, NULL, '', 1, 'Salah Isi', '2024-04-01 08:20:34', '2024-04-01 08:20:34'),
-(21, 'FP0007', NULL, NULL, NULL, '', 2, 'Disubmit Maintenance', '2024-04-01 08:20:56', '2024-04-01 08:20:56'),
-(22, 'FP0007', NULL, NULL, NULL, '', 2, 'Dikonfirmasi Dept.Maintenance', '2024-04-01 08:21:10', '2024-04-01 08:21:10'),
-(23, 'FP0007', NULL, NULL, NULL, '', 3, 'Diclosed Production', '2024-04-01 08:21:31', '2024-04-01 08:21:31');
+(1, 'FPP0001', NULL, NULL, NULL, NULL, 0, 'Form FPP Dibuat', '2024-04-02 01:20:19', '2024-04-02 01:20:19');
 
 -- --------------------------------------------------------
 
@@ -1119,7 +1094,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT untuk tabel `form_f_p_p_s`
 --
 ALTER TABLE `form_f_p_p_s`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `handlings`
@@ -1161,13 +1136,13 @@ ALTER TABLE `schedule_visits`
 -- AUTO_INCREMENT untuk tabel `spareparts`
 --
 ALTER TABLE `spareparts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `tindak_lanjuts`
 --
 ALTER TABLE `tindak_lanjuts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `type_materials`
