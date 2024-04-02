@@ -929,8 +929,8 @@ var summaryData2Chart = new Chart(ctx, {
         datasets: [{
             label: 'Waktu Pengerjaan (Dalam satuan Jam)',
             data: data,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Hijau dengan opacity 0.2
+borderColor: 'rgba(75, 192, 192, 1)',        // Hijau solid
             borderWidth: 1
         }]
     },
