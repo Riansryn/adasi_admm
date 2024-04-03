@@ -38,7 +38,7 @@ class DeptManController extends Controller
             ->orderByDesc('created_at') // Urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
             ->paginate();
 
-        return view('deptman.submission', compact('data', 'data2'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptman.submission', compact('data', 'data2'));
     }
 
     public function scheduleVisit()
@@ -98,7 +98,7 @@ class DeptManController extends Controller
         ->get();
 
         // dd($data2);
-        return view('deptman.historyClaimComplain', compact('data2'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptman.historyClaimComplain', compact('data2'));
     }
 
     
@@ -130,7 +130,7 @@ class DeptManController extends Controller
         $data = ScheduleVisit::where('handling_id', $id)->with('handlings')->get();
 
         //render view with handlings
-        return view('deptman.followup', compact('handlings', 'customers', 'type_materials', 'data'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptman.followup', compact('handlings', 'customers', 'type_materials', 'data'));
     }
 
     public function showHistoryProgres(string $id): View
@@ -146,8 +146,7 @@ class DeptManController extends Controller
         $data = ScheduleVisit::where('handling_id', $id)->with('handlings')->get();
 
         // Mengembalikan view 'deptman.historyProgres' dengan data yang dibutuhkan
-        return view('deptman.historyProgres', compact('handling', 'customers', 'type_materials', 'data'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptman.historyProgres', compact('handling', 'customers', 'type_materials', 'data'));
     }
 
     public function showCloseProgres($id)
@@ -163,8 +162,7 @@ class DeptManController extends Controller
                             ->with('handlings')
                             ->get();
 
-        return view('deptman.showCloseProgres', compact('handlings', 'customers', 'type_materials', 'data'))
-        ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('deptman.showCloseProgres', compact('handlings', 'customers', 'type_materials', 'data'));
     }
 
     /**

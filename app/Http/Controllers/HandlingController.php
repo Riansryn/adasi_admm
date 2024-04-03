@@ -86,7 +86,7 @@ class HandlingController extends Controller
         $data = ScheduleVisit::where('handling_id', $id)->get();
 
         //render view with handlings
-        return view('sales.showHistory', compact('handlings', 'customers', 'type_materials', 'data'))->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('sales.showHistory', compact('handlings', 'customers', 'type_materials', 'data'));
     }
 
     /**

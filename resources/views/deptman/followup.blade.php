@@ -37,7 +37,7 @@
                                 <div class="row mb-3">
                                     <label for="customer_code" class="col-sm-2 col-form-label">Kode Pelanggan</label>
                                     <div class="col-sm-3">
-                                        <select name="customer_id" id="customer_id_code" class="w-100 select2"
+                                        <select name="customer_id" id="customer_id_code" class="select2"
                                             style="width: 400px;" disabled>
                                             @foreach ($customers as $customer)
                                                 <option value="{{ $customer->id }}"
@@ -52,7 +52,7 @@
                                 <div class="row mb-3">
                                     <label for="customer_name" class="col-sm-2 col-form-label">Nama Pelanggan</label>
                                     <div class="col-sm-3">
-                                        <select name="customer_id" id="customer_id_name" class="w-100 select2"
+                                        <select name="customer_id" id="customer_id_name" class="select2"
                                             style="width: 400px;" disabled>
                                             @foreach ($customers as $customer)
                                                 <option value="{{ $customer->id }}"
@@ -67,7 +67,7 @@
                                 <div class="row mb-3">
                                     <label for="area" class="col-sm-2 col-form-label">Area Pelanggan</label>
                                     <div class="col-sm-3">
-                                        <select name="customer_id" id="customer_id_area" class="w-100 select2"
+                                        <select name="customer_id" id="customer_id_area" class="select2"
                                             style="width: 400px;" disabled>
                                             @foreach ($customers as $customer)
                                                 <option value="{{ $customer->id }}"
@@ -148,19 +148,20 @@
                                             name="schedule" style="max-width: 250px;">
                                     </div>
                                     <div class="input-group ps-4" style="margin-top: 10px;">
-                                        <div class="col-md-5">
+                                        <div class="col-sm-5">
                                             <label for="hasil_tindak_lanjut" class="form-label">Catatan Hasil:
                                                 (optional)</label>
                                             <textarea class="form-control" rows="5" id="results" name="results"></textarea>
                                         </div>
-                                        <div class="col">
+                                        <div class="col-sm-5">
                                             <label for="duedate" class="form-label">Batas Akhir: (optional):</label>
                                             <input type="datetime-local" class="form-control input-sm" id="due_date"
                                                 name="due_date" style="max-width: 250px;">
                                         </div>
                                     </div>
                                     <div class="ps-4" style="margin-top: 10px;">
-                                        <label for="schedule_visit" class="form-label">PIC:</label>
+                                        <label for="schedule_visit" class="form-label">PIC:<span
+                                            style="color: red;">*</span></label>
                                         <input type="text" class="form-control input-sm" id="pic"
                                             name="pic" style="max-width: 480px;" placeholder="PIC" required>
                                     </div>
@@ -200,7 +201,7 @@
                                         <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil:
                                             (optional)</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required>{{ $handlings->results }}</textarea>
+                                            <textarea class="form-control" rows="5" id="" name="" style="width: 400px;" readonly>{{ $handlings->results }}</textarea>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -302,7 +303,7 @@
                                     <tbody>
                                         @foreach ($data as $row)
                                             <tr>
-                                                <td class="text-center py-3">{{ ++$i }}</td>
+                                                <td class="text-center py-3">{{ $loop->iteration }}</td>
                                                 <td class="text-center py-3">{{ $row->results }}</td>
                                                 <td class="text-center py-3">{{ $row->schedule }}</td>
                                                 <td class="text-center py-3">{{ $row->pic }}</td>

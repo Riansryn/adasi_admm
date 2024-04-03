@@ -225,7 +225,7 @@
                                     <tbody>
                                         @foreach ($data as $row)
                                             <tr>
-                                                <td class="text-center py-3">{{ ++$i }}</td>
+                                                <td class="text-center py-3">{{ $loop->iteration }}</td>
                                                 <td class="text-center py-3">{{ $row->results }}</td>
                                                 <td class="text-center py-3">{{ $row->schedule }}</td>
                                                 <td class="text-center py-3">{{ $row->pic }}</td>

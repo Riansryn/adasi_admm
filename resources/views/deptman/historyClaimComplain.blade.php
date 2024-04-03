@@ -92,7 +92,7 @@
                                     <tbody>
                                         @foreach ($data2 as $row)
                                             <tr id="row_{{ $row->id }}">
-                                                <td class="text-center py-3">{{ ++$i }}</td>
+                                                <td class="text-center py-3">{{ $loop->iteration }}</td>
                                                 <td class="text-center py-3">{{ $row->no_wo }}</td>
                                                 <td class="text-center py-3">{{ $row->customer_code }}
                                                 </td>

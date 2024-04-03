@@ -1,6 +1,7 @@
 @extends('layout')
 
 @section('content')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <main id="main" class="main">
 
         <div class="pagetitle">
@@ -23,19 +24,27 @@
                             enctype="multipart/form-data">
                             @csrf
                             <div class="row mb-3">
-                                <label for="no_wo" class="col-sm-2 col-form-label">No. WO</label>
+                                <label for="no_wo" class="col-sm-2 col-form-label">No. WO:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="no_wo" name="no_wo" maxlength="6"
                                         style="width: 100%; max-width: 400px;" required>
                                 </div>
-                                <label for="image_upload" class="col-sm-2 col-form-label">Unggah Gambar</label>
+                                <label for="image_upload" class="col-sm-2 col-form-label">Unggah Gambar:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-4">
                                     <div class="d-flex align-items-center">
                                         <input class="form-control @error('image') is-invalid @enderror" type="file"
-                                            id="formFile" name="image" accept="image/*"
-                                            style="width: calc(100% - 100px);" onchange="previewImage(event);" required>
-                                        <button type="button" id="cancelUpload" class="btn btn-danger ms-2"
-                                            style="display:none;">Batalkan Unggahan</button>
+                                            id="formFile" name="image" accept="image/*" style="width: 40%"
+                                            onchange="previewImage(event);" required>
+                                        <div id="buttonGroup"
+                                            style="width: 35%; display: flex; justify-content: space-between; align-items: center;">
+                                            <button type="button" id="cancelUpload" class="btn btn-danger btn-sm"
+                                                style="width: 50%; display: none;">Batalkan Unggahan</button>
+                                            <div id="imagePreview" class="mt-2" style="display:none;">
+                                                <button type="button" onclick="openImageModal();">Lihat Gambar</button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <small id="fileError" class="text-danger" style="display:none;">Format berkas tidak
                                         sesuai. Silakan unggah gambar.</small>
@@ -45,19 +54,32 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <!-- Preview Image -->
-                                    <div id="imagePreview" class="mt-2" style="display:none;">
-                                        <img id="preview" src="" alt="Preview Image"
-                                            style="max-width: 100%; max-height: 200px;">
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="imageModalLabel">Gambar</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <img id="modalImage" style="max-width: 100%; height: auto;"
+                                                alt="Preview Gambar">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="customer_code" class="col-sm-2 col-form-label">Kode Pelanggan</label>
+                                <label for="customer_code" class="col-sm-2 col-form-label">Kode Pelanggan:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-4">
-                                    <select id="customer_id" name="customer_id" class="form-control" style="width: 74%;"
+                                    <select id="customer_id" name="customer_id" class="select2" style="width: 400px;"
                                         required>
-                                        <option value="" disabled selected>🔍 Search or select customer</option>
+                                        <option value="" disabled selected></option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}"
                                                 data-name_customer="{{ $customer->name_customer }}"
@@ -67,7 +89,8 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="name_customer" class="col-sm-2 col-form-label">Nama Pelanggan</label>
+                                <label for="name_customer" class="col-sm-2 col-form-label">Nama Pelanggan:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-10">
                                     <select name="name_customer" class="select2" id="name_customer" style="width: 400px;"
                                         required disabled>
@@ -81,7 +104,8 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="area" class="col-sm-2 col-form-label">Area Pelanggan</label>
+                                <label for="area" class="col-sm-2 col-form-label">Area Pelanggan:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-10">
                                     <select name="area" class="select2" id="area" style="width: 400px;" required
                                         disabled>
@@ -95,7 +119,8 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="type_material" class="col-sm-2 col-form-label">Tipe Bahan</label>
+                                <label for="type_material" class="col-sm-2 col-form-label">Tipe Bahan:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-10">
                                     <select id="type_id" name="type_id" class="form-select" style="width: 400px;"
                                         required>
@@ -149,7 +174,8 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="cataegory" class="col-sm-2 col-form-label">Kategori (NG)</label>
+                                <label for="cataegory" class="col-sm-2 col-form-label">Kategori (NG):<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-10">
                                     <select name="category" class="form-control" id="category" name="category"
                                         style="width: 400px;" required>
@@ -162,13 +188,15 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil: (optional)</label>
+                                <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil
+                                    (Jika ada)</label>
                                 <div class="col-sm-10">
-                                <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required></textarea>
+                                    <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required></textarea>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="process_type" class="col-sm-2 col-form-label">Jenis Proses</label>
+                                <label for="process_type" class="col-sm-2 col-form-label">Jenis Proses:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-10">
                                     <select name="process_type" class="form-control" id="process_type"
                                         style="width: 400px;" required>
@@ -180,7 +208,8 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="proses_type" class="col-sm-2 col-form-label">Jenis</label>
+                                <label for="proses_type" class="col-sm-2 col-form-label">Jenis:<span
+                                        style="color: red;">*</span></label>
                                 <div class="col-sm-10" @required(true)>
                                     <div class="form-check mr-2">
                                         <input type="checkbox" class="form-check-input" id="type_1" name="type_1"
@@ -212,6 +241,41 @@
             </div>
         </section>
         <script>
+            //modal image
+            function openImageModal() {
+                var modal = $('#imageModal');
+                var modalImage = $('#modalImage');
+                var imageSrc = $('#formFile').prop('files')[0];
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    modalImage.attr('src', e.target.result);
+
+                    // Set modal size based on image dimensions
+                    var img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        modal.find('.modal-dialog').css({
+                            'max-width': this.width + 'px'
+                        });
+                    };
+                };
+
+                reader.readAsDataURL(imageSrc);
+                modal.modal('show');
+            }
+            document.getElementById('formFile').addEventListener('change', function() {
+                var fileInput = document.getElementById('formFile');
+                var cancelButton = document.getElementById('cancelUpload');
+
+                if (fileInput.files.length > 0) {
+                    cancelButton.style.display = 'block';
+                } else {
+                    cancelButton.style.display = 'none';
+                }
+            });
+
+            //ddlselect
             document.addEventListener('DOMContentLoaded', function() {
                 // Ambil elemen-elemen yang diperlukan
                 var customerIdSelect = document.querySelector('select[name="customer_id"]');
@@ -229,7 +293,7 @@
                 });
             });
 
-
+            //button validasi
             function validateCreate() {
                 event.preventDefault();
 
@@ -246,7 +310,8 @@
                 var type_1 = document.getElementById('type_1').value.trim();
 
                 // Memeriksa apakah ada input yang kosong
-                if (!no_wo || !image || !customerName || !customerCode || !area || !qty || !pcs || !category || !results || !process_type ||
+                if (!no_wo || !image || !customerName || !customerCode || !area || !qty || !pcs || !category || !results || !
+                    process_type ||
                     type_1.length === 0) {
                     // Menampilkan sweet alert error jika ada input yang kosong
                     Swal.fire({
@@ -273,12 +338,12 @@
                 // Memanggil fungsi untuk menangani pengiriman formulir dan menampilkan SweetAlert
                 validateCreate();
             });
+
+            $(document).ready(function() {
+                $('select').selectize({
+                    sortField: 'text'
+                });
+            });
         </script>
-
-
-
-
-
-
     </main><!-- End #main -->
 @endsection

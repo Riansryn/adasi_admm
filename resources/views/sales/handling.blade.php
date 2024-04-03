@@ -58,7 +58,7 @@
                                     <tbody>
                                         @foreach ($data as $row)
                                             <tr>
-                                                <td class="text-center py-3">{{ ++$i }}</td>
+                                                <td class="text-center py-3">{{ $loop->iteration }}</td>
                                                 <td class="text-center py-3">{{ $row->no_wo }}</td>
                                                 <td class="text-center py-3">{{ $row->customers->customer_code ?? '' }}</td>
                                                 <td class="text-center py-3">{{ $row->customers->name_customer ?? '' }}</td>
