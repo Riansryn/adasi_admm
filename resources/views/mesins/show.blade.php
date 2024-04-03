@@ -117,17 +117,18 @@
                         <div class="accordion">
                             <div class="card-body">
                                 <b>
-                                    <h5 class="card-title">Table List Sparepart</h5>
+                                    <h5 class="card-title">Tabel List Sparepart - Mesin {{ $mesin->no_mesin }}</h5>
                                 </b>
                                 <div class="collapse" id="updateProgress">
                                     <form id="importForm" method="POST" action="{{ route('spareparts.import', ['nomor_mesin' => $mesin->no_mesin]) }}" enctype="multipart/form-data">
                                         @csrf
                                         <input type="file" id="file" name="file" class="form-control">
                                         <br>
-                                        <button class="btn btn-success">
+                                        <button class="btn btn-danger">
                                             Import Sparepart
                                         </button>
                                     </form>
+                                    <a class="btn btn-success float-end" href="{{ route('spareparts.export') }}">Export Data</a>
                                     <br><br>
                                     <table class="table table-bordered datatable" id="table1" style="width:100%">
                                         <thead>
@@ -160,7 +161,7 @@
                         <div class="card-body">
                             <div class="accordion">
                                 <b>
-                                    <h5 class="card-title">Table History Kerusakan Mesin</h5>
+                                    <h5 class="card-title">Table History Kerusakan Mesin </h5>
                                 </b>
                                 <div class="collapse" id="updateProgress">
                                     <div class="text-end">

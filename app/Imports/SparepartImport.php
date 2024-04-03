@@ -37,7 +37,6 @@ class SparepartImport implements ToModel
         $existingSparepart = Sparepart::where('nomor_mesin', $this->nomorMesin)
             ->where('nama_sparepart', $row[array_search('Nama Sparepart', $header)])
             ->where('deskripsi', $row[array_search('Deskripsi', $header)])
-            ->where('jumlah_stok', $row[array_search('Jumlah Stok', $header)])
             ->first();
 
         // Jika ada data yang sudah ada dengan nomor mesin yang sama, perbarui datanya
@@ -47,6 +46,7 @@ class SparepartImport implements ToModel
                 'deskripsi' => $row[array_search('Deskripsi', $header)],
                 'jumlah_stok' => $row[array_search('Jumlah Stok', $header)],
             ]);
+
             $existingSparepart->touch();
         } else {
             // Jika tidak ada data dengan nomor mesin yang sama, buat entri baru

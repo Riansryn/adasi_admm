@@ -131,6 +131,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('formpreventif', [PreventiveController::class, 'create'])->name('preventives.create');
     Route::get('editpreventive', [PreventiveController::class, 'edit'])->name('preventives.edit');
     Route::post('sparepart-import', [SparepartController::class, 'import'])->name('spareparts.import');
+    Route::get('sparepart-export', [SparepartController::class, 'export'])->name('spareparts.export');
     // Route::get('mesins/{mesin}/lihat-issue', [MesinController::class, 'lihatIssue'])
     //     ->name('mesins.lihatissue');
     // Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
@@ -150,6 +151,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('dashboardHandling', [DsController::class, 'dashboardHandling'])->name('dashboardHandling');
     Route::get('/getChartData', [HandlingController::class, 'getChartData']);
     Route::get('/get-data-by-year', [HandlingController::class, 'getDataByYear']);
+    Route::get('/getRepairMaintenance', [DsController::class, 'getRepairMaintenance']);
+    Route::get('/getPeriodeMesin', [DsController::class, 'getPeriodeMesin']);
     // Route::get('dashboardHandling', [DsController::class, 'multipleCharts'])->name('multipleCharts');
 
 

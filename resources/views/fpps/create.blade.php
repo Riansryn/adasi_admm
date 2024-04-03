@@ -42,27 +42,35 @@
                                     <input type="date" class="form-control" id="tanggal" name="tanggal">
                                 </div>
 
+                                <!-- Select section -->
                                 <div class="mb-3">
-                                    <label for="mesin" class="form-label">Pilih Mesin<span style="color: red;">*</span></label>
-                                    <select class="form-control" id="mesin" name="mesin">
-                                        <option value="">Pilih Mesin</option>
-                                        @foreach($mesins as $mesin)
-                                        <option value="{{ $mesin->no_mesin }}" data-section="{{ $mesin->section }}" data-lokasi="{{ $mesin->lokasi }}">
-                                            {{ $mesin->no_mesin }} | {{ $mesin->tipe }}
-                                        </option>
+                                    <label for="section" class="form-label">Pilih Section<span style="color: red;">*</span></label>
+                                    <select class="form-control" id="section" name="section">
+                                        <option value="">Pilih Section</option>
+                                        @php
+                                        $uniqueSections = $mesins->unique('section')->pluck('section');
+                                        @endphp
+                                        @foreach($uniqueSections as $section)
+                                        <option value="{{ $section }}">{{ $section }}</option>
                                         @endforeach
-                                        <option value="Others">Others</option> <!-- Tambahkan opsi Others -->
                                     </select>
                                 </div>
 
-                                <div class="mb-3" id="namaMesinDiv" style="display: none;">
-                                    <label for="namaMesin" class="form-label">Nama Alat Bantu<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" id="namaMesin" name="namaMesin">
+                                <!-- Select mesin -->
+                                <div class="mb-3">
+                                    <label for="mesin" class="form-label">Pilih Mesin<span style="color: red;">*</span></label>
+                                    <select class="form-control" id="mesin" name="mesin" onchange="checkSelectedOption()">
+                                        <option value="">Pilih Mesin</option>
+                                        @foreach($mesins as $mesin)
+                                        <option value="{{ $mesin->no_mesin }}" data-lokasi="{{ $mesin->lokasi }}">{{ $mesin->no_mesin }} | {{ $mesin->tipe }}</option>
+                                        @endforeach
+                                        <option value="Others">Others</option> <!-- Tambahkan opsi "Others" di sini -->
+                                    </select>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="section" class="form-label">Section<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" id="section" name="section" readonly>
+                                <div class="mb-3" id="othersFields" style="display: none;">
+                                    <label for="mesin" class="form-label">Nama Alat Bantu<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="mesin" name="mesin">
                                 </div>
 
                                 <div class="mb-3">
@@ -182,42 +190,68 @@
             }
         });
     </script>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('section').addEventListener('change', function() {
+            var selectedSection = this.value;
             var mesinSelect = document.getElementById('mesin');
-            var namaMesinDiv = document.getElementById('namaMesinDiv');
-            var namaMesinInput = document.getElementById('namaMesin');
-            var lokasiInput = document.getElementById('lokasi');
-            var sectionInput = document.getElementById('section');
 
-            mesinSelect.addEventListener('change', function() {
-                var selectedOption = mesinSelect.options[mesinSelect.selectedIndex];
+            // Kosongkan opsi nomor mesin
+            mesinSelect.innerHTML = '';
 
-                if (selectedOption.value === "Others") {
-                    namaMesinDiv.style.display = 'block';
-                    namaMesinInput.value = ""; // Mengosongkan nilai input namaMesin
-                    lokasiInput.value = ""; // Mengosongkan nilai input lokasi
-                    sectionInput.value = ""; // Mengosongkan nilai input section
-                    lokasiInput.removeAttribute('readonly');
-                    sectionInput.removeAttribute('readonly');
-                } else {
-                    namaMesinDiv.style.display = 'none';
-                    namaMesinInput.value = selectedOption.text;
-                    lokasiInput.value = selectedOption.getAttribute('data-lokasi');
-                    sectionInput.value = selectedOption.getAttribute('data-section');
+            // Tambahkan opsi default
+            var defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "Pilih Mesin";
+            mesinSelect.appendChild(defaultOption);
 
-                    lokasiInput.setAttribute('readonly', true);
-                    sectionInput.setAttribute('readonly', true);
-                }
-            });
+            // Filter dan tambahkan opsi nomor mesin sesuai dengan section yang dipilih
+            @foreach($mesins as $mesin)
+            if ("{{ $mesin->section }}" === selectedSection) {
+                var option = document.createElement('option');
+                option.value = "{{ $mesin->no_mesin }}";
+                option.textContent = "{{ $mesin->no_mesin }} | {{ $mesin->tipe }}";
+                option.setAttribute('data-lokasi', "{{ $mesin->lokasi }}"); // Tambahkan atribut data-lokasi
+                mesinSelect.appendChild(option);
+            }
+            @endforeach
 
-            // Jika nilai input nama mesin diubah, atur nilainya ke nilai mesin yang dipilih
-            document.getElementById('namaMesin').addEventListener('input', function() {
-                var selectedOption = mesinSelect.options[mesinSelect.selectedIndex];
-                selectedOption.value = this.value;
-            });
+            // Tambahkan opsi "Others" di bawah
+            var othersOption = document.createElement('option');
+            othersOption.value = "Others";
+            othersOption.textContent = "Others";
+            mesinSelect.appendChild(othersOption);
         });
     </script>
+
+
+
+
+    <script>
+        document.getElementById('mesin').addEventListener('change', function() {
+            var selectedMesin = this.value;
+            var lokasiInput = document.getElementById('lokasi');
+            var namaAlatBantuInput = document.getElementById('othersFields');
+            var othersFields = document.getElementById('othersFields');
+
+            if (selectedMesin === 'Others') {
+                // Jika opsi "Others" dipilih, tampilkan input "Nama Alat Bantu" dan hapus readonly pada input lokasi
+                namaAlatBantuInput.style.display = 'block';
+                lokasiInput.readOnly = false;
+                lokasiInput.value = ''; // Kosongkan nilai lokasi
+                othersFields.style.display = 'block'; // Tampilkan div "Others" fields
+            } else {
+                // Jika opsi bukan "Others" dipilih, sembunyikan input "Nama Alat Bantu" dan tetapkan readonly pada input lokasi
+                namaAlatBantuInput.style.display = 'none';
+                lokasiInput.readOnly = true;
+                // Temukan lokasi dari mesin yang dipilih
+                var selectedOption = this.options[this.selectedIndex];
+                var lokasi = selectedOption.getAttribute('data-lokasi');
+                // Perbarui nilai input teks lokasi sesuai dengan lokasi mesin yang dipilih
+                lokasiInput.value = lokasi;
+                othersFields.style.display = 'none'; // Sembunyikan div "Others" fields
+            }
+        });
+    </script>
+
 </main>
 @endsection

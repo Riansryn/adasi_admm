@@ -37,7 +37,6 @@ class FormFPPController extends Controller
         // Mengambil semua data TindakLanjut diurutkan berdasarkan updated_at terbaru
         $tindaklanjuts = TindakLanjut::orderBy('updated_at', 'desc')->get();
 
-
         return view('maintenance.index', compact('formperbaikans', 'tindaklanjuts'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -51,7 +50,6 @@ class FormFPPController extends Controller
 
         return view('deptmtce.index', compact('formperbaikans', 'tindaklanjuts'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
-
 
     public function DashboardFPPSales()
     {
@@ -79,7 +77,6 @@ class FormFPPController extends Controller
 
         return view('maintenance.lihat', compact('formperbaikan', 'formperbaikans', 'tindaklanjuts', 'tindaklanjut'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
-
 
     public function LihatFPPSales(FormFPP $formperbaikan)
     {

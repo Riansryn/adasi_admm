@@ -145,15 +145,63 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-6">
 
-                <div class="col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Waktu Pengerjaan Repair Maintenance</h5>
-                <canvas id="summaryData2" width="200" height="50"></canvas>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Waktu Pengerjaan Repair Maintenance <span></span></h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="yearDropdown">Pilih Tahun:</label>
+                    <select id="date-dropdown2" class="form-control" onchange="updateChart2()">
+                        @foreach($years2 as $year)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="sectionDropdown">Pilih Section:</label>
+                    <select id="section-dropdown" class="form-control" onchange="updateChart2()">
+                        @foreach($sections as $section)
+                            <option value="{{ $section }}">{{ $section }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                </div>
+
+            <canvas id="repairMaintenance" style="width: 100%; height: auto;"></canvas>
+
+    </div>
+    </div>
+</div>
+
+
+<div class="col-sm-6">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Periode Repair Maintenance</h5>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="section-dropdown">Pilih Section:</label>
+                    <select id="section-dropdown" class="form-control" onchange="updateChartPeriodeMesin()">
+                        @foreach($sections as $section)
+                            <option value="{{ $section }}">{{ $section }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="start_month2">Bulan Mulai:</label>
+                    <input type="date" id="start_month2" name="start_month2" class="form-control" onchange="updateChartPeriodeMesin()">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_month2">Bulan Akhir:</label>
+                    <input type="date" id="end_month2" name="end_month2" class="form-control" onchange="updateChartPeriodeMesin()">
+                </div>
             </div>
+            <canvas id="periodeMesin" style="width: 100%; height: auto;"></canvas>
         </div>
     </div>
+</div>
             </div>
         </section>
 
@@ -162,8 +210,6 @@
         <section class="section dashboard">
             <div class="row">
                 <h3 style="display: flex; justify-content: center;">Dashboard Form Claim dan Complain</h3>
-
-
                 <!-- Left side columns -->
                 <div class="col-lg-12">
                     <div class="row">
@@ -186,7 +232,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div><!-- End Sales Card -->
 
@@ -846,22 +891,22 @@ var statusData = {};
 });
 
 // Save different colors for each section
-const colors = {
+var colors = {
     'CUTTING': {
-        open: 'rgba(0, 255, 0, 0.2)',
-        closed: 'rgba(0, 0, 0, 0.4)'
+        open: 'rgba(255, 99, 132, 0.6)', // Merah
+        closed: 'rgba(255, 99, 132, 1)'   // Merah gelap
     },
     'HEAT TREATMENT': {
-        open: 'rgba(0, 255, 0, 0.2)',
-        closed: 'rgba(0, 0, 0, 0.4)'
+        open: 'rgba(255, 206, 86, 0.6)', // Kuning muda
+        closed: 'rgba(255, 206, 86, 1)'   // Kuning tua
     },
     'MACHINING': {
-        open: 'rgba(0, 255, 0, 0.2)',
-        closed: 'rgba(0, 0, 0, 0.4)'
+        open: 'rgba(75, 192, 192, 0.6)', // Hijau muda
+        closed: 'rgba(75, 192, 192, 1)'   // Hijau tua
     },
     'MACHINING CUSTOM': {
-        open: 'rgba(0, 255, 0, 0.2)',
-        closed: 'rgba(0, 0, 0, 0.4)'
+        open: 'rgba(54, 162, 235, 0.6)', // Biru muda
+        closed: 'rgba(54, 162, 235, 1)'   // Biru tua
     }
 };
 
@@ -870,67 +915,155 @@ var ctx = document.getElementById('summaryData').getContext('2d');
 var sumarryChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: months,
-        datasets: [
-            { label: 'Cutting (Open)', data: statusData['CUTTING'].open, backgroundColor: colors['CUTTING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-            { label: 'Cutting (Closed)', data: statusData['CUTTING'].closed, backgroundColor: colors['CUTTING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-            { label: 'Heat Treatment (Open)', data: statusData['HEAT TREATMENT'].open, backgroundColor: colors['HEAT TREATMENT'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-            { label: 'Heat Treatment (Closed)', data: statusData['HEAT TREATMENT'].closed, backgroundColor: colors['HEAT TREATMENT'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-            { label: 'Machining (Open)', data: statusData['MACHINING'].open, backgroundColor: colors['MACHINING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-            { label: 'Machining (Closed)', data: statusData['MACHINING'].closed, backgroundColor: colors['MACHINING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-            { label: 'Machining Custom (Open)', data: statusData['MACHINING CUSTOM'].open, backgroundColor: colors['MACHINING CUSTOM'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-            { label: 'Machining Custom (Closed)', data: statusData['MACHINING CUSTOM'].closed, backgroundColor: colors['MACHINING CUSTOM'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 }
-        ]
-    },
+    labels: months,
+    datasets: [
+        { label: 'Cutting (Open)', data: statusData['CUTTING'].open, backgroundColor: colors['CUTTING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+        { label: 'Cutting (Closed)', data: statusData['CUTTING'].closed, backgroundColor: colors['CUTTING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+        { label: 'Heat Treatment (Open)', data: statusData['HEAT TREATMENT'].open, backgroundColor: colors['HEAT TREATMENT'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+        { label: 'Heat Treatment (Closed)', data: statusData['HEAT TREATMENT'].closed, backgroundColor: colors['HEAT TREATMENT'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+        { label: 'Machining (Open)', data: statusData['MACHINING'].open, backgroundColor: colors['MACHINING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+        { label: 'Machining (Closed)', data: statusData['MACHINING'].closed, backgroundColor: colors['MACHINING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+        { label: 'Machining Custom (Open)', data: statusData['MACHINING CUSTOM'].open, backgroundColor: colors['MACHINING CUSTOM'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
+        { label: 'Machining Custom (Closed)', data: statusData['MACHINING CUSTOM'].closed, backgroundColor: colors['MACHINING CUSTOM'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 }
+    ]
+},
     options: { scales: { y: { beginAtZero: true } } }
 });
 
-           // Mengambil data dari PHP dan menetapkannya ke dalam variabel JavaScript
-var summaryData2 = {!! json_encode($summaryData2) !!};
 
-// Inisialisasi variabel totalDifference, count, labels, dan data
-var totalDifference = 0;
-var count = 0;
-var labels = [];
-var data = [];
+        </script>
 
-// Iterasi melalui setiap item dalam summaryData2
-summaryData2.forEach(function(item) {
-    // Mengambil perbedaan waktu dalam jam
-    var differenceInHours = item.time_difference_hour;
-
-    // Menambahkan perbedaan waktu dalam jam ke totalDifference
-    totalDifference += differenceInHours;
-
-    // Menambahkan 1 ke count
-    count++;
-
-    // Membuat label dengan menggabungkan id_fpp dan section
-    var label = item.id_fpp + " - " + item.mesin;
-
-    // Menambahkan label ke dalam array labels
-    labels.push(label);
-
-    // Menambahkan perbedaan waktu dalam jam ke dalam array data
-    data.push(differenceInHours);
+<script>
+// Inisialisasi dropdown tahun saat halaman dimuat
+document.addEventListener('DOMContentLoaded', function() {
+    let dateDropdown = document.getElementById('date-dropdown2');
+    let currentYear = new Date().getFullYear();
+    let earliestYear = 2020; // Tahun awal yang diinginkan
+    while (currentYear >= earliestYear) {
+        let dateOption = document.createElement('option');
+        dateOption.text = currentYear;
+        dateOption.value = currentYear;
+        dateDropdown.add(dateOption);
+        currentYear -= 1;
+    }
+    // Panggil updateChart2() untuk memuat data awal
+    updateChart2();
 });
 
-// Menghitung rata-rata perbedaan waktu
-var averageDifference = count > 0 ? totalDifference / count : 0;
+// Event handler untuk perubahan pada dropdown tahun
+document.getElementById('date-dropdown2').addEventListener('change', function() {
+    updateChart2();
+});
 
-// Mendapatkan konteks dari elemen canvas dengan ID "summaryData2"
-var ctx = document.getElementById('summaryData2').getContext('2d');
+// Event handler untuk perubahan pada dropdown section
+document.getElementById('section-dropdown').addEventListener('change', function() {
+    updateChart2();
+});
 
-// Membuat chart menggunakan library Chart.js
-var summaryData2Chart = new Chart(ctx, {
+function updateChart2() {
+    var selectedYear = document.getElementById('date-dropdown2').value;
+    var selectedSection = document.getElementById('section-dropdown').value;
+
+    // Lakukan AJAX request untuk mendapatkan data baru berdasarkan tahun dan section yang dipilih
+    $.ajax({
+        url: '/getRepairMaintenance', // Ganti dengan URL endpoint yang sesuai
+        method: 'GET',
+        data: {
+            year: selectedYear,
+            section: selectedSection
+        },
+        success: function(response) {
+            // Mendapatkan semua bulan dalam tahun
+            var labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            // Data baru yang diterima dari respons AJAX
+            var data2 = response.data2;
+
+            // Perbarui chart dengan data baru
+            repairMaintenance.data.labels = labels;
+            repairMaintenance.data.datasets[0].data = data2;
+            repairMaintenance.update();
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Handle error here
+        }
+    });
+}
+
+    // Inisialisasi chart dengan data default
+    var ctx = document.getElementById('repairMaintenance').getContext('2d');
+    var repairMaintenance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: 'Waktu Pengerjaan (Dalam menit)',
+                data: {!! json_encode($data2) !!},
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    function updateChartPeriodeMesin() {
+    var startDate = document.getElementById('start_month2').value;
+    var endDate = document.getElementById('end_month2').value;
+    var selectedSection = document.getElementById('section-dropdown').value;
+
+    // Lakukan AJAX request untuk mendapatkan data baru berdasarkan rentang tanggal dan section yang dipilih
+    $.ajax({
+        url: '/getPeriodeMesin',
+        method: 'GET',
+        data: {
+            start_month2: startDate,
+            end_month2: endDate,
+            section: selectedSection
+        },
+        success: function(response) {
+            // Proses data yang diterima dan update chart
+            processChartDataPeriodeMesin(response);
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Handle error here
+        }
+    });
+}
+
+function processChartDataPeriodeMesin(response) {
+    var data = response.data3;
+
+    // Inisialisasi array untuk labels (mesin) dan data (jumlah FPP)
+    var labels = Object.keys(data);
+    var fppCounts = Object.values(data);
+
+    // Memperbarui chart dengan data baru
+    periodeMesin.data.labels = labels;
+    periodeMesin.data.datasets[0].data = fppCounts;
+    periodeMesin.update();
+}
+
+
+// Inisialisasi chart dengan data default
+var ctx = document.getElementById('periodeMesin').getContext('2d');
+var periodeMesin = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: labels,
+        labels: [], // Labels (mesin) akan diisi setelah mendapatkan data dari server
         datasets: [{
-            label: 'Waktu Pengerjaan (Dalam satuan Jam)',
-            data: data,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Hijau dengan opacity 0.2
-borderColor: 'rgba(75, 192, 192, 1)',        // Hijau solid
+            label: 'Jumlah FPP',
+            data: [], // Data akan diisi setelah mendapatkan data dari server
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1
         }]
     },
@@ -944,9 +1077,8 @@ borderColor: 'rgba(75, 192, 192, 1)',        // Hijau solid
 });
 
 
-        </script>
 
-
+</script>
 
     </main><!-- End #main -->
 @endsection
