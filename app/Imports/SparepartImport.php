@@ -5,6 +5,9 @@ namespace App\Imports;
 use App\Models\Sparepart;
 use App\Models\Mesin;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Facades\Validator;
@@ -20,28 +23,42 @@ class SparepartImport implements ToModel
 
     public function model(array $row)
     {
-        // Check if there are any duplicate records based on nomor_mesin, nama, deskripsi, and jumlah
-        $duplicateRecords = Sparepart::where('nomor_mesin', $this->nomorMesin)
-            ->where('nama', $row[1])
-            ->where('deskripsi', $row[2])
-            ->where('jumlah', $row[3])
-            ->exists();
+        static $header = null;
+        static $existingNomorMesin = [];
 
-        // If duplicate records exist, return null
-        if ($duplicateRecords) {
-            return null;
+        // Jika header belum diambil, ambil dari baris kedua
+        if ($header === null) {
+            // Memulai dari baris kedua
+            $header = $row;
+            return null; // Tidak perlu membuat instance model untuk baris header
         }
 
-        return new Sparepart([
-            'nomor_mesin' => $this->nomorMesin,
-            'nama' => $row[1] ?? null,
-            'deskripsi' => $row[2] ?? null,
-            'jumlah' => $row[3] ?? null,
-        ]);
-    }
+        // Cek apakah data dengan nomor mesin yang sama sudah ada dalam database
+        $existingSparepart = Sparepart::where('nomor_mesin', $this->nomorMesin)
+            ->where('nama_sparepart', $row[array_search('Nama Sparepart', $header)])
+            ->where('deskripsi', $row[array_search('Deskripsi', $header)])
+            ->where('jumlah_stok', $row[array_search('Jumlah Stok', $header)])
+            ->first();
 
-    public function getHeadingRow(): int
-    {
-        return 1; // Nomor baris header
+        // Jika ada data yang sudah ada dengan nomor mesin yang sama, perbarui datanya
+        if ($existingSparepart) {
+            $existingSparepart->update([
+                'nama_sparepart' => $row[array_search('Nama Sparepart', $header)],
+                'deskripsi' => $row[array_search('Deskripsi', $header)],
+                'jumlah_stok' => $row[array_search('Jumlah Stok', $header)],
+            ]);
+            $existingSparepart->touch();
+        } else {
+            // Jika tidak ada data dengan nomor mesin yang sama, buat entri baru
+            Sparepart::create([
+                'nama_sparepart' => $row[array_search('Nama Sparepart', $header)],
+                'deskripsi' => $row[array_search('Deskripsi', $header)],
+                'jumlah_stok' => $row[array_search('Jumlah Stok', $header)],
+                'nomor_mesin' => $this->nomorMesin,
+                // Anda mungkin perlu menambahkan logika pembuatan entri baru lainnya di sini
+            ]);
+        }
+
+        return null; // Tidak perlu mengembalikan instance model
     }
 }

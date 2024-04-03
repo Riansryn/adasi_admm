@@ -120,16 +120,13 @@
                                     <h5 class="card-title">Table List Sparepart</h5>
                                 </b>
                                 <div class="collapse" id="updateProgress">
-                                    <form action="{{ route('spareparts.import', ['nomor_mesin' => $mesin->no_mesin]) }}" method="POST" enctype="multipart/form-data">
+                                    <form id="importForm" method="POST" action="{{ route('spareparts.import', ['nomor_mesin' => $mesin->no_mesin]) }}" enctype="multipart/form-data">
                                         @csrf
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <input type="file" name="file" class="form-control">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button class="btn btn-success">Import Sparepart</button>
-                                            </div>
-                                        </div>
+                                        <input type="file" id="file" name="file" class="form-control">
+                                        <br>
+                                        <button class="btn btn-success">
+                                            Import Sparepart
+                                        </button>
                                     </form>
                                     <br><br>
                                     <table class="table table-bordered datatable" id="table1" style="width:100%">
@@ -139,15 +136,17 @@
                                                 <th>Nama Sparepart</th>
                                                 <th>Deskripsi</th>
                                                 <th>Jumlah Stok</th>
+                                                <th>Tanggal Upload</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($spareparts as $index => $sparepart)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $sparepart->nama }}</td>
+                                                <td>{{ $sparepart->nama_sparepart }}</td>
                                                 <td>{{ $sparepart->deskripsi }}</td>
-                                                <td>{{ $sparepart->jumlah }}</td>
+                                                <td>{{ $sparepart->jumlah_stok }}</td>
+                                                <td>{{ $sparepart->updated_at}}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -235,6 +234,44 @@
 
 
 </main><!-- End #main -->
+
+<script>
+    function handleFormSubmission() {
+        // Memeriksa apakah semua isian telah diisi
+        var file = document.getElementById('file').value;
+
+        if (file === '') {
+            // Menampilkan SweetAlert jika ada isian yang kosong kecuali upload gambar
+            Swal.fire({
+                title: 'Data belum ada!',
+                text: 'Mohon unggah file terlebih dahulu',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            // Jika formulir valid, tampilkan SweetAlert untuk konfirmasi
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Data Sparepart berhasil diunggah.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect or perform any other action after clicking OK
+                    document.getElementById('importForm').submit();
+                }
+            });
+        }
+    }
+
+    // Event listener for form submission
+    document.getElementById('importForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Call the function to handle form submission and show SweetAlert
+        handleFormSubmission();
+    });
+</script>
 
 <style>
     .pdf-button {

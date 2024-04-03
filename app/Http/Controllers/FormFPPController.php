@@ -184,7 +184,7 @@ class FormFPPController extends Controller
         $lastFPPId = FormFPP::latest('id')->first()->id ?? 0;
 
         // Buat nomor FPP dengan format FPXXXX, misalnya FP0001
-        $id_fpp = 'FP' . str_pad($lastFPPId + 1, 4, '0', STR_PAD_LEFT);
+        $id_fpp = 'FPP' . str_pad($lastFPPId + 1, 4, '0', STR_PAD_LEFT);
 
         // Tambahkan id_fpp ke dalam request
         $request->merge(['id_fpp' => $id_fpp]);

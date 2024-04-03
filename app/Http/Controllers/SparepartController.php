@@ -15,9 +15,12 @@ class SparepartController extends Controller
     {
         // Jika validasi berhasil, lanjutkan dengan mengimpor data
         $nomorMesin = $request->input('nomor_mesin');
-        Excel::import(new SparepartImport($nomorMesin), $request->file('file'));
+        $filePath = $request->file('file')->getRealPath();
 
-        // Kembali ke halaman sebelumnya setelah import selesai
+        Excel::import(new SparepartImport($nomorMesin), $filePath, null, \Maatwebsite\Excel\Excel::XLSX, [
+            'startRow' => 2
+        ]);
+
         return back();
     }
 }
