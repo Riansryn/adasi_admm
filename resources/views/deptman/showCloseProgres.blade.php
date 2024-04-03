@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Catatan Hasil:
+                                <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Keterangan:
                                     (optional)</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" rows="5" id="results" name="results" style="width: 29%" required>{{ $handlings->results }}</textarea>
