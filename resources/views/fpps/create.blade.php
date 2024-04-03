@@ -187,15 +187,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             var mesinSelect = document.getElementById('mesin');
             var namaMesinDiv = document.getElementById('namaMesinDiv');
+            var namaMesinInput = document.getElementById('namaMesin');
+            var lokasiInput = document.getElementById('lokasi');
+            var sectionInput = document.getElementById('section');
 
             mesinSelect.addEventListener('change', function() {
                 var selectedOption = mesinSelect.options[mesinSelect.selectedIndex];
-                var namaMesinInput = document.getElementById('namaMesin');
-                var lokasiInput = document.getElementById('lokasi');
-                var sectionInput = document.getElementById('section');
 
                 if (selectedOption.value === "Others") {
                     namaMesinDiv.style.display = 'block';
+                    namaMesinInput.value = ""; // Mengosongkan nilai input namaMesin
+                    lokasiInput.value = ""; // Mengosongkan nilai input lokasi
+                    sectionInput.value = ""; // Mengosongkan nilai input section
                     lokasiInput.removeAttribute('readonly');
                     sectionInput.removeAttribute('readonly');
                 } else {

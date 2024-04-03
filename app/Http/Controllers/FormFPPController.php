@@ -66,7 +66,7 @@ class FormFPPController extends Controller
 
     public function create(Mesin $mesin)
     {
-        $mesins = Mesin::orderBy('updated_at', 'desc')->get();
+        $mesins = Mesin::orderBy('updated_at', 'asc')->get();
         return view('fpps.create', compact('mesins'));
     }
 

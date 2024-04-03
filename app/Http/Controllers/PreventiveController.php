@@ -45,7 +45,7 @@ class PreventiveController extends Controller
         // Ambil nilai issues dan checkedIssues dari sesi jika ada
         $issues = $request->session()->get('issues', []);
         // Ambil daftar data mesin dari database
-        $mesins = Mesin::orderBy('updated_at', 'desc')->get();
+        $mesins = Mesin::orderBy('updated_at', 'asc')->get();
 
         // Kemudian, Anda dapat mengirimkan nilai-nilai ini ke view
         return view('deptmtce.createpreventive', compact('issues', 'mesins'));
