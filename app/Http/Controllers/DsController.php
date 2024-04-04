@@ -19,56 +19,71 @@ class DsController extends Controller
         $selectedSection = $request->input('section'); // Ambil bagian dari permintaan HTTP
 
         // Query data summary berdasarkan tahun dan bagian tertentu
-        $summaryData = FormFPP::selectRaw('section, YEAR(created_at) as year, MONTH(created_at) as month, SUM(TIMESTAMPDIFF(SECOND, created_at, updated_at) / 3600) as total_hour')
+        $summaryData2 = FormFPP::selectRaw('section, YEAR(created_at) as year, MONTH(created_at) as month, SUM(TIMESTAMPDIFF(SECOND, created_at, updated_at) / 3600) as total_hour')
             ->whereYear('created_at', $selectedYear)
             ->where('section', $selectedSection)
             ->where('status', 3)
             ->groupBy('section', DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
             ->get();
 
-        // Mengonversi data ke format yang dapat digunakan oleh Chart.js
-        $labels = []; // Label bulan
-        $data2 = []; // Total jam per bulan
-        foreach ($summaryData as $dataPoint) {
-            $labels[] = date('F', mktime(0, 0, 0, $dataPoint->month, 1)); // Mendapatkan nama bulan dari angka bulan
-            $data2[] = $dataPoint->total_hour * 60;
+        // Buat array lengkap dari label bulan
+        $fullMonthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // Inisialisasi array data kosong
+        $data2 = array_fill(0, 12, 0);
+
+        // Iterasi melalui data yang diterima dari database
+        foreach ($summaryData2 as $dataPoint) {
+            $monthIndex = $dataPoint->month - 1; // Index bulan dimulai dari 0
+            $data2[$monthIndex] = $dataPoint->total_hour * 60;
+        }
+
+        // Mengisi label bulan untuk bulan-bulan yang tidak memiliki data
+        $labels = [];
+        foreach ($fullMonthLabels as $index => $monthLabel) {
+            $labels[] = $monthLabel;
         }
 
         // Kirim data sebagai respons JSON
         return response()->json(['labels' => $labels, 'data2' => $data2]);
     }
 
+    public function getPeriodeWaktuPengerjaan(Request $request)
+    {
+        $selectedSection = $request->input('section');
+        $startMonth = Carbon::parse($request->input('start_month2'))->startOfMonth();
+        $endMonth = Carbon::parse($request->input('end_month2'))->endOfMonth();
+
+        $periodeWaktuPengerjaan = FormFPP::selectRaw('section, SUM(TIMESTAMPDIFF(SECOND, created_at, updated_at) / 60) as total_minute')
+            ->where('section', $selectedSection)
+            ->whereBetween('created_at', [$startMonth, $endMonth])
+            ->where('status', 3)
+            ->groupBy('section') // Kelompokkan berdasarkan kolom section
+            ->first();
+
+        // Return data as JSON response
+        return response()->json($periodeWaktuPengerjaan);
+    }
+
     public function getPeriodeMesin(Request $request)
     {
-        // Ambil rentang tanggal dan section dari permintaan HTTP
-        $startDate = $request->input('start_month2');
-        $endDate = $request->input('end_month2');
+        $startDate = Carbon::parse($request->input('start_mesin'))->startOfMonth();
+        $endDate = Carbon::parse($request->input('end_mesin'))->endOfMonth();
         $section = $request->input('section');
 
-        // Query data summary berdasarkan rentang tanggal dan section
-        $periodemesin = FormFPP::select('mesin', 'section')
-            ->where('section', $section)
-            ->whereBetween('created_at', [$startDate, $endDate])
+        $periodeMesin = DB::table('mesin')
+            ->select('mesin.no_mesin', DB::raw('COUNT(form_f_p_p_s.id) as total_fpp'))
+            ->leftJoin('form_f_p_p_s', 'mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+            ->where('form_f_p_p_s.status', 3)
+            ->where('form_f_p_p_s.section', $section)
+            ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate])
+            ->groupBy('mesin.no_mesin')
             ->get();
 
-        // Inisialisasi array untuk menyimpan jumlah FPP per mesin
-        $data3 = [];
 
-        // Loop melalui data summary dan menghitung jumlah FPP per mesin
-        foreach ($periodemesin as $dataPoint) {
-            $mesin = $dataPoint->mesin;
-
-            // Menambahkan jumlah FPP per mesin ke dalam array
-            if (!isset($data[$mesin])) {
-                $data3[$mesin] = 1;
-            } else {
-                $data3[$mesin]++;
-            }
-        }
-
-        // Kirim data sebagai respons JSON
-        return response()->json(['data3' => $data3]);
+        return response()->json($periodeMesin);
     }
+
 
     // Buat Dashboard dan Chart
     public function dashboardHandling(Request $request)
@@ -172,46 +187,47 @@ class DsController extends Controller
 
         $selectedYear = $request->input('year', date('Y'));
         $selectedSection = $request->input('section', $sections->first());
-        $summaryData2 = FormFPP::selectRaw('section, YEAR(created_at) as year, MONTH(created_at) as month, SUM(TIMESTAMPDIFF(SECOND, created_at, updated_at) / 3600) as total_hour')
+
+        $summaryData2 = FormFPP::selectRaw('section, YEAR(created_at) as year,
+    MONTH(created_at) as month, SUM(TIMESTAMPDIFF(SECOND, created_at, updated_at) / 3600) as total_hour')
             ->whereYear('created_at', $selectedYear)
             ->where('section', $selectedSection)
             ->where('status', 3)
-            ->groupBy('section', DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+            ->groupBy('section', 'year', 'month')
+            ->orderBy('year')
+            ->orderBy('month')
             ->get();
 
-        // Mengonversi data ke format yang dapat digunakan oleh Chart.js
-        $labels = []; // Label bulan
-        $data2 = []; // Total jam per bulan
+        $labels = [];
+        $data2 = [];
         foreach ($summaryData2 as $dataPoint) {
             $labels[] = date('F', mktime(0, 0, 0, $dataPoint->month, 1)); // Mendapatkan nama bulan dari angka bulan
             $data2[] = $dataPoint->total_hour * 60;
         }
 
-        // Ambil rentang tanggal dan section dari permintaan HTTP
-        $startDate = $request->input('start_month2');
-        $endDate = $request->input('end_month2');
+        $startMonth = Carbon::parse($request->input('start_month2'))->startOfMonth();
+        $endMonth = Carbon::parse($request->input('end_month2'))->endOfMonth();
+
+        $periodeWaktuPengerjaan = FormFPP::selectRaw('section, SUM(TIMESTAMPDIFF(SECOND, created_at, updated_at) / 60) as total_minute')
+            ->where('section', $selectedSection)
+            ->whereBetween('created_at', [$startMonth, $endMonth])
+            ->where('status', 3)
+            ->groupBy('section') // Kelompokkan berdasarkan kolom section
+            ->first();
+
+
+        $startDate = Carbon::parse($request->input('start_mesin'))->startOfMonth();
+        $endDate = Carbon::parse($request->input('end_mesin'))->endOfMonth();
         $section = $request->input('section');
 
-        // Query data summary berdasarkan rentang tanggal dan section
-        $periodemesin = FormFPP::select('mesin', 'section')
-            ->where('section', $section)
-            ->whereBetween('created_at', [$startDate, $endDate])
+        $periodeMesin = DB::table('mesin')
+            ->select('mesin.no_mesin', DB::raw('COUNT(form_f_p_p_s.id) as total_fpp'))
+            ->leftJoin('form_f_p_p_s', 'mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+            ->where('form_f_p_p_s.status', 3)
+            ->where('form_f_p_p_s.section', $section)
+            ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate])
+            ->groupBy('mesin.no_mesin')
             ->get();
-
-        // Inisialisasi array untuk menyimpan jumlah FPP per mesin
-        $data3 = [];
-
-        // Loop melalui data summary dan menghitung jumlah FPP per mesin
-        foreach ($periodemesin as $dataPoint) {
-            $mesin = $dataPoint->mesin;
-
-            // Menambahkan jumlah FPP per mesin ke dalam array
-            if (!isset($data[$mesin])) {
-                $data3[$mesin] = 1;
-            } else {
-                $data3[$mesin]++;
-            }
-        }
 
         $chartMachining = FormFPP::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
@@ -262,10 +278,11 @@ class DsController extends Controller
                 'countPeriode',
                 'labels',
                 'data2',
-                'data3',
+                'periodeWaktuPengerjaan',
                 'sections',
                 'years2',
-                'periodemesin',
+                'data2',
+                'periodeMesin' // tambahkan data periodeMesin ke dalam array compact()
             )
         );
     }

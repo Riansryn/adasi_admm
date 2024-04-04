@@ -112,7 +112,7 @@ class MesinController extends Controller
         return redirect()->route('mesins.index')->with('success', 'Mesin updated successfully');
     }
 
-    public function show(Mesin $mesin, FormFPP $formperbaikan)
+    public function show(Mesin $mesin, FormFPP $formperbaikan, Sparepart $sparepart)
     {
         // Mengambil formperbaikans berdasarkan status 3 dan nomor_mesin dari mesin yang sama dengan mesin di formperbaikan
         $formperbaikans = FormFPP::where('status', '3')
@@ -123,7 +123,7 @@ class MesinController extends Controller
         // Mengambil daftar sparepart berdasarkan nomor mesin
         $spareparts = Sparepart::where('nomor_mesin', $mesin->no_mesin)->get();
 
-        return view('mesins.show', compact('mesin', 'formperbaikan', 'formperbaikans', 'spareparts'));
+        return view('mesins.show', compact('mesin', 'formperbaikan', 'formperbaikans', 'spareparts', 'sparepart'));
     }
 
     public function edit(Mesin $mesin)

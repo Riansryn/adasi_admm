@@ -10,11 +10,18 @@ use App\Models\Sparepart;
 
 class SparepartExport implements FromCollection, WithHeadings, ShouldAutoSize // Implement ShouldAutoSize
 {
-    use Exportable;
+    protected $nomor_mesin;
+
+    public function __construct($nomor_mesin)
+    {
+        $this->nomor_mesin = $nomor_mesin;
+    }
 
     public function collection()
     {
-        return Sparepart::select("id", "nama_sparepart", "deskripsi", "jumlah_stok")->get();
+        return Sparepart::select("id", "nama_sparepart", "deskripsi", "jumlah_stok")
+            ->where('nomor_mesin', $this->nomor_mesin)
+            ->get();
     }
 
     public function headings(): array

@@ -18,5 +18,10 @@ class Sparepart extends Model
         'nomor_mesin'
     ];
 
+    public function mesin()
+    {
+        return $this->belongsTo(Mesin::class, 'nomor_mesin', 'no_mesin');
+    }
+
     protected $dates = ['created_at', 'updated_at'];
 }

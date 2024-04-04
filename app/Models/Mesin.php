@@ -25,6 +25,11 @@ class Mesin extends Model
         return Carbon::parse($value)->format('Y-m-d | H:i:s');
     }
 
+    public function spareparts()
+    {
+        return $this->hasMany(Sparepart::class);
+    }
+
     public function getUpdatedAtAttribute($value)
     {
         return Carbon::parse($value)->format('Y-m-d | H:i:s');

@@ -20,7 +20,6 @@
     <section class="section">
         <div class="container">
             <div class="row">
-                <!-- Section 1 - Form -->
                 <div class="col-mt-4">
                     <div class="card">
                         <div class="accordion">
@@ -128,7 +127,10 @@
                                             Import Sparepart
                                         </button>
                                     </form>
-                                    <a class="btn btn-success float-end" href="{{ route('spareparts.export') }}">Export Data</a>
+                                    <!-- Bagian HTML untuk menampilkan tabel sparepart -->
+                                    <a class="btn btn-success float-end" href="{{ route('spareparts.export', ['nomor_mesin' => $mesin->no_mesin]) }}">Export Data</a>
+
+
                                     <br><br>
                                     <table class="table table-bordered datatable" id="table1" style="width:100%">
                                         <thead>

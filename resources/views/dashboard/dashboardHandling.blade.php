@@ -145,9 +145,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
 
-    <div class="card">
+
+                <div class="col-sm-6">
+                <div class="card">
         <div class="card-body">
             <h5 class="card-title">Waktu Pengerjaan Repair Maintenance <span></span></h5>
             <div class="row">
@@ -175,33 +176,53 @@
     </div>
 </div>
 
-
 <div class="col-sm-6">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Periode Repair Maintenance</h5>
+            <h5 class="card-title">Periode Waktu Pengerjaan</h5>
             <div class="row">
                 <div class="col-md-3">
-                    <label for="section-dropdown">Pilih Section:</label>
-                    <select id="section-dropdown" class="form-control" onchange="updateChartPeriodeMesin()">
+                    <label for="start_month2">Bulan Mulai:</label>
+                    <input type="date" id="start_month2" name="start_month2" class="form-control" onchange="updatePeriodeWaktuPengerjaan()">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_month2">Bulan Akhir:</label>
+                    <input type="date" id="end_month2" name="end_month2" class="form-control" onchange="updatePeriodeWaktuPengerjaan()">
+                </div>
+            </div>
+            <canvas id="periodeRepair" style="width: 100%; height: auto;"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Periode Repair Mesin</h5>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="sectionDropdown">Pilih Section:</label>
+                    <select id="section-dropdown2" class="form-control" onchange="updateChartPeriodeMesin()">
                         @foreach($sections as $section)
                             <option value="{{ $section }}">{{ $section }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="start_month2">Bulan Mulai:</label>
-                    <input type="date" id="start_month2" name="start_month2" class="form-control" onchange="updateChartPeriodeMesin()">
+                    <label for="start_mesin">Bulan Mulai:</label>
+                    <input type="date" id="start_mesin" name="start_mesin" class="form-control" onchange="updateChartPeriodeMesin()">
                 </div>
                 <div class="col-md-3">
-                    <label for="end_month2">Bulan Akhir:</label>
-                    <input type="date" id="end_month2" name="end_month2" class="form-control" onchange="updateChartPeriodeMesin()">
+                    <label for="end_mesin">Bulan Akhir:</label>
+                    <input type="date" id="end_mesin" name="end_mesin" class="form-control" onchange="updateChartPeriodeMesin()">
                 </div>
             </div>
-            <canvas id="periodeMesin" style="width: 100%; height: auto;"></canvas>
+            <canvas id="periodeRepairMesin" style="width: 100%; height: auto;"></canvas>
         </div>
     </div>
 </div>
+
             </div>
         </section>
 
@@ -929,9 +950,11 @@ var sumarryChart = new Chart(ctx, {
 },
     options: { scales: { y: { beginAtZero: true } } }
 });
-
-
         </script>
+
+
+
+
 
 <script>
 // Inisialisasi dropdown tahun saat halaman dimuat
@@ -955,10 +978,6 @@ document.getElementById('date-dropdown2').addEventListener('change', function() 
     updateChart2();
 });
 
-// Event handler untuk perubahan pada dropdown section
-document.getElementById('section-dropdown').addEventListener('change', function() {
-    updateChart2();
-});
 
 function updateChart2() {
     var selectedYear = document.getElementById('date-dropdown2').value;
@@ -966,31 +985,32 @@ function updateChart2() {
 
     // Lakukan AJAX request untuk mendapatkan data baru berdasarkan tahun dan section yang dipilih
     $.ajax({
-        url: '/getRepairMaintenance', // Ganti dengan URL endpoint yang sesuai
-        method: 'GET',
-        data: {
-            year: selectedYear,
-            section: selectedSection
-        },
-        success: function(response) {
-            // Mendapatkan semua bulan dalam tahun
-            var labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    url: '/getRepairMaintenance', // Ganti dengan URL endpoint yang sesuai
+    method: 'GET',
+    data: {
+        year: selectedYear,
+        section: selectedSection
+    },
+    success: function(response) {
+        // Label bulan yang sesuai dengan data yang diterima
+        var labels = response.labels;
 
-            // Data baru yang diterima dari respons AJAX
-            var data2 = response.data2;
+        // Data yang diterima dari respons AJAX
+        var data2 = response.data2;
 
-            // Perbarui chart dengan data baru
-            repairMaintenance.data.labels = labels;
-            repairMaintenance.data.datasets[0].data = data2;
-            repairMaintenance.update();
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            // Handle error here
-        }
-    });
+        // Perbarui chart dengan data baru
+        repairMaintenance.data.labels = labels;
+        repairMaintenance.data.datasets[0].data = data2;
+        repairMaintenance.update();
+    },
+    error: function(xhr, status, error) {
+        console.error(xhr.responseText);
+        // Handle error here
+    }
+});
+
+
 }
-
     // Inisialisasi chart dengan data default
     var ctx = document.getElementById('repairMaintenance').getContext('2d');
     var repairMaintenance = new Chart(ctx, {
@@ -999,7 +1019,7 @@ function updateChart2() {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [{
                 label: 'Waktu Pengerjaan (Dalam menit)',
-                data: {!! json_encode($data2) !!},
+                data:{},
                 backgroundColor: 'rgba(255, 99, 132, 0.6)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
@@ -1014,56 +1034,18 @@ function updateChart2() {
         }
     });
 
-    function updateChartPeriodeMesin() {
-    var startDate = document.getElementById('start_month2').value;
-    var endDate = document.getElementById('end_month2').value;
-    var selectedSection = document.getElementById('section-dropdown').value;
 
-    // Lakukan AJAX request untuk mendapatkan data baru berdasarkan rentang tanggal dan section yang dipilih
-    $.ajax({
-        url: '/getPeriodeMesin',
-        method: 'GET',
-        data: {
-            start_month2: startDate,
-            end_month2: endDate,
-            section: selectedSection
-        },
-        success: function(response) {
-            // Proses data yang diterima dan update chart
-            processChartDataPeriodeMesin(response);
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            // Handle error here
-        }
-    });
-}
-
-function processChartDataPeriodeMesin(response) {
-    var data = response.data3;
-
-    // Inisialisasi array untuk labels (mesin) dan data (jumlah FPP)
-    var labels = Object.keys(data);
-    var fppCounts = Object.values(data);
-
-    // Memperbarui chart dengan data baru
-    periodeMesin.data.labels = labels;
-    periodeMesin.data.datasets[0].data = fppCounts;
-    periodeMesin.update();
-}
-
-
-// Inisialisasi chart dengan data default
-var ctx = document.getElementById('periodeMesin').getContext('2d');
-var periodeMesin = new Chart(ctx, {
+// Inisialisasi chart periode waktu pengerjaan dengan data default
+var ctxPeriode = document.getElementById('periodeRepair').getContext('2d');
+var periodeRepair = new Chart(ctxPeriode, {
     type: 'bar',
     data: {
-        labels: [], // Labels (mesin) akan diisi setelah mendapatkan data dari server
+        labels: ['Waktu Pengerjaan'], // Label waktu pengerjaan saja
         datasets: [{
-            label: 'Jumlah FPP',
-            data: [], // Data akan diisi setelah mendapatkan data dari server
-            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            label: 'Total Waktu Pengerjaan (Dalam menit)', // Label dataset
+            data: [{!! json_encode($periodeWaktuPengerjaan) !!}], // Data waktu pengerjaan akan diisi setelah permintaan AJAX berhasil
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1
         }]
     },
@@ -1075,6 +1057,142 @@ var periodeMesin = new Chart(ctx, {
         }
     }
 });
+
+// Fungsi untuk memperbarui chart periode waktu pengerjaan
+function updatePeriodeWaktuPengerjaan() {
+    var selectedSection = document.getElementById('section-dropdown').value;
+    var startMonth = document.getElementById('start_month2').value;
+    var endMonth = document.getElementById('end_month2').value;
+
+    // Lakukan AJAX request untuk mendapatkan data periode waktu pengerjaan berdasarkan section dan tanggal yang dipilih
+    $.ajax({
+        url: '/getPeriodeWaktuPengerjaan',
+        method: 'GET',
+        data: {
+            section: selectedSection,
+            start_month2: startMonth,
+            end_month2: endMonth
+        },
+        success: function(response) {
+            // Perbarui data chart dengan data baru
+            periodeRepair.data.datasets[0].data = [response.total_minute];
+            periodeRepair.update();
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Handle error here
+        }
+    });
+}
+
+
+    // Event handler untuk perubahan pada dropdown section
+    document.getElementById('section-dropdown').addEventListener('change', function() {
+    updateChart2();
+    updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+document.getElementById('start_month2').addEventListener('change', function() {
+    updateChart2();
+    updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+document.getElementById('end_month2').addEventListener('change', function() {
+    updateChart2();
+    updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+
+
+// Inisialisasi chart periode waktu pengerjaan untuk mesin dengan data default
+var ctxPeriodeMesin = document.getElementById('periodeRepairMesin').getContext('2d');
+var periodeRepairMesin = new Chart(ctxPeriodeMesin, {
+    type: 'bar',
+    data: {
+        labels: [], // Label mesin akan diisi setelah permintaan AJAX berhasil
+        datasets: [{
+            label: 'Total FPP', // Label dataset
+            data: [{!! json_encode($periodeMesin) !!}], // Data total FPP akan diisi setelah permintaan AJAX berhasil
+            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Warna latar belakang hijau
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+function updateChartPeriodeMesin() {
+    var selectedSection = document.getElementById('section-dropdown2').value;
+    var startDate = document.getElementById('start_mesin').value;
+    var endDate = document.getElementById('end_mesin').value;
+
+    // Lakukan AJAX request untuk mendapatkan data mesin berdasarkan section dan tanggal yang dipilih
+    $.ajax({
+        url: '/getPeriodeMesin',
+        method: 'GET',
+        data: {
+            section: selectedSection,
+            start_mesin: startDate,
+            end_mesin: endDate
+        },
+        success: function(response) {
+            // Perbarui chart dengan data baru
+            updateMesinChart(response);
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Handle error here
+        }
+    });
+}
+
+// Fungsi untuk memperbarui chart dengan data mesin
+function updateMesinChart(data) {
+    var mesinLabels = [];
+    var totalFPP = [];
+
+    // Mengisi data mesin dan total FPP
+    data.forEach(function(item) {
+        mesinLabels.push(item.no_mesin);
+        totalFPP.push(item.total_fpp);
+    });
+
+    // Perbarui labels chart dengan label-label mesin
+    periodeRepairMesin.data.labels = mesinLabels;
+
+    // Perbarui data chart dengan data baru
+    periodeRepairMesin.data.datasets[0].data = totalFPP;
+    periodeRepairMesin.update();
+}
+
+    // Event handler untuk perubahan pada dropdown section
+    document.getElementById('section-dropdown2').addEventListener('change', function() {
+    updateChartPeriodeMesin(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+document.getElementById('start_mesin').addEventListener('change', function() {
+    updateChartPeriodeMesin();// Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+document.getElementById('end_mesin').addEventListener('change', function() {
+    updateChartPeriodeMesin();  // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+
+
+
+
+
+
+
+
+
 
 
 

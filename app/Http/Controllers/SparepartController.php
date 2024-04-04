@@ -27,8 +27,12 @@ class SparepartController extends Controller
         return back();
     }
 
-    public function export(Request $request)
+    public function export($nomor_mesin)
     {
-        return Excel::download(new SparepartExport, 'Sparepart - Mesin .xlsx');
+        $mesin = Mesin::where('no_mesin', $nomor_mesin)->firstOrFail(); // Mendapatkan data mesin berdasarkan nomor mesin yang dipilih
+        $formatted_date = now()->format('d F Y'); // Format hari, tanggal, dan bulan
+        $nama_file = 'Sparepart - Mesin ' . $nomor_mesin . ' - ' . $formatted_date . '.xlsx'; // Nama file sesuai dengan nomor mesin dan tanggal yang rapi
+
+        return Excel::download(new SparepartExport($nomor_mesin), $nama_file);
     }
 }
