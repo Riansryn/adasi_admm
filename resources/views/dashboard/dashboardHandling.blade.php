@@ -1112,7 +1112,7 @@ var periodeRepairMesin = new Chart(ctxPeriodeMesin, {
         labels: [], // Label mesin akan diisi setelah permintaan AJAX berhasil
         datasets: [{
             label: 'Total FPP', // Label dataset
-            data: [{!! json_encode($periodeMesin) !!}], // Data total FPP akan diisi setelah permintaan AJAX berhasil
+            data: [], // Data total FPP akan diisi setelah permintaan AJAX berhasil
             backgroundColor: 'rgba(75, 192, 192, 0.6)', // Warna latar belakang hijau
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
@@ -1127,6 +1127,34 @@ var periodeRepairMesin = new Chart(ctxPeriodeMesin, {
     }
 });
 
+// Fungsi untuk memperbarui chart dengan data mesin
+function updateMesinChart(data) {
+    var mesinLabels = [];
+    var totalFPP = [];
+
+    // Periksa apakah ada data yang dikembalikan
+    if (data.length > 0) {
+        // Mengisi data mesin dan total FPP
+        data.forEach(function(item) {
+            mesinLabels.push(item.no_mesin);
+            totalFPP.push(item.total_fpp);
+        });
+    } else {
+        // Jika tidak ada data, atur label dan data chart menjadi array kosong
+        mesinLabels = [];
+        totalFPP = [];
+    }
+
+    // Perbarui labels chart dengan label-label mesin
+    periodeRepairMesin.data.labels = mesinLabels;
+
+    // Perbarui data chart dengan data baru
+    periodeRepairMesin.data.datasets[0].data = totalFPP;
+    periodeRepairMesin.update();
+}
+
+
+// Fungsi untuk memperbarui chart periode waktu pengerjaan untuk mesin
 function updateChartPeriodeMesin() {
     var selectedSection = document.getElementById('section-dropdown2').value;
     var startDate = document.getElementById('start_mesin').value;
@@ -1152,49 +1180,19 @@ function updateChartPeriodeMesin() {
     });
 }
 
-// Fungsi untuk memperbarui chart dengan data mesin
-function updateMesinChart(data) {
-    var mesinLabels = [];
-    var totalFPP = [];
-
-    // Mengisi data mesin dan total FPP
-    data.forEach(function(item) {
-        mesinLabels.push(item.no_mesin);
-        totalFPP.push(item.total_fpp);
-    });
-
-    // Perbarui labels chart dengan label-label mesin
-    periodeRepairMesin.data.labels = mesinLabels;
-
-    // Perbarui data chart dengan data baru
-    periodeRepairMesin.data.datasets[0].data = totalFPP;
-    periodeRepairMesin.update();
-}
-
-    // Event handler untuk perubahan pada dropdown section
-    document.getElementById('section-dropdown2').addEventListener('change', function() {
-    updateChartPeriodeMesin(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+// Event handler untuk perubahan pada dropdown section
+document.getElementById('section-dropdown2').addEventListener('change', function() {
+    updateChartPeriodeMesin();
 });
 
+// Event handler untuk perubahan pada input tanggal
 document.getElementById('start_mesin').addEventListener('change', function() {
-    updateChartPeriodeMesin();// Panggil fungsi untuk memperbarui periode waktu pengerjaan
+    updateChartPeriodeMesin();
 });
 
 document.getElementById('end_mesin').addEventListener('change', function() {
-    updateChartPeriodeMesin();  // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+    updateChartPeriodeMesin();
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 </script>
 

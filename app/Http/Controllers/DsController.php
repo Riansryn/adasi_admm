@@ -72,17 +72,21 @@ class DsController extends Controller
         $section = $request->input('section');
 
         $periodeMesin = DB::table('mesin')
+            ->leftJoin('form_f_p_p_s', function ($join) use ($section, $startDate, $endDate) {
+                $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+                    ->where('form_f_p_p_s.status', 3)
+                    ->where('form_f_p_p_s.section', $section)
+                    ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
+            })
             ->select('mesin.no_mesin', DB::raw('COUNT(form_f_p_p_s.id) as total_fpp'))
-            ->leftJoin('form_f_p_p_s', 'mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
-            ->where('form_f_p_p_s.status', 3)
-            ->where('form_f_p_p_s.section', $section)
-            ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate])
+            ->where('mesin.section', $section) // Filter mesin berdasarkan section yang dipilih
             ->groupBy('mesin.no_mesin')
             ->get();
 
 
         return response()->json($periodeMesin);
     }
+
 
 
     // Buat Dashboard dan Chart
@@ -215,19 +219,22 @@ class DsController extends Controller
             ->groupBy('section') // Kelompokkan berdasarkan kolom section
             ->first();
 
-
         $startDate = Carbon::parse($request->input('start_mesin'))->startOfMonth();
         $endDate = Carbon::parse($request->input('end_mesin'))->endOfMonth();
         $section = $request->input('section');
 
         $periodeMesin = DB::table('mesin')
+            ->leftJoin('form_f_p_p_s', function ($join) use ($section, $startDate, $endDate) {
+                $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+                    ->where('form_f_p_p_s.status', 3)
+                    ->where('form_f_p_p_s.section', $section)
+                    ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
+            })
             ->select('mesin.no_mesin', DB::raw('COUNT(form_f_p_p_s.id) as total_fpp'))
-            ->leftJoin('form_f_p_p_s', 'mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
-            ->where('form_f_p_p_s.status', 3)
-            ->where('form_f_p_p_s.section', $section)
-            ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate])
+            ->where('mesin.section', $section) // Filter mesin berdasarkan section yang dipilih
             ->groupBy('mesin.no_mesin')
             ->get();
+
 
         $chartMachining = FormFPP::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
