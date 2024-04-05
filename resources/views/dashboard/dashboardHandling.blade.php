@@ -962,7 +962,7 @@ series: [{
 
 // Initialize array for months
 var months = [];
-for (var i = 0; i <= 12; i++) {
+for (var i = 1; i <= 12; i++) {
     months.push(getMonthName(i));
 }
 
