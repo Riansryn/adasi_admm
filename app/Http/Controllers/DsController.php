@@ -80,6 +80,7 @@ class DsController extends Controller
             })
             ->select('mesin.no_mesin', DB::raw('COUNT(form_f_p_p_s.id) as total_fpp'))
             ->where('mesin.section', $section) // Filter mesin berdasarkan section yang dipilih
+            ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
             ->groupBy('mesin.no_mesin')
             ->get();
 
@@ -232,6 +233,7 @@ class DsController extends Controller
             })
             ->select('mesin.no_mesin', DB::raw('COUNT(form_f_p_p_s.id) as total_fpp'))
             ->where('mesin.section', $section) // Filter mesin berdasarkan section yang dipilih
+            ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
             ->groupBy('mesin.no_mesin')
             ->get();
 
