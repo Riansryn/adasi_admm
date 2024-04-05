@@ -1,5 +1,6 @@
 @extends('layout')
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
 @section('content')
     <main id="main" class="main">
 
@@ -104,7 +105,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Mesin Cutting</h5>
-                            <canvas id="chartCutting" width="200" height="50"></canvas>
+                            <div id="chartCutting" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
                 </div>
@@ -113,7 +114,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Mesin Machining</h5>
-                            <canvas id="chartMachining" width="200" height="50"></canvas>
+                            <div id="chartMachining" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
                 </div>
@@ -122,7 +123,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Mesin Heat Treatment</h5>
-                            <canvas id="chartHeatTreatment" width="200" height="50"></canvas>
+                            <div id="chartHeatTreatment" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
                 </div>
@@ -131,21 +132,19 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Mesin Machining Custom</h5>
-                            <canvas id="chartMachiningCustom" width="200" height="50"></canvas>
+                            <div id="chartMachiningCustom" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Summary buat Claim dan Complain -->
                 <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Summary Repair Maintenance</h5>
-                            <canvas id="summaryData" width="200" height="50"></canvas>
-                        </div>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Summary Repair Maintenance</h5>
+                    <div id="summaryHighcharts" style="width: 100%; height: 400px;"></div>
                 </div>
-
+            </div>
+        </div>
 
                 <div class="col-sm-6">
                 <div class="card">
@@ -170,7 +169,7 @@
                 </div>
                 </div>
 
-            <canvas id="repairMaintenance" style="width: 100%; height: auto;"></canvas>
+            <div id="repairMaintenance" style="width: 100%; height: auto;"></div>
 
     </div>
     </div>
@@ -197,7 +196,7 @@
 
 
 <div class="col-sm-12">
-    <div class="card">
+    <div id="highcharts-container" class="card">
         <div class="card-body">
             <h5 class="card-title">Periode Repair Mesin</h5>
             <div class="row">
@@ -218,11 +217,10 @@
                     <input type="date" id="end_mesin" name="end_mesin" class="form-control" onchange="updateChartPeriodeMesin()">
                 </div>
             </div>
-            <canvas id="periodeRepairMesin" style="width: 100%; height: auto;"></canvas>
+            <div id="periodeRepairMesin" style="width: 100%; height: 400px;"></div>
         </div>
     </div>
 </div>
-
             </div>
         </section>
 
@@ -678,34 +676,51 @@
                 }
             }
 
-            var ctx = document.getElementById('chartCutting').getContext('2d');
+            Highcharts.chart('chartCutting', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+        text: 'Jumlah Repair Mesin Cutting'
+    },
+    xAxis: {
+        categories: months,
+        crosshair: true,
+        accessibility: {
+            description: 'Bulan'
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Jumlah Repair'
+        }
+    },
+    tooltip: {
+    headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+    footerFormat: '</table>',
+    shared: true,
+    useHTML: true
+},
+plotOptions: {
+    column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+    }
+},
+series: [{
+    name: 'Status (Open)',
+    data: status1,
+    color: 'rgba(0, 150, 0, 0.5)' // Warna hijau yang lebih gelap untuk 'Status (Open)'
+}, {
+    name: 'Status (Closed)',
+    data: status2,
+    color: 'rgba(0, 0, 0, 0.7)' // Warna hitam yang lebih terang untuk 'Status (Closed)'
+}]
 
-            var chartCutting = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Open',
-                        data: status1,
-                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Close',
-                        data: status2,
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+    });
 
 
             // Data Heat Treatment chart
@@ -737,34 +752,51 @@
                 }
             }
 
-            var ctx = document.getElementById('chartHeatTreatment').getContext('2d');
+            Highcharts.chart('chartHeatTreatment', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+        text: 'Jumlah Repair Mesin Heat Treatment'
+    },
+    xAxis: {
+        categories: months,
+        crosshair: true,
+        accessibility: {
+            description: 'Bulan'
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Jumlah Repair'
+        }
+    },
+    tooltip: {
+    headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+    footerFormat: '</table>',
+    shared: true,
+    useHTML: true
+},
+plotOptions: {
+    column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+    }
+},
+series: [{
+    name: 'Status (Open)',
+    data: status1,
+    color: 'rgba(0, 150, 0, 0.5)' // Warna hijau yang lebih gelap untuk 'Status (Open)'
+}, {
+    name: 'Status (Closed)',
+    data: status2,
+    color: 'rgba(0, 0, 0, 0.7)' // Warna hitam yang lebih terang untuk 'Status (Closed)'
+}]
 
-            var chartHeatTreatment = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Open',
-                        data: status1,
-                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Close',
-                        data: status2,
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+    });
 
             // Data Machining Chart
             var machiningData = {!! $chartMachining !!};
@@ -795,34 +827,51 @@
                 }
             }
 
-            var ctx = document.getElementById('chartMachining').getContext('2d');
+            Highcharts.chart('chartMachining', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+        text: 'Jumlah Repair Mesin Machining'
+    },
+    xAxis: {
+        categories: months,
+        crosshair: true,
+        accessibility: {
+            description: 'Bulan'
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Jumlah Repair'
+        }
+    },
+    tooltip: {
+    headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+    footerFormat: '</table>',
+    shared: true,
+    useHTML: true
+},
+plotOptions: {
+    column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+    }
+},
+series: [{
+    name: 'Status (Open)',
+    data: status1,
+    color: 'rgba(0, 150, 0, 0.5)' // Warna hijau yang lebih gelap untuk 'Status (Open)'
+}, {
+    name: 'Status (Closed)',
+    data: status2,
+    color: 'rgba(0, 0, 0, 0.7)' // Warna hitam yang lebih terang untuk 'Status (Closed)'
+}]
 
-            var chartMachining = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Open',
-                        data: status1,
-                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Close',
-                        data: status2,
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+    });
 
             // Data CT Bubut Chart
             var machiningcustomData = {!! $chartMachiningCustom !!};
@@ -853,36 +902,53 @@
                 }
             }
 
-            var ctx = document.getElementById('chartMachiningCustom').getContext('2d');
+            Highcharts.chart('chartMachiningCustom', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+        text: 'Jumlah Repair Mesin Maching Custom'
+    },
+    xAxis: {
+        categories: months,
+        crosshair: true,
+        accessibility: {
+            description: 'Bulan'
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Jumlah Repair'
+        }
+    },
+    tooltip: {
+    headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+    footerFormat: '</table>',
+    shared: true,
+    useHTML: true
+},
+plotOptions: {
+    column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+    }
+},
+series: [{
+    name: 'Status (Open)',
+    data: status1,
+    color: 'rgba(0, 150, 0, 0.5)' // Warna hijau yang lebih gelap untuk 'Status (Open)'
+}, {
+    name: 'Status (Closed)',
+    data: status2,
+    color: 'rgba(0, 0, 0, 0.7)' // Warna hitam yang lebih terang untuk 'Status (Closed)'
+}]
 
-            var chartCTBubut = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Open',
-                        data: status1,
-                        backgroundColor: 'rgba(0, 255, 0, 0.2)', // Warna hijau untuk 'Open'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: 'Close',
-                        data: status2,
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Warna hitam yang lebih gelap untuk 'Close'
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+    });
 
-            var summaryData = {!! json_encode($summaryData) !!};
+    var summaryData = {!! json_encode($summaryData) !!};
 
 // Initialize array for months
 var months = [];
@@ -890,65 +956,75 @@ for (var i = 0; i <= 12; i++) {
     months.push(getMonthName(i));
 }
 
-// Function to find data for a specific section in a month
-function findData(month, section) {
-    var found = summaryData.find(function(item) {
-        return parseInt(item.month) === month && item.section.toUpperCase() === section.toUpperCase();
-    });
-    return found ? found : { total_status_2_0: 0, total_status_3: 0 };
+// Function to get month name from its number
+function getMonthName(monthNumber) {
+    var d = new Date();
+    d.setMonth(monthNumber - 1);
+    return d.toLocaleString('en-us', { month: 'long' });
 }
 
-// Map total status for each section and month
-var statusData = {};
-['CUTTING', 'HEAT TREATMENT', 'MACHINING', 'MACHINING CUSTOM'].forEach(function(section) {
-    var openData = [];
-    var closedData = [];
-    for (var i = 1; i <= 12; i++) {
-        var data = findData(i, section);
-        openData.push(data.total_status_2_0);
-        closedData.push(data.total_status_3);
-    }
-    statusData[section] = { open: openData, closed: closedData };
+// Get all unique sections
+var sections = ['CUTTING', 'HEAT TREATMENT', 'MACHINING', 'MACHINING CUSTOM'];
+
+// Create data series for Highcharts
+var seriesData = [];
+sections.forEach(function(section) {
+    var openArray = [];
+    var closedArray = [];
+    months.forEach(function(month) {
+        // Check if data exists for this section and month
+        var sectionData = summaryData.find(data => data.section.toUpperCase() === section && getMonthName(data.month) === month);
+        if (sectionData) {
+            openArray.push(parseInt(sectionData.total_status_2_0));
+            closedArray.push(parseInt(sectionData.total_status_3));
+        } else {
+            openArray.push(0);
+            closedArray.push(0);
+        }
+    });
+
+    seriesData.push({
+        name: section + ' (Open)',
+        data: openArray
+    }, {
+        name: section + ' (Closed)',
+        data: closedArray
+    });
 });
 
-// Save different colors for each section
-var colors = {
-    'CUTTING': {
-        open: 'rgba(255, 99, 132, 0.6)', // Merah
-        closed: 'rgba(255, 99, 132, 1)'   // Merah gelap
+// Create chart using Highcharts
+Highcharts.chart('summaryHighcharts', {
+    chart: {
+        type: 'column'
     },
-    'HEAT TREATMENT': {
-        open: 'rgba(255, 206, 86, 0.6)', // Kuning muda
-        closed: 'rgba(255, 206, 86, 1)'   // Kuning tua
+    title: {
+        text: 'Summary Repair Maintenance'
     },
-    'MACHINING': {
-        open: 'rgba(75, 192, 192, 0.6)', // Hijau muda
-        closed: 'rgba(75, 192, 192, 1)'   // Hijau tua
+    xAxis: {
+        categories: months,
+        crosshair: true
     },
-    'MACHINING CUSTOM': {
-        open: 'rgba(54, 162, 235, 0.6)', // Biru muda
-        closed: 'rgba(54, 162, 235, 1)'   // Biru tua
-    }
-};
-
-var ctx = document.getElementById('summaryData').getContext('2d');
-
-var sumarryChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-    labels: months,
-    datasets: [
-        { label: 'Cutting (Open)', data: statusData['CUTTING'].open, backgroundColor: colors['CUTTING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-        { label: 'Cutting (Closed)', data: statusData['CUTTING'].closed, backgroundColor: colors['CUTTING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-        { label: 'Heat Treatment (Open)', data: statusData['HEAT TREATMENT'].open, backgroundColor: colors['HEAT TREATMENT'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-        { label: 'Heat Treatment (Closed)', data: statusData['HEAT TREATMENT'].closed, backgroundColor: colors['HEAT TREATMENT'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-        { label: 'Machining (Open)', data: statusData['MACHINING'].open, backgroundColor: colors['MACHINING'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-        { label: 'Machining (Closed)', data: statusData['MACHINING'].closed, backgroundColor: colors['MACHINING'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-        { label: 'Machining Custom (Open)', data: statusData['MACHINING CUSTOM'].open, backgroundColor: colors['MACHINING CUSTOM'].open, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 },
-        { label: 'Machining Custom (Closed)', data: statusData['MACHINING CUSTOM'].closed, backgroundColor: colors['MACHINING CUSTOM'].closed, borderColor: 'rgba(0, 0, 0, 1)', borderWidth: 1 }
-    ]
-},
-    options: { scales: { y: { beginAtZero: true } } }
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total Repair Maintenance'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: seriesData
 });
         </script>
 
@@ -957,6 +1033,9 @@ var sumarryChart = new Chart(ctx, {
 
 
 <script>
+    // Inisialisasi chart dengan data default
+var repairMaintenanceChart;
+
 // Inisialisasi dropdown tahun saat halaman dimuat
 document.addEventListener('DOMContentLoaded', function() {
     let dateDropdown = document.getElementById('date-dropdown2');
@@ -985,54 +1064,56 @@ function updateChart2() {
 
     // Lakukan AJAX request untuk mendapatkan data baru berdasarkan tahun dan section yang dipilih
     $.ajax({
-    url: '/getRepairMaintenance', // Ganti dengan URL endpoint yang sesuai
-    method: 'GET',
-    data: {
-        year: selectedYear,
-        section: selectedSection
-    },
-    success: function(response) {
-        // Label bulan yang sesuai dengan data yang diterima
-        var labels = response.labels;
-
-        // Data yang diterima dari respons AJAX
-        var data2 = response.data2;
-
-        // Perbarui chart dengan data baru
-        repairMaintenance.data.labels = labels;
-        repairMaintenance.data.datasets[0].data = data2;
-        repairMaintenance.update();
-    },
-    error: function(xhr, status, error) {
-        console.error(xhr.responseText);
-        // Handle error here
-    }
-});
-
-
-}
-    // Inisialisasi chart dengan data default
-    var ctx = document.getElementById('repairMaintenance').getContext('2d');
-    var repairMaintenance = new Chart(ctx, {
-        type: 'bar',
+        url: '/getRepairMaintenance', // Ganti dengan URL endpoint yang sesuai
+        method: 'GET',
         data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            datasets: [{
-                label: 'Waktu Pengerjaan (Dalam menit)',
-                data:{},
-                backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
+            year: selectedYear,
+            section: selectedSection
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        success: function(response) {
+            // Label bulan yang sesuai dengan data yang diterima
+            var labels = response.labels;
+
+            // Data yang diterima dari respons AJAX
+            var data2 = response.data2;
+
+            // Perbarui chart dengan data baru
+            if (!repairMaintenanceChart) {
+                // Jika chart belum diinisialisasi, lakukan inisialisasi
+                repairMaintenanceChart = Highcharts.chart('repairMaintenance', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Waktu Pengerjaan Repair Maintenance (Dalam menit)'
+                    },
+                    xAxis: {
+                        categories: labels
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Waktu (menit)'
+                        }
+                    },
+                    series: [{
+                        name: 'Waktu Pengerjaan (Dalam menit)',
+                        data: data2,
+                        color: 'red' // Mengatur warna menjadi merah
+                    }]
+                });
+            } else {
+                // Jika chart sudah diinisialisasi, perbarui data-nya
+                repairMaintenanceChart.xAxis[0].setCategories(labels, false);
+                repairMaintenanceChart.series[0].setData(data2, true);
             }
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Handle error here
         }
     });
+}
 
 
 // Inisialisasi chart periode waktu pengerjaan dengan data default
@@ -1102,57 +1183,44 @@ document.getElementById('end_month2').addEventListener('change', function() {
     updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
 });
 
-
-
-// Inisialisasi chart periode waktu pengerjaan untuk mesin dengan data default
-var ctxPeriodeMesin = document.getElementById('periodeRepairMesin').getContext('2d');
-var periodeRepairMesin = new Chart(ctxPeriodeMesin, {
-    type: 'bar',
-    data: {
-        labels: [], // Label mesin akan diisi setelah permintaan AJAX berhasil
-        datasets: [{
-            label: 'Total FPP', // Label dataset
-            data: [], // Data total FPP akan diisi setelah permintaan AJAX berhasil
-            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Warna latar belakang hijau
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-
-// Fungsi untuk memperbarui chart dengan data mesin
+// Fungsi untuk memperbarui chart dengan data mesin menggunakan Highcharts
 function updateMesinChart(data) {
-    var mesinLabels = [];
-    var totalFPP = [];
+    var mesinData = [];
 
-    // Periksa apakah ada data yang dikembalikan
-    if (data.length > 0) {
-        // Mengisi data mesin dan total FPP
-        data.forEach(function(item) {
-            mesinLabels.push(item.no_mesin);
-            totalFPP.push(item.total_fpp);
+    // Mengisi data mesin dan total FPP
+    data.forEach(function(item) {
+        mesinData.push({
+            name: item.no_mesin,
+            y: item.total_fpp
         });
-    } else {
-        // Jika tidak ada data, atur label dan data chart menjadi array kosong
-        mesinLabels = [];
-        totalFPP = [];
-    }
+    });
 
-    // Perbarui labels chart dengan label-label mesin
-    periodeRepairMesin.data.labels = mesinLabels;
-
-    // Perbarui data chart dengan data baru
-    periodeRepairMesin.data.datasets[0].data = totalFPP;
-    periodeRepairMesin.update();
+    // Membuat chart menggunakan Highcharts
+    Highcharts.chart('periodeRepairMesin', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Jumlah FPP Mesin'
+        },
+        xAxis: {
+            type: 'category',
+            title: {
+                text: 'Mesin'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Total FPP'
+            }
+        },
+        series: [{
+            name: 'Total FPP',
+            data: mesinData,
+            color: 'rgba(75, 192, 192, 0.6)' // Warna latar belakang hijau
+        }]
+    });
 }
-
 
 // Fungsi untuk memperbarui chart periode waktu pengerjaan untuk mesin
 function updateChartPeriodeMesin() {
@@ -1193,6 +1261,7 @@ document.getElementById('start_mesin').addEventListener('change', function() {
 document.getElementById('end_mesin').addEventListener('change', function() {
     updateChartPeriodeMesin();
 });
+
 
 </script>
 
