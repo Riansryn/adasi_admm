@@ -104,7 +104,6 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Mesin Cutting</h5>
                             <div id="chartCutting" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
@@ -113,7 +112,6 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Mesin Machining</h5>
                             <div id="chartMachining" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
@@ -122,7 +120,6 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Mesin Heat Treatment</h5>
                             <div id="chartHeatTreatment" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
@@ -131,7 +128,6 @@
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Mesin Machining Custom</h5>
                             <div id="chartMachiningCustom" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                         </div>
                     </div>
@@ -140,7 +136,6 @@
                 <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Summary Repair Maintenance</h5>
                     <div id="summaryHighcharts" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
@@ -149,11 +144,12 @@
                 <div class="col-sm-6">
                 <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Waktu Pengerjaan Repair Maintenance <span></span></h5>
+        <h5 class="card-title">Waktu Pengerjaan Repair Maintenance</h5>
             <div class="row">
                 <div class="col-md-4">
                     <label for="yearDropdown">Pilih Tahun:</label>
                     <select id="date-dropdown2" class="form-control" onchange="updateChart2()">
+                    <option value=" " selected>Pilih Tahun</option> <!-- Default option -->
                         @foreach($years2 as $year)
                             <option value="{{ $year }}">{{ $year }}</option>
                         @endforeach
@@ -162,6 +158,7 @@
                 <div class="col-md-4">
                     <label for="sectionDropdown">Pilih Section:</label>
                     <select id="section-dropdown" class="form-control" onchange="updateChart2()">
+                    <option value=" " selected>Pilih Section </option> <!-- Default option -->
                         @foreach($sections as $section)
                             <option value="{{ $section }}">{{ $section }}</option>
                         @endforeach
@@ -198,11 +195,12 @@
 <div class="col-sm-12">
     <div id="highcharts-container" class="card">
         <div class="card-body">
-            <h5 class="card-title">Periode Repair Mesin</h5>
+        <h5 class="card-title">Summary FPP Mesin</h5>
             <div class="row">
                 <div class="col-md-3">
                     <label for="sectionDropdown">Pilih Section:</label>
                     <select id="section-dropdown2" class="form-control" onchange="updateChartPeriodeMesin()">
+                    <option value=" " selected>Pilih Section </option> <!-- Default option -->
                         @foreach($sections as $section)
                             <option value="{{ $section }}">{{ $section }}</option>
                         @endforeach
@@ -681,7 +679,7 @@
             type: 'column'
         },
         title: {
-        text: 'Jumlah Repair Mesin Cutting'
+        text: 'Mesin Cutting'
     },
     xAxis: {
         categories: months,
@@ -695,6 +693,9 @@
         title: {
             text: 'Jumlah Repair'
         }
+    },
+    credits: {  // Configuration to disable credits
+        enabled: false
     },
     tooltip: {
     headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
@@ -757,7 +758,7 @@ series: [{
             type: 'column'
         },
         title: {
-        text: 'Jumlah Repair Mesin Heat Treatment'
+        text: 'Mesin Heat Treatment'
     },
     xAxis: {
         categories: months,
@@ -771,6 +772,9 @@ series: [{
         title: {
             text: 'Jumlah Repair'
         }
+    },
+    credits: {  // Configuration to disable credits
+        enabled: false
     },
     tooltip: {
     headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
@@ -832,7 +836,7 @@ series: [{
             type: 'column'
         },
         title: {
-        text: 'Jumlah Repair Mesin Machining'
+        text: 'Mesin Machining'
     },
     xAxis: {
         categories: months,
@@ -846,6 +850,9 @@ series: [{
         title: {
             text: 'Jumlah Repair'
         }
+    },
+    credits: {  // Configuration to disable credits
+        enabled: false
     },
     tooltip: {
     headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
@@ -907,7 +914,7 @@ series: [{
             type: 'column'
         },
         title: {
-        text: 'Jumlah Repair Mesin Maching Custom'
+        text: 'Mesin Maching Custom'
     },
     xAxis: {
         categories: months,
@@ -921,6 +928,9 @@ series: [{
         title: {
             text: 'Jumlah Repair'
         }
+    },
+    credits: {  // Configuration to disable credits
+        enabled: false
     },
     tooltip: {
     headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
@@ -1010,6 +1020,9 @@ Highcharts.chart('summaryHighcharts', {
             text: 'Total Repair Maintenance'
         }
     },
+    credits: {  // Configuration to disable credits
+        enabled: false
+    },
     tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -1096,6 +1109,9 @@ function updateChart2() {
                             text: 'Waktu (menit)'
                         }
                     },
+                    credits: {  // Configuration to disable credits
+        enabled: false
+    },
                     series: [{
                         name: 'Waktu Pengerjaan (Dalam menit)',
                         data: data2,
