@@ -1070,29 +1070,23 @@ document.getElementById('date-dropdown2').addEventListener('change', function() 
     updateChart2();
 });
 
-
 function updateChart2() {
     var selectedYear = document.getElementById('date-dropdown2').value;
     var selectedSection = document.getElementById('section-dropdown').value;
 
-    // Lakukan AJAX request untuk mendapatkan data baru berdasarkan tahun dan section yang dipilih
+    // Perform AJAX request to get new data based on selected year and section
     $.ajax({
-        url: '/getRepairMaintenance', // Ganti dengan URL endpoint yang sesuai
+        url: '/getRepairMaintenance', // Replace with appropriate endpoint URL
         method: 'GET',
         data: {
             year: selectedYear,
             section: selectedSection
         },
         success: function(response) {
-            // Label bulan yang sesuai dengan data yang diterima
             var labels = response.labels;
-
-            // Data yang diterima dari respons AJAX
             var data2 = response.data2;
 
-            // Perbarui chart dengan data baru
             if (!repairMaintenanceChart) {
-                // Jika chart belum diinisialisasi, lakukan inisialisasi
                 repairMaintenanceChart = Highcharts.chart('repairMaintenance', {
                     chart: {
                         type: 'column'
@@ -1109,17 +1103,16 @@ function updateChart2() {
                             text: 'Waktu (menit)'
                         }
                     },
-                    credits: {  // Configuration to disable credits
-        enabled: false
-    },
+                    credits: {
+                        enabled: false
+                    },
                     series: [{
                         name: 'Waktu Pengerjaan (Dalam menit)',
                         data: data2,
-                        color: 'red' // Mengatur warna menjadi merah
+                        color: 'red'
                     }]
                 });
             } else {
-                // Jika chart sudah diinisialisasi, perbarui data-nya
                 repairMaintenanceChart.xAxis[0].setCategories(labels, false);
                 repairMaintenanceChart.series[0].setData(data2, true);
             }
@@ -1129,6 +1122,9 @@ function updateChart2() {
             // Handle error here
         }
     });
+
+    // Call function to update the period of work completion chart
+    updatePeriodeWaktuPengerjaan();
 }
 
 
