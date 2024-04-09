@@ -49,7 +49,6 @@
                                             <th class="text-center" width="100px">Tipe proses</th>
                                             <th class="text-center" width="95px">Jenis 1</th>
                                             <th class="text-center" width="95px">Jenis 2</th>
-                                            <th class="text-center" width="100px">Gambar</th>
                                             <th class="text-center" width="100px">Pembaruan Terakhir</th>
                                             <th class="text-center" width="100px">Status</th>
                                             <th class="text-center" width="100px">Aksi</th>
@@ -63,28 +62,18 @@
                                                 <td class="text-center py-3">{{ $row->customers->customer_code ?? '' }}</td>
                                                 <td class="text-center py-3">{{ $row->customers->name_customer ?? '' }}</td>
                                                 <td class="text-center py-3">{{ $row->customers->area ?? '' }}</td>
-                                                <td class="text-center py-3">{{ $row->type_materials->type_name ?? '' }}
-                                                </td>
+                                                <td class="text-center py-3">{{ $row->type_materials->type_name ?? '' }}</td>
                                                 <td class="text-center py-3">{{ $row->thickness }}</td>
                                                 <td class="text-center py-3">{{ $row->weight }}</td>
                                                 <td class="text-center py-3">{{ $row->outer_diameter }}</td>
                                                 <td class="text-center py-3">{{ $row->inner_diameter }}</td>
-                                                <td class="text-center py-3">{{ $row->lenght }}</td>
+                                                <td class="text-center py-3">{{ $row->length }}</td>
                                                 <td class="text-center py-3">{{ $row->qty }}</td>
                                                 <td class="text-center py-3">{{ $row->pcs }}</td>
                                                 <td class="text-center py-3">{{ $row->category }}</td>
                                                 <td class="text-center py-3">{{ $row->process_type }}</td>
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
                                                 <td class="text-center py-3">{{ $row->type_2 }}</td>
-                                                <td class="text-center pt-3">
-                                                    @if ($row->image)
-                                                        <img src="{{ asset('assets/image/' . $row->image) }}"
-                                                            class="img-fluid rounded"
-                                                            style="max-width: 100%; height: auto;">
-                                                    @else
-                                                        <span>No Image Available</span>
-                                                    @endif
-                                                </td>
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>
                                                 <td class="text-center py-4"
                                                     style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -128,10 +117,9 @@
                                                                 onclick="confirmStatusChange({{ $row->id }})">
                                                                 <i class="fa fa-window-close fa-1x"></i>
                                                             </button>
-                                                            <a href="{{ route('showHistory', $row->id) }}"
-                                                                class="btn btn-sm btn-success">
+                                                            <a href="{{ route('showHistory', $row->id) }}" class="btn btn-sm btn-success">
                                                                 <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
-                                                            </a>
+                                                            </a>                                                            
                                                         @elseif($row->status == 3)
                                                             <a href="{{ route('showHistory', $row->id) }}"
                                                                 class="btn btn-sm btn-success">

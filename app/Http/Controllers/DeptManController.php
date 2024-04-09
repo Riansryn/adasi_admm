@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Handling;
 use App\Models\Customer;
-use App\Models\TypeMaterial;
+use App\Models\Handling;
 use App\Models\ScheduleVisit;
-use Illuminate\View\View;
+use App\Models\TypeMaterial;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Dompdf\Dompdf;
-
-
-//import Facade "Storage"
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+// import Facade "Storage"
+use Illuminate\View\View;
 
 class DeptManController extends Controller
 {
@@ -24,8 +20,8 @@ class DeptManController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    //viewSubmission
+
+    // viewSubmission
     public function submission()
     {
         $data = Handling::with('customers', 'type_materials')
@@ -34,9 +30,10 @@ class DeptManController extends Controller
             ->paginate();
 
         $data2 = Handling::with('customers', 'type_materials')
-            ->whereIn('status', [1, 2, 3]) // Filter berdasarkan status 1, 2, dan 3
-            ->orderByDesc('created_at') // Urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
-            ->paginate();
+        ->whereIn('status', [1, 2, 3]) // Filter berdasarkan status 1, 2, dan 3
+        ->orderByRaw('FIELD(status, 1, 2, 3)') // Urutkan berdasarkan urutan status yang diinginkan
+        ->orderByDesc('created_at') // Jika perlu, urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
+        ->paginate();
 
         return view('deptman.submission', compact('data', 'data2'));
     }
@@ -66,27 +63,27 @@ class DeptManController extends Controller
     {
         $data2 = Handling::select(
             'handlings.id',
-            'handlings.no_wo', 
-            'customers.customer_code', 
-            'customers.name_customer', 
-            'customers.area', 
-            'type_materials.type_name', 
-            'handlings.thickness', 
-            'handlings.weight', 
-            'handlings.outer_diameter', 
-            'handlings.inner_diameter', 
-            'handlings.lenght', 
-            'handlings.qty', 
-            'handlings.pcs', 
-            'handlings.category', 
-            'handlings.process_type', 
-            'handlings.type_1', 
-            'handlings.type_2', 
-            'handlings.image', 
-            'schedule_visits.schedule', 
-            'schedule_visits.results', 
-            'schedule_visits.due_date', 
-            'schedule_visits.pic', 
+            'handlings.no_wo',
+            'customers.customer_code',
+            'customers.name_customer',
+            'customers.area',
+            'type_materials.type_name',
+            'handlings.thickness',
+            'handlings.weight',
+            'handlings.outer_diameter',
+            'handlings.inner_diameter',
+            'handlings.length',
+            'handlings.qty',
+            'handlings.pcs',
+            'handlings.category',
+            'handlings.process_type',
+            'handlings.type_1',
+            'handlings.type_2',
+            'handlings.image',
+            'schedule_visits.schedule',
+            'schedule_visits.results',
+            'schedule_visits.due_date',
+            'schedule_visits.pic',
             'handlings.status',
             'handlings.created_at'
         )
@@ -101,27 +98,25 @@ class DeptManController extends Controller
         return view('deptman.historyClaimComplain', compact('data2'));
     }
 
-    
     /**
-     * edit
+     * edit.
      *
-     * @param  mixed $id
-     * @return View
+     * @param mixed $id
      */
     public function showConfirm(string $id): View
     {
-        //get handlings by ID
+        // get handlings by ID
         $handlings = Handling::findOrFail($id);
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
 
-        //render view with handlings
+        // render view with handlings
         return view('deptman.confirm', compact('handlings', 'customers', 'type_materials'));
     }
 
     public function showFollowUp(string $id): View
     {
-        //get handlings by ID
+        // get handlings by ID
         $handlings = Handling::findOrFail($id);
 
         $customers = Customer::all();
@@ -129,7 +124,7 @@ class DeptManController extends Controller
 
         $data = ScheduleVisit::where('handling_id', $id)->with('handlings')->get();
 
-        //render view with handlings
+        // render view with handlings
         return view('deptman.followup', compact('handlings', 'customers', 'type_materials', 'data'));
     }
 
@@ -166,31 +161,27 @@ class DeptManController extends Controller
     }
 
     /**
-     * update
+     * update.
      *
-     * @param  mixed $request
-     * @param  mixed $id
-     * @return RedirectResponse
+     * @param mixed $request
      */
     public function updateConfirm(Request $request, $id): RedirectResponse
     {
-
-        //get post by ID
+        // get post by ID
         $handlings = Handling::findOrFail($id);
 
         // Update post
         $handlings->update([
-            'status'            => 1
+            'status' => 1,
         ]);
 
-        //redirect to index
+        // redirect to index
         return redirect()->route('submission')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    //followup/tindak lanjut
-    public function updateFollowUp(Request $request, $id): RedirectResponse 
+    // followup/tindak lanjut
+    public function updateFollowUp(Request $request, $id): RedirectResponse
     {
-
         // Lakukan sesuatu untuk aksi "Save"
         // Simpan file ke dalam sistem file dengan nama hash
         if ($request->hasFile('file')) {
@@ -203,93 +194,89 @@ class DeptManController extends Controller
             $originalFilename = null;
         }
 
-        if ($request->action == 'save') {    
+        if ($request->action == 'save') {
             // Lakukan sesuatu untuk aksi "Save"
             // Simpan data schedule_visit ke dalam tabel schedule_visit
-                $scheduleVisit = new ScheduleVisit();
-                if(isset($request->schedule)) {
-                    $scheduleVisit->schedule = date('Y-m-d H:i:s', strtotime($request->schedule));
-                }
-
-                $scheduleVisit->results = $request->results;
-
-                if(isset($request->due_date)) {
-                    $scheduleVisit->due_date = date('Y-m-d H:i:s', strtotime($request->due_date));
-                }
-                $scheduleVisit->pic = $request->pic;
-                $scheduleVisit->file = $filename;
-                $scheduleVisit->file_name = $originalFilename;
-                $scheduleVisit->status = '1';
-                $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
-                $scheduleVisit->save();
-
-                return redirect()->route('showFollowUp', ['id' => $id])->with(['success' => 'Data Berhasil Diubah!']);
-        } elseif ($request->action == 'finish') {
-
-                $scheduleVisit = new ScheduleVisit();
-                if(isset($request->schedule)) {
-                    $scheduleVisit->schedule = date('Y-m-d H:i:s', strtotime($request->schedule));
-                }
-
-                $scheduleVisit->results = $request->results;
-
-               if(isset($request->due_date)) {
-                    $scheduleVisit->due_date = date('Y-m-d H:i:s', strtotime($request->due_date));
-                }
-                $scheduleVisit->pic = $request->pic;
-                $scheduleVisit->file = $filename;
-                $scheduleVisit->file_name = $originalFilename;
-                $scheduleVisit->status = '3';
-                $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
-                $scheduleVisit->save();
-                // Temukan entitas Handling berdasarkan ID
-                $handlings = Handling::findOrFail($request->handling_id);
-
-                // Update status Handling menjadi 3
-                $handlings->update([
-                    'status' => 2
-                ]);
-
-                // Simpan perubahan
-                $handlings->save();
-
-                return redirect()->route('submission')->with(['success' => 'Data Berhasil Diubah!']);
-        }elseif ($request->action == 'claim'){
-
-                $scheduleVisit = new ScheduleVisit();
-                if(isset($request->schedule)) {
-                    $scheduleVisit->schedule = date('Y-m-d H:i:s', strtotime($request->schedule));
-                }
-
-                $scheduleVisit->results = $request->results;
-                
-              if(isset($request->due_date)) {
-                    $scheduleVisit->due_date = date('Y-m-d H:i:s', strtotime($request->due_date));
-                }
-
-                $scheduleVisit->pic = $request->pic;
-                $scheduleVisit->file = $filename;
-                $scheduleVisit->file_name = $originalFilename;
-                $scheduleVisit->history_type = '1';
-                $scheduleVisit->status = '1';
-                $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
-                $scheduleVisit->save();
-
-                 // Temukan entitas Handling berdasarkan ID
-                 $handlings = Handling::findOrFail($request->handling_id);
-
-                 // Update status Handling menjadi 3
-                 $handlings->update([
-                    'type_2' => 'Klaim',
-                     'status' => 1
-                 ]);
-
-                 // Simpan perubahan
-                 $handlings->save();
-
-                 return redirect()->route('showFollowUp', ['id' => $id])->with(['success' => 'Data Berhasil Diubah!']);
+            $scheduleVisit = new ScheduleVisit();
+            if (isset($request->schedule)) {
+                $scheduleVisit->schedule = date('Y-m-d H:i:s', strtotime($request->schedule));
             }
+
+            $scheduleVisit->results = $request->results;
+
+            if (isset($request->due_date)) {
+                $scheduleVisit->due_date = date('Y-m-d H:i:s', strtotime($request->due_date));
+            }
+            $scheduleVisit->pic = $request->pic;
+            $scheduleVisit->file = $filename;
+            $scheduleVisit->file_name = $originalFilename;
+            $scheduleVisit->status = '1';
+            $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
+            $scheduleVisit->save();
+
+            return redirect()->route('showFollowUp', ['id' => $id])->with(['success' => 'Data Berhasil Diubah!']);
+        } elseif ($request->action == 'finish') {
+            $scheduleVisit = new ScheduleVisit();
+            if (isset($request->schedule)) {
+                $scheduleVisit->schedule = date('Y-m-d H:i:s', strtotime($request->schedule));
+            }
+
+            $scheduleVisit->results = $request->results;
+
+            if (isset($request->due_date)) {
+                $scheduleVisit->due_date = date('Y-m-d H:i:s', strtotime($request->due_date));
+            }
+            $scheduleVisit->pic = $request->pic;
+            $scheduleVisit->file = $filename;
+            $scheduleVisit->file_name = $originalFilename;
+            $scheduleVisit->status = '3';
+            $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
+            $scheduleVisit->save();
+            // Temukan entitas Handling berdasarkan ID
+            $handlings = Handling::findOrFail($request->handling_id);
+
+            // Update status Handling menjadi 3
+            $handlings->update([
+                'status' => 2,
+            ]);
+
+            // Simpan perubahan
+            $handlings->save();
+
+            return redirect()->route('submission')->with(['success' => 'Data Berhasil Diubah!']);
+        } elseif ($request->action == 'claim') {
+            $scheduleVisit = new ScheduleVisit();
+            if (isset($request->schedule)) {
+                $scheduleVisit->schedule = date('Y-m-d H:i:s', strtotime($request->schedule));
+            }
+
+            $scheduleVisit->results = $request->results;
+
+            if (isset($request->due_date)) {
+                $scheduleVisit->due_date = date('Y-m-d H:i:s', strtotime($request->due_date));
+            }
+
+            $scheduleVisit->pic = $request->pic;
+            $scheduleVisit->file = $filename;
+            $scheduleVisit->file_name = $originalFilename;
+            $scheduleVisit->history_type = '1';
+            $scheduleVisit->status = '1';
+            $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
+            $scheduleVisit->save();
+
+            // Temukan entitas Handling berdasarkan ID
+            $handlings = Handling::findOrFail($request->handling_id);
+
+            // Update status Handling menjadi 3
+            $handlings->update([
+               'type_2' => 'Klaim',
+                'status' => 1,
+            ]);
+
+            // Simpan perubahan
+            $handlings->save();
+
+            return redirect()->route('showFollowUp', ['id' => $id])->with(['success' => 'Data Berhasil Diubah!']);
         }
-        
-    
+    }
 }

@@ -41,7 +41,6 @@
                                             <th class="text-center" width="105px">Kategori (NG)</th>
                                             <th class="text-center" width="100px">Tipe proses</th>
                                             <th class="text-center" width="95px">Jenis 1</th>
-                                            <th class="text-center" width="100px">Gambar</th>
                                             <th class="text-center" width="100px">Pembaruan Terakhir</th>
                                             <th class="text-center" width="100px">Status</th>
                                             <th class="text-center" width="100px">Aksi</th>
@@ -67,10 +66,6 @@
                                                 <td class="text-center py-3">{{ $row->category }}</td>
                                                 <td class="text-center py-3">{{ $row->process_type }}</td>
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
-                                                <td class="text-center pt-3">
-                                                    <img src="{{ asset('assets/image/'. $row->image) }}"
-                                                        class="img-fluid rounded" style="max-width: 100%; height: auto;">
-                                                </td>
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>
                                                 <td class="text-center py-4">
                                                     @if ($row->status == 0)
@@ -125,7 +120,6 @@
                                             <th class="text-center" width="100px">Tipe proses</th>
                                             <th class="text-center" width="95px">Jenis 1</th>
                                             <th class="text-center" width="95px">Jenis 2</th>
-                                            <th class="text-center" width="100px">Gambar</th>
                                             <th class="text-center" width="100px">Pembaruan Terakhir</th>
                                             <th class="text-center" width="100px">Status</th>
                                             <th class="text-center" width="100px">Aksi</th>
@@ -136,13 +130,10 @@
                                             <tr>
                                                 <td class="text-center py-3">{{ $loop->iteration }}</td>
                                                 <td class="text-center py-3">{{ $row->no_wo }}</td>
-                                                <td class="text-center py-3">{{ $row->customers->customer_code ?? '' }}
-                                                </td>
-                                                <td class="text-center py-3">{{ $row->customers->name_customer ?? '' }}
-                                                </td>
+                                                <td class="text-center py-3">{{ $row->customers->customer_code ?? '' }}</td>
+                                                <td class="text-center py-3">{{ $row->customers->name_customer ?? '' }}</td>
                                                 <td class="text-center py-3">{{ $row->customers->area ?? '' }}</td>
-                                                <td class="text-center py-3">{{ $row->type_materials->type_name ?? '' }}
-                                                </td>
+                                                <td class="text-center py-3">{{ $row->type_materials->type_name ?? '' }}</td>
                                                 <td class="text-center py-3">{{ $row->thickness }}</td>
                                                 <td class="text-center py-3">{{ $row->weight }}</td>
                                                 <td class="text-center py-3">{{ $row->outer_diameter }}</td>
@@ -154,10 +145,6 @@
                                                 <td class="text-center py-3">{{ $row->process_type }}</td>
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
                                                 <td class="text-center py-3">{{ $row->type_2 }}</td>
-                                                <td class="text-center pt-3">
-                                                    <img src="{{ asset('assets/image/' . $row->image) }}"
-                                                        class="img-fluid rounded" style="max-width: 100%; height: auto;">
-                                                </td>
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>
                                                 <td class="text-center py-3"
                                                     style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">

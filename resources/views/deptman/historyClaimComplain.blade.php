@@ -83,7 +83,6 @@
                                             <th class="text-center" width="100px">Tipe proses</th>
                                             <th class="text-center" width="95px">Jenis 1</th>
                                             <th class="text-center" width="95px">Jenis 2</th>
-                                            <th class="text-center" width="100px">Gambar</th>
                                             <th class="text-center" width="100px">Pembaruan Terakhir</th>
                                             <th class="text-center" width="100px">Status</th>
                                             <th class="text-center" width="100px">Aksi</th>
@@ -105,20 +104,13 @@
                                                 <td class="text-center py-3">{{ $row->weight }}</td>
                                                 <td class="text-center py-3">{{ $row->outer_diameter }}</td>
                                                 <td class="text-center py-3">{{ $row->inner_diameter }}</td>
-                                                <td class="text-center py-3">{{ $row->lenght }}</td>
+                                                <td class="text-center py-3">{{ $row->length }}</td>
                                                 <td class="text-center py-3">{{ $row->qty }}</td>
                                                 <td class="text-center py-3">{{ $row->pcs }}</td>
                                                 <td class="text-center py-3">{{ $row->category }}</td>
                                                 <td class="text-center py-3">{{ $row->process_type }}</td>
                                                 <td class="text-center py-3">{{ $row->type_1 }}</td>
                                                 <td class="text-center py-3">{{ $row->type_2 }}</td>
-                                                <td class="text-center pt-3">
-                                                    <img src="{{ asset('assets/image/' . $row->image) }}"
-                                                        class="img-fluid rounded" style="max-width: 100%; height: auto;">
-                                                </td>
-                                                {{-- <td class="text-center pt-3">{{ $row->schedule }}</td>
-                                                <td class="text-center pt-3">{{ $row->due_date }}</td>
-                                                <td class="text-center pt-3">{{ $row->pic }}</td> --}}
                                                 <td class="text-center py-3">{{ $row->created_at }}</td>
                                                 <td class="text-center py-3"
                                                     style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -128,10 +120,6 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    {{-- <button class="btn btn-primary export-pdf-button"
-                                                        data-row-id="{{ $row->id }}">
-                                                        <i class="fas fa-file-pdf fa-2x"></i>
-                                                    </button> --}}
                                                     <a href="{{ route('showCloseProgres', ['id' => $row->id]) }}" class="btn btn-sm btn-success">
                                                         <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
                                                     </a>                                                    

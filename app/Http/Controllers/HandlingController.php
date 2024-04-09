@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Handling;
 use App\Models\Customer;
-use App\Models\TypeMaterial;
+use App\Models\Handling;
 use App\Models\ScheduleVisit;
-use Illuminate\View\View;
+use App\Models\TypeMaterial;
 use Illuminate\Http\RedirectResponse;
-//import Facade "Storage"
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+// import Facade "Storage"
+use Illuminate\View\View;
 
 class HandlingController extends Controller
 {
-    //
     public function __construct()
     {
         $this->middleware('auth');
     }
+
     public function index()
     {
         $data = Handling::with('customers', 'type_materials')
-            ->orderByRaw('FIELD(status, 0) DESC, created_at DESC')
-            ->whereIn('status', [0, 1, 2, 3])
-            ->paginate();
+    ->whereIn('status', [1, 2, 0, 3]) // Filter berdasarkan status 1, 2, 0, dan 3
+    ->orderByRaw('FIELD(status, 1, 2, 3, 0)') // Urutkan berdasarkan urutan status yang diinginkan
+    ->orderByDesc('created_at') // Jika perlu, urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
+    ->paginate();
 
-
-        return view('sales.handling', compact('data'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('sales.handling', compact('data'));
     }
 
     public function getChartData(Request $request)
@@ -44,7 +44,7 @@ class HandlingController extends Controller
         // Mengembalikan data dalam format JSON
         return response()->json($data);
     }
-    
+
     public function getDataByYear(Request $request)
     {
         // Ambil tahun dari request
@@ -52,10 +52,10 @@ class HandlingController extends Controller
 
         // Query untuk mengambil data berdasarkan tahun
         $data = Handling::select(
-                \DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
-                \DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
-                \DB::raw('MONTH(created_at) as month')
-            )
+            \DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
+            \DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
+            \DB::raw('MONTH(created_at) as month')
+        )
             ->whereYear('created_at', $year) // Filter berdasarkan tahun
             ->groupBy('month')
             ->get();
@@ -78,25 +78,22 @@ class HandlingController extends Controller
 
     public function showHistory($id)
     {
-        //get handlings by ID
+        // get handlings by ID
         $handlings = Handling::findOrFail($id);
 
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
         $data = ScheduleVisit::where('handling_id', $id)->get();
 
-        //render view with handlings
+        // render view with handlings
         return view('sales.showHistory', compact('handlings', 'customers', 'type_materials', 'data'));
     }
 
     /**
-     * create
-     *
-     * @return View
+     * create.
      */
     public function create(): View
     {
-
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
 
@@ -104,189 +101,175 @@ class HandlingController extends Controller
     }
 
     /**
-     * store
+     * store.
      *
-     * @param  mixed $request
-     * @return RedirectResponse
+     * @param mixed $request
      */
     public function store(Request $request): RedirectResponse
     {
+        $imagePaths = []; // Array untuk menyimpan jalur gambar
 
-        // Cek apakah file gambar diunggah
         // Cek apakah file gambar diunggah
         if ($request->hasFile('image')) {
             // Validasi file gambar
             $request->validate([
-                'image' => 'image|mimes:jpeg,jpg,png',
+                'image.*' => 'image|mimes:jpeg,jpg,png',
             ]);
 
-            // Pindahkan foto ke direktori public/assets/foto
-            $image = $request->file('image');
-            $imagePath = $image->hashName(); // Gunakan hashname sebagai nama file
-            $image->move(public_path('assets/image'), $imagePath);
-        } else {
-            $imagePath = null;
+            // Loop melalui setiap gambar yang diunggah
+            foreach ($request->file('image') as $image) {
+                // Pindahkan foto ke direktori public/assets/foto
+                $imagePath = $image->hashName(); // Gunakan hashname sebagai nama file
+                $image->move(public_path('assets/image'), $imagePath);
+
+                // Simpan jalur gambar ke dalam array
+                $imagePaths[] = $imagePath;
+            }
         }
+
+        // Ubah array menjadi string JSON sebelum menyimpannya ke dalam database
+        $imagePathsString = json_encode($imagePaths);
+
         // Dapatkan tahun saat ini
         $currentYear = date('Y');
 
         // Buat nomor WO dengan menambahkan tahun saat ini
-        $no_wo = 'WO/' . $currentYear . '/' . $request->no_wo;
-        // Buat data handling
-        Handling::create([
-            'no_wo'             => $no_wo,
-            'customer_id'       => $request->customer_id,
-            'type_id'           => $request->type_id,
-            'thickness'         => $request->thickness,
-            'weight'            => $request->weight,
-            'outer_diameter'    => $request->outer_diameter,
-            'inner_diameter'    => $request->inner_diameter,
-            'lenght'            => $request->lenght,
-            'qty'               => $request->qty,
-            'pcs'               => $request->pcs,
-            'category'          => $request->category,
-            'results'           => $request->results,
-            'process_type'      => $request->process_type,
-            'type_1'            => $request->type_1,
-            'image'             => $imagePath, // Simpan nama file gambar atau null jika tidak ada gambar yang diunggah
-            'status'            => 0,
-            'status_2'          => 0
-        ]);
+        $no_wo = 'WO/'.$currentYear.'/'.$request->no_wo;
 
-        //redirect to index
+        // Buat data handling
+        $handling = new Handling();
+        $handling->no_wo = $no_wo;
+        $handling->customer_id = $request->customer_id;
+        $handling->type_id = $request->type_id;
+        $handling->thickness = $request->thickness;
+        $handling->weight = $request->weight;
+        $handling->outer_diameter = $request->outer_diameter;
+        $handling->inner_diameter = $request->inner_diameter;
+        $handling->length = $request->lenght;
+        $handling->qty = $request->qty;
+        $handling->pcs = $request->pcs;
+        $handling->category = $request->category;
+        $handling->results = $request->results;
+        $handling->process_type = $request->process_type;
+        $handling->type_1 = $request->type_1;
+        $handling->image = $imagePathsString; // Simpan string JSON jalur gambar
+        $handling->status = 0;
+        $handling->status_2 = 0;
+        $handling->save();
+
+        // redirect to index
         return redirect()->route('index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
-     * edit
+     * edit.
      *
-     * @param  mixed $id
-     * @return View
+     * @param mixed $id
      */
     public function edit(string $id): View
     {
-        //get handlings by ID
+        // get handlings by ID
         $handlings = Handling::findOrFail($id);
         $customers = Customer::all();
         $type_materials = TypeMaterial::all();
 
-        //render view with handlings
+        // render view with handlings
         return view('sales.edit', compact('handlings', 'customers', 'type_materials'));
     }
 
     /**
-     * update
+     * update.
      *
-     * @param  mixed $request
-     * @param  mixed $id
-     * @return RedirectResponse
+     * @param mixed $request
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        //validate form
-        $this->validate($request, [
-            'image'     => 'image|mimes:jpeg,jpg,png|max:2048',
-        ]);
+       // Validate form
+    $this->validate($request, [
+        'images.*' => 'image|mimes:jpeg,jpg,png|max:10000',
+    ]);
 
-        //get post by ID
-        $handlings = Handling::findOrFail($id);
+    // Get handling by ID
+    $handlings = Handling::findOrFail($id);
 
-        //check if image is uploaded
-        if ($request->hasFile('image')) {
+    // Initialize an array to hold new image paths
+    $newImagePaths = [];
 
-            //upload new image
-            if ($request->hasFile('image')) {
-                // Validasi file gambar
-                $request->validate([
-                    'image' => 'image|mimes:jpeg,jpg,png',
-                ]);
+    // Check if images are uploaded
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
 
-                // Pindahkan foto ke direktori public/assets/foto
-                $image = $request->file('image');
-                $imagePath = $image->hashName(); // Gunakan hashname sebagai nama file
-                $image->move(public_path('assets/image'), $imagePath);
-            } else {
-                $imagePath = null;
-            }
+            // Move each image to the appropriate directory
+            $imagePath = $image->hashName();
+            $image->move(public_path('assets/image'), $imagePath);
 
-            //delete old image
-            // Hapus gambar lama jika ada
-            if ($handlings->image) {
-                $oldImagePath = public_path('assets/image/' . $handlings->image);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
-            }
-
-            //update post with new image
-            $handlings->update([
-                'no_wo'                 => $request->no_wo,
-                'customer_id'           => $request->customer_id,
-                'type_id'               => $request->type_id,
-                'thickness'             => $request->thickness,
-                'weight'                => $request->weight,
-                'outer_diameter'        => $request->outer_diameter,
-                'inner_diameter'        => $request->inner_diameter,
-                'lenght'                => $request->lenght,
-                'qty'                   => $request->qty,
-                'pcs'                   => $request->pcs,
-                'category'              => $request->category,
-                'results'           => $request->results,
-                'process_type'          => $request->process_type,
-                'type_1'                => $request->type_1,
-                'image'                 => $imagePath,
-                'status'                => 0
-
-            ]);
-        } else {
-            //update post without image
-            $handlings->update([
-                'no_wo'                 => $request->no_wo,
-                'customer_id'           => $request->customer_id,
-                'type_id'               => $request->type_id,
-                'thickness'             => $request->thickness,
-                'weight'                => $request->weight,
-                'outer_diameter'        => $request->outer_diameter,
-                'inner_diameter'        => $request->inner_diameter,
-                'lenght'                => $request->lenght,
-                'qty'                   => $request->qty,
-                'pcs'                   => $request->pcs,
-                'category'              => $request->category,
-                'results'           => $request->results,
-                'process_type'          => $request->process_type,
-                'type_1'                => $request->type_1,
-                'status'                => 0
-            ]);
+            // Add the new image path to the array
+            $newImagePaths[] = $imagePath;
         }
+    }
 
-        //redirect to index
+    // Delete old images (if any)
+    if ($handlings->image) {
+        $oldImagePaths = json_decode($handlings->image, true);
+
+        foreach ($oldImagePaths as $oldImagePath) {
+            $fullPath = public_path('assets/image/' . $oldImagePath);
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
+        }
+    }
+
+    // Combine old and new image paths
+    $allImagePaths = array_merge($oldImagePaths ?? [], $newImagePaths);
+
+    // Update post with new image paths
+    $handlings->update([
+        'no_wo' => $request->no_wo,
+        'customer_id' => $request->customer_id,
+        'type_id' => $request->type_id,
+        'thickness' => $request->thickness,
+        'weight' => $request->weight,
+        'outer_diameter' => $request->outer_diameter,
+        'inner_diameter' => $request->inner_diameter,
+        'length' => $request->lenght,
+        'qty' => $request->qty,
+        'pcs' => $request->pcs,
+        'category' => $request->category,
+        'results' => $request->results,
+        'process_type' => $request->process_type,
+        'type_1' => $request->type_1,
+        'image' => json_encode($allImagePaths),
+        'status' => 0,
+    ]);
+
+        // redirect to index
         return redirect()->route('index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
     /**
-     * destroy
+     * destroy.
      *
-     * @param  mixed $post
      * @return void
      */
     public function delete($id): RedirectResponse
     {
-        //get post by ID
+        // get post by ID
         $handlings = Handling::findOrFail($id);
 
-        //delete old image
+        // delete old image
         // Hapus gambar lama jika ada
         if ($handlings->image) {
-            $oldImagePath = public_path('assets/image/' . $handlings->image);
+            $oldImagePath = public_path('assets/image/'.$handlings->image);
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }
         }
 
-        //delete post
+        // delete post
         $handlings->delete();
 
-        //redirect to index
+        // redirect to index
         return redirect()->route('index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }

@@ -22,66 +22,78 @@
                         @csrf
                         @method('PUT')
                         <div class="row">
-                            <div class="col-md-6 justify-content-start">
-                                <div class="row mb-3">
-                                    <label for="no_wo" class="col-sm-2 col-form-label">No.WO</label>
-                                    <div class="col-sm-10">
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="no_wo" class="col-sm-2 col-form-label">No. WO:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
                                         <input type="text" class="form-control" id="no_wo" name="no_wo"
-                                            value="{{ $handlings->no_wo }}" maxlength="15" style="width: 400px;" required
-                                            readonly>
-                                        <input type="text" id="handling_id" name="handling_id"
-                                            value="{{ $handlings->id }}" hidden>
+                                            maxlength="6" style="width: 100%; max-width: 100%;"
+                                            value="{{ $handlings->no_wo }}" required disabled>
+                                            <input type="hidden" id="handling_id" name="handling_id" value="{{ $handlings->id }}">
                                     </div>
                                 </div>
-                                <!-- Customer Code -->
-                                <div class="row mb-3">
-                                    <label for="customer_code" class="col-sm-2 col-form-label">Kode Pelanggan</label>
-                                    <div class="col-sm-3">
-                                        <select name="customer_id" id="customer_id_code" class="select2"
-                                            style="width: 400px;" disabled>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="customer_code" class="col-sm-5 col-form-label">Kode Pelanggan:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select name="customer_id" id="customer_id_code" class="select2" style="width: 100%"
+                                            onchange="updateCustomerInfo()" disabled>
                                             @foreach ($customers as $customer)
                                                 <option value="{{ $customer->id }}"
-                                                    @if ($customer->id == $handlings->customer_id) selected @endif>
-                                                    {{ $customer->customer_code }}
+                                                    @if ($customer->id == $handlings->customer_id) selected @endif
+                                                    data-name_customer="{{ $customer->name_customer }}"
+                                                    data-area="{{ $customer->area }}">{{ $customer->customer_code }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <!-- Customer Name -->
-                                <div class="row mb-3">
-                                    <label for="customer_name" class="col-sm-2 col-form-label">Nama Pelanggan</label>
-                                    <div class="col-sm-3">
-                                        <select name="customer_id" id="customer_id_name" class="select2"
-                                            style="width: 400px;" disabled>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="customer_name" class="col-sm-5 col-form-label">Nama Pelanggan:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select name="customer_name" id="customer_id_name" class="select2"
+                                            style="width: 100%" disabled>
                                             @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}"
-                                                    @if ($customer->id == $handlings->customer_id) selected @endif>
+                                                <option value="{{ $customer->name_customer }}">
                                                     {{ $customer->name_customer }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <!-- Area -->
-                                <div class="row mb-3">
-                                    <label for="area" class="col-sm-2 col-form-label">Area Pelanggan</label>
-                                    <div class="col-sm-3">
-                                        <select name="customer_id" id="customer_id_area" class="select2"
-                                            style="width: 400px;" disabled>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="area" class="col-sm-5 col-form-label">Area Pelanggan:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select name="area" id="customer_id_area" class="select2" style="width: 100%"
+                                            disabled>
                                             @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}"
-                                                    @if ($customer->id == $handlings->customer_id) selected @endif>
-                                                    {{ $customer->area }}
-                                                </option>
+                                                <option value="{{ $customer->area }}">{{ $customer->area }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <label for="area" class="col-sm-2 col-form-label">Tipe Material</label>
-                                    <div class="col-sm-10">
-                                        <select name="type_id" id="type_id" style="width: 400px;" disabled>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="area" class="col-sm-5 col-form-label">Tipe Bahan:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select name="type_id" id="type_id" class="" style="width: 100%" disabled>
                                             @foreach ($type_materials as $typeMaterial)
                                                 <option value="{{ $typeMaterial->id }}"
                                                     @if ($typeMaterial->id == $handlings->type_id) selected @endif>
@@ -91,161 +103,199 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row mb-2 ps-5">
-                                    <div class="col-md-2">
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-3">
                                         <label for="t" class="form-label">T:</label>
                                         <input type="text" class="form-control input-sm" id="thickness" name="thickness"
-                                            placeholder="Thickness" value="{{ $handlings->thickness }}"
-                                            style="max-width: 150px;" readonly>
+                                            placeholder="Thickness" style="max-width: 80%;"
+                                            value="{{ $handlings->thickness }}" disabled>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <label for="w" class="form-label">W:</label>
                                         <input type="text" class="form-control input-sm" id="weight" name="weight"
-                                            placeholder="Weight" value="{{ $handlings->weight }}" style="max-width: 150px;"
-                                            readonly>
+                                            placeholder="Weight" style="max-width: 80%;" value="{{ $handlings->weight }}"
+                                            disabled>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <label for="w" class="form-label">L:</label>
-                                        <input type="text" class="form-control input-sm" id="lenght" name="lenght"
-                                            placeholder="Lenght" value="{{ $handlings->lenght }}" style="max-width: 150px;"
-                                            readonly>
+                                        <input type="text" class="form-control input-sm" id="lenght"
+                                            name="lenght" placeholder="Lenght" style="max-width: 80%;"
+                                            value="{{ $handlings->lenght }}" disabled>
                                     </div>
                                 </div>
-                                <div class="row mb-2 ps-5">
-                                    <div class="col-md-2">
+                                <div class="row">
+                                    <div class="col-md-3">
                                         <label for="w" class="form-label">OD:</label>
                                         <input type="text" class="form-control input-sm" id="outer_diameter"
-                                            name="outer_diameter" value="{{ $handlings->outer_diameter }}"
-                                            placeholder="Outer Diameter" style="max-width: 150px;" readonly>
+                                            name="outer_diameter" placeholder="Outer Diameter" style="max-width: 80%"
+                                            value="{{ $handlings->outer_diameter }}" disabled>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <label for="w" class="form-label">ID:</label>
                                         <input type="text" class="form-control input-sm" id="inner_diameter"
-                                            name="inner_diameter" value="{{ $handlings->inner_diameter }}"
-                                            placeholder="Inner Diameter" style="max-width: 150px;" readonly>
+                                            name="inner_diameter" placeholder="Inner Diameter" style="max-width: 80%"
+                                            value="{{ $handlings->inner_diameter }}" disabled>
                                     </div>
                                 </div>
-                                <div class="row mb-2 ps-5">
-                                    <div class="col-md-2">
-                                        <label for="qty" class="form-label">QTY:</label>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="qty" class="form-label">QTY (Kg):</label>
                                         <input type="text" class="form-control input-sm" id="qty"
-                                            name="qty" value="{{ $handlings->qty }}" placeholder="(/KG)"
-                                            style="max-width: 150px;" required readonly>
+                                            name="qty" style="max-width: 80%;" value="{{ $handlings->qty }}"
+                                            required disabled>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label for="pcs" class="form-label">pcs</label>
+                                    <div class="col-md-3">
+                                        <label for="pcs" class="form-label">Unit (Pcs):</label>
                                         <input type="text" class="form-control input-sm" id="pcs"
-                                            name="pcs" value="{{ $handlings->pcs }}" placeholder="(/PCS)"
-                                            style="max-width: 150px;" required readonly>
+                                            name="pcs" style="max-width: 80%" value="{{ $handlings->pcs }}" required
+                                            disabled>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="category" class="col-sm-5 col-form-label">Kategori (NG):<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select name="category" class="form-control" id="category" style="width: 100%"
+                                            required disabled>
+                                            <option value="">------------------- Category -----------------
+                                            </option>
+                                            <option value="Retak"
+                                                {{ $handlings->category == 'Retak' ? 'selected' : '' }}>
+                                                Retak</option>
+                                            <option value="Pecah"
+                                                {{ $handlings->category == 'Pecah' ? 'selected' : '' }}>
+                                                Pecah</option>
+                                            <option value="Etc" {{ $handlings->category == 'Etc' ? 'selected' : '' }}>
+                                                Etc
+                                            </option>
+                                            <!-- Tambahkan opsi statis lainnya jika diperlukan -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="hasil_tindak_lanjut" class="col-sm-5 col-form-label">Keterangan:
+                                            (Jika ada)</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <textarea class="form-control" rows="5" id="results" name="results" style="width: 100%" disabled required>{{ $handlings->results }}</textarea>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="process_type" class="col-sm-5 col-form-label">Jenis Proses:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select name="process_type" class="form-control" id="process_type"
+                                            style="width: 25%" required disabled>
+                                            <option value="">------------------- Jenis Proses -----------------
+                                            </option>
+                                            <option value="HeatTreatment"
+                                                {{ $handlings->process_type == 'HeatTreatment' ? 'selected' : '' }}>
+                                                Heat
+                                                treatment</option>
+                                            <option value="Cutting"
+                                                {{ $handlings->process_type == 'Cutting' ? 'selected' : '' }}>
+                                                Cutting
+                                            </option>
+                                            <option value="Machining"
+                                                {{ $handlings->process_type == 'Machining' ? 'selected' : '' }}>
+                                                Machining
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="type_1" class="col-sm-5 col-form-label">Jenis:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-check mr-2">
+                                            <input type="checkbox" class="form-check-input" id="type_1"
+                                                name="type_1" value="Klaim" disabled
+                                                @if ($handlings->type_1 == 'Klaim') checked @endif>
+                                            <label class="form-check-label" for="check1">Klaim</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="type_1"
+                                                name="type_1" value="Komplain" disabled
+                                                @if ($handlings->type_1 == 'Komplain') checked @endif>
+                                            <label class="form-check-label" for="check2">Komplain</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="image_upload" class="col-sm-5 col-form-label">Unggah Gambar:<span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row mt-3">
+                                            <div id="imagePreviewContainer" class="row">
+                                                <div class="col-lg-12 mb-2 d-flex justify-content-start">
+                                                    @foreach(json_decode($handlings->image) as $image)
+                                                        <img src="{{ asset('assets/image/' . $image) }}" class="img-fluid rounded mx-1" alt="image" style="max-width: 200px; object-fit: cover;">
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>           
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="col-md-7 mt-2">
-                                    <div class="ps-4">
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-6">
                                         <label for="schedule" class="form-label">Jadwal Kunjungan:</label>
+                                    </div>
+                                    <div class="col-lg-6">
                                         <input type="datetime-local" class="form-control input-sm" id="schedule"
-                                            name="schedule" style="max-width: 250px;">
+                                            name="schedule" style="max-width: 100%;">
                                     </div>
-                                    <div class="input-group ps-4" style="margin-top: 10px;">
-                                        <div class="col-sm-5">
-                                            <label for="hasil_tindak_lanjut" class="form-label">Catatan Hasil:
-                                                (optional)</label>
-                                            <textarea class="form-control" rows="5" id="results" name="results"></textarea>
-                                        </div>
-                                        <div class="col-sm-5">
-                                            <label for="duedate" class="form-label">Batas Akhir: (optional):</label>
-                                            <input type="datetime-local" class="form-control input-sm" id="due_date"
-                                                name="due_date" style="max-width: 250px;">
-                                        </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="hasil_tindak_lanjut" class="form-label">Catatan Hasil:
+                                            (optional)</label>
+                                        <textarea class="form-control" rows="5" id="results" name="results"></textarea>
                                     </div>
-                                    <div class="ps-4" style="margin-top: 10px;">
+                                    <div class="col-lg-6">
+                                        <label for="duedate" class="form-label">Batas Akhir: (optional):</label>
+                                        <input type="datetime-local" class="form-control input-sm" id="due_date"
+                                            name="due_date" style="max-width: 250px;">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
                                         <label for="schedule_visit" class="form-label">PIC:<span
-                                            style="color: red;">*</span></label>
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-6">
                                         <input type="text" class="form-control input-sm" id="pic"
                                             name="pic" style="max-width: 480px;" placeholder="PIC" required>
                                     </div>
-                                    <div class="mb-2 ps-4" style="max-width: 500px;">
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
                                         <label for="upload_file" class="form-label" style="margin-top: 10px;">Unggah File
                                             (optional):</label>
+                                    </div>
+                                    <div class="col-lg-6">
                                         <div class="input-group">
                                             <input class="form-control" type="file" id="upload_file"
                                                 onchange="displayCancelBtn()" name="file" style="margin-top: 10px;"
                                                 accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls" multiple>
-                                            <button class="btn btn-secondary" type="button" id="cancelBtn"
-                                                style="display: none;" onclick="cancelUpload()">Batalkan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="row mb-3">
-                                        <label for="category" class="col-sm-2 col-form-label">Kategori (NG):</label>
-                                        <div class="col-sm-10">
-                                            <select name="category" class="form-control" id="category"
-                                                style="width: 400px;" required disabled>
-                                                <option value="">------------------- Category -----------------
-                                                </option>
-                                                <option value="Retak"
-                                                    {{ $handlings->category == 'Retak' ? 'selected' : '' }}>Retak</option>
-                                                <option value="Pecah"
-                                                    {{ $handlings->category == 'Pecah' ? 'selected' : '' }}>Pecah</option>
-                                                <option value="Etc"
-                                                    {{ $handlings->category == 'Etc' ? 'selected' : '' }}>Etc</option>
-                                                <!-- Tambahkan opsi statis lainnya jika diperlukan -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label for="hasil_tindak_lanjut" class="col-sm-2 col-form-label">Keterangan:
-                                            (optional)</label>
-                                        <div class="col-sm-10">
-                                            <textarea class="form-control" rows="5" id="" name="" style="width: 400px;" readonly>{{ $handlings->results }}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label for="process_type" class="col-sm-2 col-form-label">Jenis Proses:</label>
-                                        <div class="col-sm-10">
-                                            <select name="process_type" class="form-control" id="process_type"
-                                                style="width: 400px;" required disabled>
-                                                <option value="">------------------- Proses Type -----------------
-                                                </option>
-                                                <option value="HeatTreatment"
-                                                    {{ $handlings->process_type == 'HeatTreatment' ? 'selected' : '' }}>
-                                                    Heat treatment</option>
-                                                <option value="Cutting"
-                                                    {{ $handlings->process_type == 'Cutting' ? 'selected' : '' }}>Cutting
-                                                </option>
-                                                <option value="Machining"
-                                                    {{ $handlings->process_type == 'Machining' ? 'selected' : '' }}>
-                                                    Machining</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label for="type_1" class="col-sm-2 col-form-label">Jenis:</label>
-                                        <div class="col-sm-10">
-                                            <div class="form-check mr-2">
-                                                <input type="checkbox" class="form-check-input" id="type_1"
-                                                    name="type_1" disabled value="Klaim"
-                                                    @if ($handlings->type_1 == 'Klaim') checked @endif>
-                                                <label class="form-check-label" for="check1">Klaim</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="type_1"
-                                                    name="type_1" disabled value="Komplain"
-                                                    @if ($handlings->type_1 == 'Komplain') checked @endif>
-                                                <label class="form-check-label" for="check2">Komplain</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label for="inputNumber" class="col-sm-2 col-form-label">Image</label>
-                                        <div class="col-sm-10">
-                                            <img src="{{ asset('assets/image/' . $handlings->image) }}"
-                                                class="img-fluid img-thumbnail rounded clickable-image"
-                                                style="max-width: 350px;">
                                         </div>
                                     </div>
                                 </div>
@@ -370,15 +420,29 @@
         </section>
         <script>
             function buttonFollowUp() {
-                // Simulasi validasi
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: 'Data telah berhasil di simpan',
-                    showConfirmButton: false
-                });
+                // Ambil nilai input PIC
+                var picInput = document.getElementById('pic').value;
+
+                // Lakukan validasi
+                if (picInput.trim() === '') {
+                    // Tampilkan pesan SweetAlert jika PIC kosong
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Harap Lengkapi Data Anda',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    // Tampilkan pesan sukses jika validasi berhasil
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Data telah berhasil disimpan',
+                        showConfirmButton: false
+                    });
+                }
             }
-            
         </script>
     </main><!-- End #main -->
 @endsection

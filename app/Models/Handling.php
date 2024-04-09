@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Handling extends Model
 {
     use HasFactory;
@@ -20,7 +20,7 @@ class Handling extends Model
         'weight',
         'outer_diameter',
         'inner_diameter',
-        'lenght',
+        'length',
         'qty',
         'pcs',
         'category',
@@ -30,7 +30,7 @@ class Handling extends Model
         'type_2',
         'image',
         'status',
-        'status_2'
+        'status_2',
     ];
 
     public static function countDataBetweenDates($start_date, $end_date)
@@ -60,5 +60,4 @@ class Handling extends Model
     {
         return $this->hasMany(ScheduleVisit::class);
     }
-
 }
