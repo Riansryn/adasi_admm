@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </div>
-                <canvas id="periodeRepair" style="width: 100%; height: auto;"></canvas>
+                <canvas id="periodeRepair" style="width: 100%; height: 175px;"></canvas>
         </div>
     </div>
 </div>
@@ -1265,34 +1265,28 @@ function drawChart(data) {
     var seriesData = []; // Array untuk menyimpan data series
     var sectionColors = {}; // Objek untuk menyimpan warna dari setiap section
 
-// Membuat data series berdasarkan section dengan warna yang sesuai
-data.forEach(item => {
-    var color;
-    switch (item.section) {
-        case 'cutting':
-            color = 'red';
-        case 'machining custom':
-            color = 'lightblue';
-        case 'machining':
-            color = 'blue';
-        case 'heat treatment':
-            color = 'green';
-        default:
-            color = 'gray';
-    }
+    // Tentukan warna yang sesuai untuk setiap section
+    var colors = {
+        'cutting': 'red',
+        'machining custom': 'lightblue',
+        'machining': 'blue',
+        'heat treatment': 'green'
+    };
 
-    // Menambahkan kategori (nomor mesin) dan data series
-    categories.push(item.no_mesin);
-    seriesData.push({
-        name: item.no_mesin,
-        y: parseFloat(item.total_minutes),
-        color: color
+    // Warna default untuk section lainnya
+    var defaultColor = 'gray';
+
+    // Membuat data series berdasarkan section dengan warna yang sesuai
+    data.forEach(item => {
+        // Menambahkan kategori (nomor mesin) dan data series
+        categories.push(item.no_mesin);
+        var color = colors[item.section] || defaultColor; // Gunakan warna sesuai dengan section, jika tidak ada gunakan warna default
+        seriesData.push({
+            name: item.no_mesin,
+            y: parseFloat(item.total_minutes),
+            color: color
+        });
     });
-
-    // Menyimpan warna untuk setiap section
-    sectionColors[item.section] = color;
-});
-
 
     // Menggambar grafik menggunakan Highcharts JS
     Highcharts.chart('periodeRepairMesin', {
@@ -1313,12 +1307,19 @@ data.forEach(item => {
         series: [{
             name: 'Line Stop (Dalam menit)',
             data: seriesData // Menggunakan data yang sudah disesuaikan warnanya
-        }]
+        }],
+        plotOptions: {
+            column: {
+                colorByPoint: true // Mengatur agar warna sesuai dengan point (data) pada sumbu-x
+            }
+        }
     });
 }
 
 // Memanggil fungsi updateChartPeriodeMesin() untuk menginisialisasi grafik
 updateChartPeriodeMesin();
+
+
 
 </script>
     </main><!-- End #main -->
