@@ -75,6 +75,19 @@ class MesinController extends Controller
     }
     public function update(Request $request, Mesin $mesin, DetailPreventive $detail)
     {
+        // Validasi foto
+        if ($request->hasFile('foto')) {
+            $request->validate([
+                'foto' => 'max:10000', // Maksimal 10MB
+            ]);
+        }
+
+        // Validasi sparepart
+        if ($request->hasFile('sparepart')) {
+            $request->validate([
+                'sparepart' => 'max:10000', // Maksimal 10MB
+            ]);
+        }
         // Cek apakah ada file foto yang diunggah
         if ($request->hasFile('foto')) {
             // Menghapus foto lama jika ada
@@ -92,6 +105,24 @@ class MesinController extends Controller
 
             // Perbarui path foto di database
             $mesin->foto = 'foto/' . $fotoName;
+        }
+
+        // Cek apakah ada file foto yang diunggah
+        if ($request->hasFile('sparepart')) {
+            // Menghapus foto lama jika ada
+            if ($mesin->foto) {
+                $oldFotoPath = public_path('assets/' . $mesin->foto);
+                if (file_exists($oldFotoPath)) {
+                    unlink($oldFotoPath);
+                }
+            }
+            // Simpan foto baru
+            $sparepart = $request->file('sparepart');
+            $sparepartName = $sparepart->getClientOriginalName();
+            $sparepartPath = $sparepart->move(public_path('assets/sparepart'), $fotoName);
+
+            // Perbarui path foto di database
+            $mesin->sparepart = 'sparepart/' . $sparepartName;
         }
         // Update data mesin
         $mesin->update([

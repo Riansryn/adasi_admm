@@ -172,28 +172,48 @@
             // Menangkap elemen gambar preview
             var fotoPreview = document.getElementById('fotoPreview');
             var sparepartPreview = document.getElementById('sparepartPreview');
-            // Mengatur listener untuk input file
+
+            // Mengatur listener untuk input file foto
             fotoInput.addEventListener('change', function() {
                 previewImage(this, fotoPreview);
             });
 
+            // Mengatur listener untuk input file sparepart
             sparepartInput.addEventListener('change', function() {
                 previewImage(this, sparepartPreview);
             });
 
+            // Memanggil fungsi previewImage untuk menampilkan preview gambar yang sudah ada
+            setPreviewImage(fotoPreview, '{{ $mesin->foto ?? '
+                ' }}');
+            setPreviewImage(sparepartPreview, '{{ $mesin->sparepart ?? '
+                ' }}');
+
             // Fungsi untuk menampilkan preview gambar
             function previewImage(input, previewElement) {
-                var file = input.files[0];
-                var reader = new FileReader();
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
 
-                reader.onload = function(e) {
-                    previewElement.src = e.target.result;
-                };
+                    reader.onload = function(e) {
+                        previewElement.src = e.target.result;
+                    };
 
-                reader.readAsDataURL(file);
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // Fungsi untuk menetapkan URL gambar yang ada sebagai preview
+            function setPreviewImage(previewElement, imageURL) {
+                if (imageURL) {
+                    previewElement.src = imageURL;
+                } else {
+                    previewElement.src = ''; // Set the src attribute to an empty string
+                }
             }
         });
     </script>
+
+
 
 
 
