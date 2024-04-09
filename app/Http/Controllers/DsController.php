@@ -14,6 +14,7 @@ class DsController extends Controller
 
     public function getRepairMaintenance(Request $request)
     {
+
         // Ambil parameter tahun dan bagian dari permintaan HTTP
         $selectedYear = $request->input('year', date('Y')); // Jika tidak ada parameter tahun, gunakan tahun saat ini sebagai default
         $selectedSection = $request->input('section', 'All');
@@ -67,12 +68,14 @@ class DsController extends Controller
     public function getPeriodeWaktuPengerjaan(Request $request)
     {
         $selectedSection = $request->input('section', 'All');
+        $selectedYear = $request->input('year', date('Y'));
         $startMonth = Carbon::parse($request->input('start_month2'))->startOfMonth();
         $endMonth = Carbon::parse($request->input('end_month2'))->endOfMonth();
 
         if ($selectedSection === 'All') {
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
                 ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                ->whereYear('form_f_p_p_s.created_at', $selectedYear)
                 ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
                 ->where('form_f_p_p_s.status', 3)
                 ->groupBy('mesin.no_mesin') // Kelompokkan berdasarkan kolom no_mesin
@@ -80,6 +83,7 @@ class DsController extends Controller
         } else {
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
                 ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                ->whereYear('form_f_p_p_s.created_at', $selectedYear)
                 ->where('form_f_p_p_s.section', $selectedSection)
                 ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
                 ->where('form_f_p_p_s.status', 3)
@@ -106,6 +110,7 @@ class DsController extends Controller
                 })
                 ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
                 ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
+                ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
                 ->groupBy('mesin.no_mesin')
                 ->get();
         } else {
@@ -119,6 +124,7 @@ class DsController extends Controller
                 ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
                 ->where('mesin.section', $section)
                 ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
+                ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
                 ->groupBy('mesin.no_mesin')
                 ->get();
         }
@@ -282,6 +288,7 @@ class DsController extends Controller
 
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
                 ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                ->whereYear('form_f_p_p_s.created_at', $selectedYear)
                 ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
                 ->where('form_f_p_p_s.status', 3)
                 ->groupBy('mesin.no_mesin') // Kelompokkan berdasarkan kolom no_mesin
@@ -300,10 +307,11 @@ class DsController extends Controller
 
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
                 ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                ->whereYear('form_f_p_p_s.created_at', $selectedYear)
                 ->where('form_f_p_p_s.section', $selectedSection)
                 ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
                 ->where('form_f_p_p_s.status', 3)
-                ->groupBy('mesin.no_mesin') // Kelompokkan berdasarkan kolom no_mesin
+                ->groupBy('mesin.no_mesin')
                 ->first();
         }
 
@@ -328,6 +336,7 @@ class DsController extends Controller
                 })
                 ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
                 ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
+                ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
                 ->groupBy('mesin.no_mesin')
                 ->get();
         } else {
@@ -338,10 +347,11 @@ class DsController extends Controller
                         ->where('form_f_p_p_s.section', $section)
                         ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
                 })
-                ->select('mesin.no_mesin', 'mesin.section', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
+                ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
                 ->where('mesin.section', $section)
                 ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
-                ->groupBy('mesin.no_mesin', 'mesin.section') // tambahkan 'mesin.section' di sini untuk memasukkan informasi section
+                ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
+                ->groupBy('mesin.no_mesin')
                 ->get();
         }
 

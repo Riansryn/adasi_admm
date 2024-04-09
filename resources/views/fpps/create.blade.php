@@ -69,9 +69,10 @@
                                 </div>
 
                                 <div class="mb-3" id="othersFields" style="display: none;">
-                                    <label for="mesin" class="form-label">Nama Alat Bantu<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" id="mesin" name="mesin">
+                                    <label for="namaAlatBantu" class="form-label">Nama Alat Bantu<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="namaAlatBantu" name="namaAlatBantu">
                                 </div>
+
 
                                 <div class="mb-3">
                                     <label for="lokasi" class="form-label">Lokasi<span style="color: red;">*</span></label>
@@ -222,9 +223,6 @@
             mesinSelect.appendChild(othersOption);
         });
     </script>
-
-
-
 
     <script>
         document.getElementById('mesin').addEventListener('change', function() {

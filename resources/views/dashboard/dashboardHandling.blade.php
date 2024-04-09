@@ -198,16 +198,16 @@
         <div class="card-body">
         <h5 class="card-title">Detail Linestop / Mesin (Dalam Menit)</h5>
             <div class="row">
-                <div class="col-md-3">
-                    <label for="sectionDropdown">Pilih Section:</label>
-                    <select id="section-dropdown2" class="form-control" onchange="updateChartPeriodeMesin()">
-                    <option value=" " selected>Pilih Section</option> <!-- Default option -->
-                    <option value="All">All</option> <!-- Default option -->
-                        @foreach($sections as $section)
-                            <option value="{{ $section }}">{{ $section }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="col-md-3">
+    <label for="sectionDropdown">Pilih Section:</label>
+    <select id="section-dropdown2" class="form-control" onchange="updateChartPeriodeMesin()">
+        <option value="All" selected>All</option> <!-- Default option with "selected" attribute -->
+        @foreach($sections as $section)
+            <option value="{{ $section }}">{{ $section }}</option>
+        @endforeach
+    </select>
+</div>
+
                 <div class="col-md-3">
                     <label for="start_mesin">Bulan Mulai:</label>
                     <input type="date" id="start_mesin" name="start_mesin" class="form-control" onchange="updateChartPeriodeMesin()">
@@ -1180,6 +1180,7 @@ borderColor: 'rgba(255, 99, 132, 0.6)', // Merah terang tanpa opacity
 // Fungsi untuk memperbarui chart periode waktu pengerjaan
 function updatePeriodeWaktuPengerjaan() {
     var selectedSection = document.getElementById('section-dropdown').value;
+    var selectedYear = document.getElementById('date-dropdown2').value;
     var startMonth = document.getElementById('start_month2').value;
     var endMonth = document.getElementById('end_month2').value;
 
@@ -1188,6 +1189,7 @@ function updatePeriodeWaktuPengerjaan() {
         url: '/getPeriodeWaktuPengerjaan',
         method: 'GET',
         data: {
+            year: selectedYear,
             section: selectedSection,
             start_month2: startMonth,
             end_month2: endMonth
@@ -1211,6 +1213,13 @@ function updatePeriodeWaktuPengerjaan() {
     updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
 });
 
+ // Event handler untuk perubahan pada dropdown section
+ document.getElementById('date-dropdown2').addEventListener('change', function() {
+    updateChart2();
+    updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+
 document.getElementById('start_month2').addEventListener('change', function() {
     updateChart2();
     updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
@@ -1221,114 +1230,96 @@ document.getElementById('end_month2').addEventListener('change', function() {
     updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
 });
 
-// Fungsi untuk memperbarui chart periode waktu pengerjaan untuk mesin
+
+</script>
+
+
+<script>
+ // Fungsi untuk memuat data dari server dan menggambar grafik
 function updateChartPeriodeMesin() {
-    var selectedSection = document.getElementById('section-dropdown2').value;
+    var section = document.getElementById('section-dropdown2').value;
     var startDate = document.getElementById('start_mesin').value;
     var endDate = document.getElementById('end_mesin').value;
-    var requestData = {
-        start_mesin: startDate,
-        end_mesin: endDate
-    };
 
-    // Jika yang dipilih adalah "All", tambahkan informasi tambahan ke permintaan
-    if (selectedSection === "All") {
-        requestData.all_mesin = true;
-    } else {
-        requestData.section = selectedSection;
-    }
-
-    // Lakukan AJAX request untuk mendapatkan data mesin berdasarkan section dan tanggal yang dipilih
+    // AJAX request untuk mendapatkan data dari server
     $.ajax({
         url: '/getPeriodeMesin',
-        method: 'GET',
-        data: requestData,
+        type: 'GET',
+        data: {
+            section: section,
+            start_mesin: startDate,
+            end_mesin: endDate
+        },
         success: function(response) {
-            // Perbarui chart dengan data baru
-            updateMesinChart(response);
+            drawChart(response);
         },
         error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            // Handle error here
+            console.error(error);
         }
     });
 }
 
-// Fungsi untuk memperbarui chart dengan data mesin menggunakan Highcharts
-function updateMesinChart(data) {
-    var mesinData = [];
+// Fungsi untuk menggambar grafik menggunakan Highcharts JS
+function drawChart(data) {
+    var categories = []; // Array untuk menyimpan kategori (nomor mesin)
+    var seriesData = []; // Array untuk menyimpan data series
+    var sectionColors = {}; // Objek untuk menyimpan warna dari setiap section
 
-    // Mengisi data mesin dan total selisih waktu pengerjaan
-    data.forEach(function(item) {
-        // Tentukan warna berdasarkan section
-        var color;
-        switch(item.section) {
-            case 'Cutting':
-                color = 'red';
-                break;
-            case 'Machining Custom':
-                color = 'lightblue';
-                break;
-            case 'Machining':
-                color = 'blue';
-                break;
-            case 'Heat Treatment':
-                color = 'green';
-                break;
-            default:
-                color = 'gray'; // Warna default jika section tidak dikenali
-                break;
-        }
+// Membuat data series berdasarkan section dengan warna yang sesuai
+data.forEach(item => {
+    var color;
+    switch (item.section) {
+        case 'cutting':
+            color = 'red';
+        case 'machining custom':
+            color = 'lightblue';
+        case 'machining':
+            color = 'blue';
+        case 'heat treatment':
+            color = 'green';
+        default:
+            color = 'gray';
+    }
 
-        mesinData.push({
-            name: item.no_mesin,
-            y: item.total_minutes, // Menggunakan total_minutes untuk menampilkan selisih waktu
-            color: color // Menentukan warna berdasarkan section
-        });
+    // Menambahkan kategori (nomor mesin) dan data series
+    categories.push(item.no_mesin);
+    seriesData.push({
+        name: item.no_mesin,
+        y: parseFloat(item.total_minutes),
+        color: color
     });
 
-    // Membuat chart menggunakan Highcharts
+    // Menyimpan warna untuk setiap section
+    sectionColors[item.section] = color;
+});
+
+
+    // Menggambar grafik menggunakan Highcharts JS
     Highcharts.chart('periodeRepairMesin', {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Total Linestop (Dalam Menit)'
+            text: 'Detail Linestop / Mesin (Dalam Menit)'
         },
         xAxis: {
-            type: 'category',
-            title: {
-                text: 'Mesin'
-            }
+            categories: categories
         },
         yAxis: {
             title: {
-                text: 'Linestop (Dalam Menit)'
+                text: 'Total Menit'
             }
         },
         series: [{
-            name: 'Linestop (Dalam Menit)',
-            data: mesinData,
-            // Tidak perlu menentukan warna di sini karena sudah ditentukan di dalam loop
+            name: 'Line Stop (Dalam menit)',
+            data: seriesData // Menggunakan data yang sudah disesuaikan warnanya
         }]
     });
 }
 
-
-
-document.getElementById('section-dropdown2').addEventListener('change', function() {
-    updateChartPeriodeMesin(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
-});
-
-document.getElementById('start_mesin').addEventListener('change', function() {
-    updateChartPeriodeMesin(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
-});
-
-document.getElementById('end_mesin').addEventListener('change', function() {
-    updateChartPeriodeMesin(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
-});
+// Memanggil fungsi updateChartPeriodeMesin() untuk menginisialisasi grafik
+updateChartPeriodeMesin();
 
 </script>
-
     </main><!-- End #main -->
 @endsection
