@@ -195,23 +195,27 @@ class FormFPPController extends Controller
             $gambarPath = null;
         }
 
-        // Add 'status' field with a default value of 'open'
+        // Set default values for status fields
         $request->merge(['status' => 0]);
         $request->merge(['status_2' => 0]);
         $request->merge(['note' => 'Form FPP Dibuat']);
 
+        // Determine the value of 'mesin' based on the selected option
         $mesin = $request->mesin;
-        // Periksa apakah opsi yang dipilih adalah "Others"
         if ($request->mesin === "Others") {
-            // Jika "Others" dipilih, gunakan nilai dari inputan "Nama Mesin"
-            $mesin = $request->namaMesin;
+            // Use the value from the input field 'namaAlatBantu'
+            $mesin = $request->namaAlatBantu;
+        } else {
+            // Use the selected option for 'mesin'
+            $mesin = $request->mesin;
         }
 
+        // Create the FormFPP record
         $createdFormFPP = FormFPP::create([
             'id_fpp' => $request->id_fpp,
             'pemohon' => $request->pemohon,
             'tanggal' => $request->tanggal,
-            'mesin' => $mesin, // Gunakan nilai yang telah ditentukan di atas
+            'mesin' => $mesin,
             'section' => $request->section,
             'lokasi' => $request->lokasi,
             'kendala' => $request->kendala,
@@ -220,7 +224,7 @@ class FormFPPController extends Controller
             'status_2' => $request->status_2,
         ]);
 
-
+        // Create the related TindakLanjut record
         TindakLanjut::create([
             'id_fpp' => $createdFormFPP->id_fpp,
             'status' => $request->status,
@@ -229,6 +233,7 @@ class FormFPPController extends Controller
 
         return redirect()->route('fpps.index')->with('success', 'Form FPP created successfully.');
     }
+
 
     public function edit(FormFPP $formperbaikan)
     {

@@ -88,8 +88,10 @@
                                             <label for="foto" class="form-label">Foto</label>
                                             <div>
                                                 @if($mesin->foto)
-                                                <img id="fotoPreview" src="{{ asset($mesin->foto) }}" alt="Preview Foto" style="max-width: 200px;">
+                                                <!-- Jika ada foto, tampilkan gambar -->
+                                                <img id="fotoPreview" src="{{ asset('assets/' . $mesin->foto) }}" alt="Preview Foto" style="max-width: 200px;">
                                                 @else
+                                                <!-- Jika tidak ada foto, tampilkan pesan -->
                                                 <p>No image available</p>
                                                 @endif
                                             </div>
@@ -99,8 +101,10 @@
                                             <label for="sparepart" class="form-label">Sparepart</label>
                                             <div>
                                                 @if($mesin->sparepart)
-                                                <img id="fotoPreview" src="{{ asset($mesin->sparepart) }}" alt="Preview Sparepart" style="max-width: 200px;">
+                                                <!-- Jika ada sparepart, tampilkan gambar -->
+                                                <img id="sparepartPreview" src="{{ asset('assets/' . $mesin->sparepart) }}" src="{{ asset('assets/' . $mesin->foto) }}" alt="Preview Sparepart" style="max-width: 200px;">
                                                 @else
+                                                <!-- Jika tidak ada sparepart, tampilkan pesan -->
                                                 <p>No image available</p>
                                                 @endif
                                             </div>
@@ -237,42 +241,37 @@
 
 
 </main><!-- End #main -->
-
 <script>
-    function handleFormSubmission() {
-        // Memeriksa apakah semua isian telah diisi
-        var file = document.getElementById('file').value;
+    document.addEventListener("DOMContentLoaded", function() {
+        // Menangkap elemen input file
+        var fotoInput = document.getElementById('foto');
+        var sparepartInput = document.getElementById('sparepart');
 
-        if (file === '') {
-            // Menampilkan SweetAlert jika ada isian yang kosong kecuali upload gambar
-            Swal.fire({
-                title: 'Data belum ada!',
-                text: 'Mohon unggah file terlebih dahulu',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        } else {
-            // Jika formulir valid, tampilkan SweetAlert untuk konfirmasi
-            Swal.fire({
-                title: 'Berhasil!',
-                text: 'Data Sparepart berhasil diunggah.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect or perform any other action after clicking OK
-                    document.getElementById('importForm').submit();
-                }
-            });
+        // Menangkap elemen gambar preview
+        var fotoPreview = document.getElementById('fotoPreview');
+        var sparepartPreview = document.getElementById('sparepartPreview');
+
+        // Mengatur listener untuk input file
+        fotoInput.addEventListener('change', function() {
+            previewImage(this, fotoPreview);
+        });
+
+        sparepartInput.addEventListener('change', function() {
+            previewImage(this, sparepartPreview);
+        });
+
+        // Fungsi untuk menampilkan preview gambar
+        function previewImage(input, previewElement) {
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                previewElement.src = e.target.result;
+                previewElement.style.display = 'block'; // Menampilkan preview setelah gambar diunggah
+            };
+
+            reader.readAsDataURL(file);
         }
-    }
-
-    // Event listener for form submission
-    document.getElementById('importForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Call the function to handle form submission and show SweetAlert
-        handleFormSubmission();
     });
 </script>
 

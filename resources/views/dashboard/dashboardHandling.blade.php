@@ -141,15 +141,14 @@
             </div>
         </div>
 
-                <div class="col-sm-6">
-                <div class="card">
+        <div class="col-sm-8">
+    <div class="card">
         <div class="card-body">
-        <h5 class="card-title">Waktu Pengerjaan Repair Maintenance</h5>
+            <h5 class="card-title">Linestop (Dalam Menit)</h5>
             <div class="row">
                 <div class="col-md-4">
                     <label for="yearDropdown">Pilih Tahun:</label>
                     <select id="date-dropdown2" class="form-control" onchange="updateChart2()">
-                    <option value=" " selected>Pilih Tahun</option> <!-- Default option -->
                         @foreach($years2 as $year)
                             <option value="{{ $year }}">{{ $year }}</option>
                         @endforeach
@@ -158,54 +157,57 @@
                 <div class="col-md-4">
                     <label for="sectionDropdown">Pilih Section:</label>
                     <select id="section-dropdown" class="form-control" onchange="updateChart2()">
-                    <option value=" " selected>Pilih Section </option> <!-- Default option -->
+                        <option value="All" selected>All</option> <!-- Default option -->
                         @foreach($sections as $section)
                             <option value="{{ $section }}">{{ $section }}</option>
                         @endforeach
                     </select>
                 </div>
-                </div>
-
-            <div id="repairMaintenance" style="width: 100%; height: auto;"></div>
-
-    </div>
-    </div>
-</div>
-
-<div class="col-sm-6">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Periode Waktu Pengerjaan</h5>
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="start_month2">Bulan Mulai:</label>
-                    <input type="date" id="start_month2" name="start_month2" class="form-control" onchange="updatePeriodeWaktuPengerjaan()">
-                </div>
-                <div class="col-md-3">
-                    <label for="end_month2">Bulan Akhir:</label>
-                    <input type="date" id="end_month2" name="end_month2" class="form-control" onchange="updatePeriodeWaktuPengerjaan()">
-                </div>
             </div>
-            <canvas id="periodeRepair" style="width: 100%; height: auto;"></canvas>
+            <div id="repairMaintenance" style="width: 100%; height: auto;"></div>
         </div>
     </div>
 </div>
 
 
+<div class="col-sm-4"> <!-- Mengubah class menjadi col-sm-10 -->
+    <div class="card" style="height: 560px;">
+        <div class="card-body">
+            <h5 class="card-title">Linestop (Dalam Menit)</h5>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="start_month2">Bulan Mulai:</label>
+                        <input type="date" id="start_month2" name="start_month2" class="form-control" onchange="updatePeriodeWaktuPengerjaan()">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="end_month2">Bulan Akhir:</label>
+                        <input type="date" id="end_month2" name="end_month2" class="form-control" onchange="updatePeriodeWaktuPengerjaan()">
+                    </div>
+                </div>
+            </div>
+                <canvas id="periodeRepair" style="width: 100%; height: 175px;"></canvas>
+        </div>
+    </div>
+</div>
+
 <div class="col-sm-12">
     <div id="highcharts-container" class="card">
         <div class="card-body">
-        <h5 class="card-title">Summary FPP Mesin</h5>
+        <h5 class="card-title">Detail Linestop / Mesin (Dalam Menit)</h5>
             <div class="row">
-                <div class="col-md-3">
-                    <label for="sectionDropdown">Pilih Section:</label>
-                    <select id="section-dropdown2" class="form-control" onchange="updateChartPeriodeMesin()">
-                    <option value=" " selected>Pilih Section </option> <!-- Default option -->
-                        @foreach($sections as $section)
-                            <option value="{{ $section }}">{{ $section }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="col-md-3">
+    <label for="sectionDropdown">Pilih Section:</label>
+    <select id="section-dropdown2" class="form-control" onchange="updateChartPeriodeMesin()">
+        <option value="All" selected>All</option> <!-- Default option with "selected" attribute -->
+        @foreach($sections as $section)
+            <option value="{{ $section }}">{{ $section }}</option>
+        @endforeach
+    </select>
+</div>
+
                 <div class="col-md-3">
                     <label for="start_mesin">Bulan Mulai:</label>
                     <input type="date" id="start_mesin" name="start_mesin" class="form-control" onchange="updateChartPeriodeMesin()">
@@ -976,6 +978,26 @@ function getMonthName(monthNumber) {
 // Get all unique sections
 var sections = ['CUTTING', 'HEAT TREATMENT', 'MACHINING', 'MACHINING CUSTOM'];
 
+// Define colors for each section
+var sectionColors = {
+    'CUTTING': {
+        'open': '#FF6666',          // Warna merah muda untuk Cutting (Open)
+        'closed': '#CC0000'         // Warna merah tua untuk Cutting (Closed)
+    },
+    'HEAT TREATMENT': {
+        'open': '#66FF66',          // Warna hijau muda untuk Heat Treatment (Open)
+        'closed': '#009900'         // Warna hijau tua untuk Heat Treatment (Closed)
+    },
+    'MACHINING': {
+        'open': '#6666FF',          // Warna biru muda untuk Machining (Open)
+        'closed': '#000099'         // Warna biru tua untuk Machining (Closed)
+    },
+    'MACHINING CUSTOM': {
+        'open': '#ADD8E6',          // Warna biru muda untuk Machining Custom (Open)
+        'closed': '#4682B4'         // Warna biru tua untuk Machining Custom (Closed)
+    }
+};
+
 // Create data series for Highcharts
 var seriesData = [];
 sections.forEach(function(section) {
@@ -995,10 +1017,12 @@ sections.forEach(function(section) {
 
     seriesData.push({
         name: section + ' (Open)',
-        data: openArray
+        data: openArray,
+        color: sectionColors[section.toUpperCase()]['open'] // Mengatur warna label berdasarkan bagian (Open)
     }, {
         name: section + ' (Closed)',
-        data: closedArray
+        data: closedArray,
+        color: sectionColors[section.toUpperCase()]['closed'] // Mengatur warna label berdasarkan bagian (Closed)
     });
 });
 
@@ -1039,6 +1063,7 @@ Highcharts.chart('summaryHighcharts', {
     },
     series: seriesData
 });
+
         </script>
 
 
@@ -1092,7 +1117,7 @@ function updateChart2() {
                         type: 'column'
                     },
                     title: {
-                        text: 'Waktu Pengerjaan Repair Maintenance (Dalam menit)'
+                        text: 'Linestop (Dalam Menit)'
                     },
                     xAxis: {
                         categories: labels
@@ -1107,7 +1132,7 @@ function updateChart2() {
                         enabled: false
                     },
                     series: [{
-                        name: 'Waktu Pengerjaan (Dalam menit)',
+                        name: 'Line Stop (Dalam Menit)',
                         data: data2,
                         color: 'red'
                     }]
@@ -1133,12 +1158,13 @@ var ctxPeriode = document.getElementById('periodeRepair').getContext('2d');
 var periodeRepair = new Chart(ctxPeriode, {
     type: 'bar',
     data: {
-        labels: ['Waktu Pengerjaan'], // Label waktu pengerjaan saja
+        labels: ['Line Stop (Dalam Menit)'], // Label waktu pengerjaan saja
         datasets: [{
-            label: 'Total Waktu Pengerjaan (Dalam menit)', // Label dataset
+            label: 'Line Stop (Dalam menit)', // Label dataset
             data: [{!! json_encode($periodeWaktuPengerjaan) !!}], // Data waktu pengerjaan akan diisi setelah permintaan AJAX berhasil
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'red', // Merah terang dengan opacity 0.6
+borderColor: 'rgba(255, 99, 132, 0.6)', // Merah terang tanpa opacity
+
             borderWidth: 1
         }]
     },
@@ -1154,6 +1180,7 @@ var periodeRepair = new Chart(ctxPeriode, {
 // Fungsi untuk memperbarui chart periode waktu pengerjaan
 function updatePeriodeWaktuPengerjaan() {
     var selectedSection = document.getElementById('section-dropdown').value;
+    var selectedYear = document.getElementById('date-dropdown2').value;
     var startMonth = document.getElementById('start_month2').value;
     var endMonth = document.getElementById('end_month2').value;
 
@@ -1162,6 +1189,7 @@ function updatePeriodeWaktuPengerjaan() {
         url: '/getPeriodeWaktuPengerjaan',
         method: 'GET',
         data: {
+            year: selectedYear,
             section: selectedSection,
             start_month2: startMonth,
             end_month2: endMonth
@@ -1185,6 +1213,13 @@ function updatePeriodeWaktuPengerjaan() {
     updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
 });
 
+ // Event handler untuk perubahan pada dropdown section
+ document.getElementById('date-dropdown2').addEventListener('change', function() {
+    updateChart2();
+    updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
+});
+
+
 document.getElementById('start_month2').addEventListener('change', function() {
     updateChart2();
     updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
@@ -1195,87 +1230,97 @@ document.getElementById('end_month2').addEventListener('change', function() {
     updatePeriodeWaktuPengerjaan(); // Panggil fungsi untuk memperbarui periode waktu pengerjaan
 });
 
-// Fungsi untuk memperbarui chart dengan data mesin menggunakan Highcharts
-function updateMesinChart(data) {
-    var mesinData = [];
 
-    // Mengisi data mesin dan total FPP
-    data.forEach(function(item) {
-        mesinData.push({
+</script>
+
+
+<script>
+ // Fungsi untuk memuat data dari server dan menggambar grafik
+function updateChartPeriodeMesin() {
+    var section = document.getElementById('section-dropdown2').value;
+    var startDate = document.getElementById('start_mesin').value;
+    var endDate = document.getElementById('end_mesin').value;
+
+    // AJAX request untuk mendapatkan data dari server
+    $.ajax({
+        url: '/getPeriodeMesin',
+        type: 'GET',
+        data: {
+            section: section,
+            start_mesin: startDate,
+            end_mesin: endDate
+        },
+        success: function(response) {
+            drawChart(response);
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+// Fungsi untuk menggambar grafik menggunakan Highcharts JS
+function drawChart(data) {
+    var categories = []; // Array untuk menyimpan kategori (nomor mesin)
+    var seriesData = []; // Array untuk menyimpan data series
+    var sectionColors = {}; // Objek untuk menyimpan warna dari setiap section
+
+    // Tentukan warna yang sesuai untuk setiap section
+    var colors = {
+        'cutting': 'red',
+        'machining custom': 'lightblue',
+        'machining': 'blue',
+        'heat treatment': 'green'
+    };
+
+    // Warna default untuk section lainnya
+    var defaultColor = 'gray';
+
+    // Membuat data series berdasarkan section dengan warna yang sesuai
+    data.forEach(item => {
+        // Menambahkan kategori (nomor mesin) dan data series
+        categories.push(item.no_mesin);
+        var color = colors[item.section] || defaultColor; // Gunakan warna sesuai dengan section, jika tidak ada gunakan warna default
+        seriesData.push({
             name: item.no_mesin,
-            y: item.total_fpp
+            y: parseFloat(item.total_minutes),
+            color: color
         });
     });
 
-    // Membuat chart menggunakan Highcharts
+    // Menggambar grafik menggunakan Highcharts JS
     Highcharts.chart('periodeRepairMesin', {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Jumlah FPP Mesin'
+            text: 'Detail Linestop / Mesin (Dalam Menit)'
         },
         xAxis: {
-            type: 'category',
-            title: {
-                text: 'Mesin'
-            }
+            categories: categories
         },
         yAxis: {
             title: {
-                text: 'Total FPP'
+                text: 'Total Menit'
             }
         },
         series: [{
-            name: 'Total FPP',
-            data: mesinData,
-            color: 'rgba(75, 192, 192, 0.6)' // Warna latar belakang hijau
-        }]
-    });
-}
-
-// Fungsi untuk memperbarui chart periode waktu pengerjaan untuk mesin
-function updateChartPeriodeMesin() {
-    var selectedSection = document.getElementById('section-dropdown2').value;
-    var startDate = document.getElementById('start_mesin').value;
-    var endDate = document.getElementById('end_mesin').value;
-
-    // Lakukan AJAX request untuk mendapatkan data mesin berdasarkan section dan tanggal yang dipilih
-    $.ajax({
-        url: '/getPeriodeMesin',
-        method: 'GET',
-        data: {
-            section: selectedSection,
-            start_mesin: startDate,
-            end_mesin: endDate
-        },
-        success: function(response) {
-            // Perbarui chart dengan data baru
-            updateMesinChart(response);
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            // Handle error here
+            name: 'Line Stop (Dalam menit)',
+            data: seriesData // Menggunakan data yang sudah disesuaikan warnanya
+        }],
+        plotOptions: {
+            column: {
+                colorByPoint: true // Mengatur agar warna sesuai dengan point (data) pada sumbu-x
+            }
         }
     });
 }
 
-// Event handler untuk perubahan pada dropdown section
-document.getElementById('section-dropdown2').addEventListener('change', function() {
-    updateChartPeriodeMesin();
-});
+// Memanggil fungsi updateChartPeriodeMesin() untuk menginisialisasi grafik
+updateChartPeriodeMesin();
 
-// Event handler untuk perubahan pada input tanggal
-document.getElementById('start_mesin').addEventListener('change', function() {
-    updateChartPeriodeMesin();
-});
-
-document.getElementById('end_mesin').addEventListener('change', function() {
-    updateChartPeriodeMesin();
-});
 
 
 </script>
-
     </main><!-- End #main -->
 @endsection

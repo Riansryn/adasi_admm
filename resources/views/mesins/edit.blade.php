@@ -92,8 +92,10 @@
                                     <label for="foto" class="form-label">Foto</label>
                                     <div>
                                         @if($mesin->foto)
-                                        <img id="fotoPreview" src="{{ asset($mesin->foto) }}" alt="Preview Foto" style="max-width: 200px;">
+                                        <!-- Jika ada foto, tampilkan gambar -->
+                                        <img id="fotoPreview" src="{{ asset('assets/' . $mesin->foto) }}" alt="Preview Foto" style="max-width: 200px;">
                                         @else
+                                        <!-- Jika tidak ada foto, tampilkan pesan -->
                                         <p>No image available</p>
                                         @endif
                                     </div>
@@ -108,8 +110,10 @@
                                     <label for="sparepart" class="form-label">Sparepart</label>
                                     <div>
                                         @if($mesin->sparepart)
-                                        <img id="fotoPreview" src="{{ asset($mesin->sparepart) }}" alt="Preview Sparepart" style="max-width: 200px;">
+                                        <!-- Jika ada sparepart, tampilkan gambar -->
+                                        <img id="sparepartPreview" src="{{ asset('assets/' . $mesin->sparepart) }}"src="{{ asset('assets/' . $mesin->foto) }}" alt="Preview Sparepart" style="max-width: 200px;">
                                         @else
+                                        <!-- Jika tidak ada sparepart, tampilkan pesan -->
                                         <p>No image available</p>
                                         @endif
                                     </div>
@@ -172,6 +176,7 @@
             // Menangkap elemen gambar preview
             var fotoPreview = document.getElementById('fotoPreview');
             var sparepartPreview = document.getElementById('sparepartPreview');
+
             // Mengatur listener untuk input file
             fotoInput.addEventListener('change', function() {
                 previewImage(this, fotoPreview);
@@ -188,13 +193,13 @@
 
                 reader.onload = function(e) {
                     previewElement.src = e.target.result;
+                    previewElement.style.display = 'block'; // Menampilkan preview setelah gambar diunggah
                 };
 
                 reader.readAsDataURL(file);
             }
         });
     </script>
-
 
 
 </main><!-- End #main -->
