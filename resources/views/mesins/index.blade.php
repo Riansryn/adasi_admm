@@ -32,54 +32,56 @@
                         </div>
 
                         <!-- Table with stripped rows -->
-                        <table class="table table-striped table-bordered table-hover datatable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Section</th>
-                                    <th scope="col">Tipe</th>
-                                    <th scope="col">No Mesin</th>
-                                    <th scope="col">Tanggal Dibuat</th>
-                                    <th scope="col">Umur</th>
-                                    <th scope="col">Spesifikasi</th>
-                                    <th scope="col">Lokasi</th>
-                                    <th scope="col">Created At</th>
-                                    <th scope="col">Last Update</th>
-                                    <th scope="col">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($mesins as $mesin)
-                                <tr>
-                                    <td>{{ ++$i }}</td>
-                                    <td>{{ $mesin->section }}</td>
-                                    <td>{{ $mesin->tipe }}</td>
-                                    <td>{{ $mesin->no_mesin }}</td>
-                                    <td>{{ $mesin->tanggal_dibuat }}</td>
-                                    <td>{{ $mesin->umur }}</td>
-                                    <td>{{ $mesin->spesifikasi }}</td>
-                                    <td>{{ $mesin->lokasi }}</td>
-                                    <td>{{ $mesin->created_at }}</td>
-                                    <td>{{ $mesin->updated_at }}</td>
-                                    <td>
-                                        <a class="btn btn-primary" href="{{ route('mesins.edit', $mesin->id) }}">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-                                        <a class="btn btn-warning" href="{{ route('mesins.show', $mesin->id) }}">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-danger" onclick="deletemesin({{$mesin->id}})">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                        <form id="mesinForm_{{ $mesin->id }}" action="{{ route('mesins.destroy', $mesin->id) }}" method="POST" style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover datatable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Section</th>
+                                        <th scope="col">Tipe</th>
+                                        <th scope="col">No Mesin</th>
+                                        <th scope="col">Tanggal Dibuat</th>
+                                        <th scope="col">Umur</th>
+                                        <th scope="col">Spesifikasi</th>
+                                        <th scope="col">Lokasi</th>
+                                        <th scope="col">Created At</th>
+                                        <th scope="col">Last Update</th>
+                                        <th scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($mesins as $mesin)
+                                    <tr>
+                                        <td>{{ ++$i }}</td>
+                                        <td>{{ $mesin->section }}</td>
+                                        <td>{{ $mesin->tipe }}</td>
+                                        <td>{{ $mesin->no_mesin }}</td>
+                                        <td>{{ $mesin->tanggal_dibuat }}</td>
+                                        <td>{{ $mesin->umur }}</td>
+                                        <td>{{ $mesin->spesifikasi }}</td>
+                                        <td>{{ $mesin->lokasi }}</td>
+                                        <td>{{ $mesin->created_at }}</td>
+                                        <td>{{ $mesin->updated_at }}</td>
+                                        <td>
+                                            <a class="btn btn-primary" href="{{ route('mesins.edit', $mesin->id) }}">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <a class="btn btn-warning" href="{{ route('mesins.show', $mesin->id) }}">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-danger" onclick="deletemesin({{$mesin->id}})">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                            <form id="mesinForm_{{ $mesin->id }}" action="{{ route('mesins.destroy', $mesin->id) }}" method="POST" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
