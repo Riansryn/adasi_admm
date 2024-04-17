@@ -108,49 +108,53 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="t" class="form-label">T:</label>
                                             <input type="text" class="form-control input-sm" id="thickness"
-                                                name="thickness" placeholder="Thickness" style="max-width: 80%;">
+                                                name="thickness" placeholder="Thickness" style="max-width: 80%">
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="w" class="form-label">W:</label>
                                             <input type="text" class="form-control input-sm" id="weight"
                                                 name="weight" placeholder="Weight" style="max-width: 80%;">
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="w" class="form-label">L:</label>
                                             <input type="text" class="form-control input-sm" id="lenght"
                                                 name="lenght" placeholder="Lenght" style="max-width: 80%;">
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">OD:</label>
                                             <input type="text" class="form-control input-sm" id="outer_diameter"
-                                                name="outer_diameter" placeholder="Outer Diameter"
-                                                style="max-width: 80%;">
+                                                name="outer_diameter" placeholder="Outer Diameter" style="max-width: 80%">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">ID:</label>
                                             <input type="text" class="form-control input-sm" id="inner_diameter"
-                                                name="inner_diameter" placeholder="Inner Diameter"
-                                                style="max-width: 80%;">
+                                                name="inner_diameter" placeholder="Inner Diameter" style="max-width: 80%">
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="qty" class="form-label">QTY (Kg):</label>
                                             <input type="text" class="form-control input-sm" id="qty"
-                                                name="qty" style="max-width: 80%;" required>
+                                                name="qty" style="max-width: 80%;" 
+                                                required>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label for="pcs" class="form-label">Unit (Pcs):</label>
                                             <input type="text" class="form-control input-sm" id="pcs"
-                                                name="pcs" style="max-width: 80%;" required>
+                                                name="pcs" style="max-width: 80%" 
+                                                required>
                                         </div>
                                     </div>
+                                    <br>
                                     <br>
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -203,15 +207,15 @@
                                                     style="color: red;">*</span></label>
                                         </div>
                                         <div class="col-lg-6" @required(true)>
-                                            <div class="form-check mr-2">
-                                                <input type="checkbox" class="form-check-input" id="type_1"
-                                                    name="type_1" value="Klaim">
-                                                <label class="form-check-label" for="check1">Klaim</label>
-                                            </div>
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" id="type_1"
                                                     name="type_1" value="Komplain">
                                                 <label class="form-check-label" for="check2">Komplain</label>
+                                            </div>
+                                            <div class="form-check mr-2">
+                                                <input type="checkbox" class="form-check-input" id="type_2"
+                                                    name="type_2" value="Klaim">
+                                                <label class="form-check-label" for="check1">Klaim</label>
                                             </div>
                                         </div>
                                     </div>

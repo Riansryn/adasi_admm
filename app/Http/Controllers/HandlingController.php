@@ -183,6 +183,7 @@ class HandlingController extends Controller
         $handling->results = $request->results;
         $handling->process_type = $request->process_type;
         $handling->type_1 = $request->type_1;
+        $handling->type_2 = $request->type_2;
         $handling->image = $imagePathsString; // Simpan string JSON jalur gambar
         $handling->status = 0;
         $handling->status_2 = 0;
@@ -269,6 +270,7 @@ class HandlingController extends Controller
             'results' => $request->results,
             'process_type' => $request->process_type,
             'type_1' => $request->type_1,
+            'type_2' => $request->type_2,
             'image' => json_encode($allImagePaths),
             'status' => 0,
         ]);
