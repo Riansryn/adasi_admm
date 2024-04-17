@@ -1,23 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HandlingController;
-use App\http\Controllers\DeptManController;
-use App\http\Controllers\DsController;
-use App\http\Controllers\PDFController;
-use App\http\Controllers\ExcelController;
-use Illuminate\Support\Facades\View;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\MesinController;
-use App\Http\Controllers\FormFPPController;
-use App\Http\Controllers\PreventiveController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\ExcelCSVController;
+use App\http\Controllers\DeptManController;
 use App\Http\Controllers\DetailPreventiveController;
+use App\http\Controllers\DsController;
+use App\Http\Controllers\EventController;
+use App\http\Controllers\ExcelController;
+use App\Http\Controllers\FormFPPController;
+use App\Http\Controllers\HandlingController;
+use App\Http\Controllers\MesinController;
+use App\http\Controllers\PDFController;
+use App\Http\Controllers\PreventiveController;
 use App\Http\Controllers\SparepartController;
 use App\Http\Controllers\UserController;
-use App\Models\JadwalPreventif;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +27,10 @@ use App\Models\JadwalPreventif;
 |
 */
 // Proses login
-Route::post('/', [AuthController::class, 'login'])->name('login');
-//showformlogin
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+
+Route::post('/login', [AuthController::class, 'login'])->name('login_post');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['web', 'auth'])->group(function () {
@@ -55,14 +53,12 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('events', EventController::class);
     Route::resource('spareparts', SparepartController::class);
 
-    //Admin
+    // Admin
     Route::get('dashboardusers', [UserController::class, 'index'])->name('dashboardusers');
     Route::get('dashboardcustomers', [CustomerController::class, 'index'])->name('dashboardcustomers');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
-
-
-    //Preventive
+    // Preventive
     Route::get('dashpreventive', [PreventiveController::class, 'maintenanceDashPreventive'])
         ->name('maintenance.dashpreventive');
     Route::get('deptmtcepreventive', [PreventiveController::class, 'deptmtceDashPreventive'])
@@ -70,7 +66,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('deptmtce/editpreventive/{mesin}', [PreventiveController::class, 'EditDeptMTCEPreventive'])
         ->name('deptmtce.editpreventive');
 
-    //Production
+    // Production
     Route::get('dashboardproduction', [FormFPPController::class, 'DashboardProduction'])->name('fpps.index');
     Route::get('historyfpp', [FormFPPController::class, 'HistoryFPP'])->name('fpps.history');
     Route::get('lihatform/{formperbaikan}', [FormFPPController::class, 'LihatFPP'])
@@ -78,7 +74,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('closedform/{formperbaikan}', [FormFPPController::class, 'ClosedFormProduction'])
         ->name('fpps.closed');
 
-    //Maintenance
+    // Maintenance
     Route::get('dashboardmaintenance', [FormFPPController::class, 'DashboardMaintenance'])
         ->name('maintenance.index');
     Route::get('lihatmaintenance/{formperbaikan}', [FormFPPController::class, 'LihatMaintenance'])
@@ -92,15 +88,6 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('preventives/update-issue/{preventive}', [PreventiveController::class, 'updateIssue'])
         ->name('preventives.updateIssue');
 
-
-    // Route::get('mesins/editpreventive/{mesin}', [PreventiveController::class, 'EditMaintenancePreventive'])
-    //     ->name('maintenance.editpreventive');
-    // Route::get('mesins/{mesin}/edit-issue', [MesinController::class, 'editIssue'])
-    //     ->name('mesins.issue');
-    // Route::get('mesins/{mesin}/edit-perbaikan', [MesinController::class, 'editPerbaikan'])
-    //     ->name('mesins.perbaikan');
-    // Route::put('mesins/{mesin}/update-preventive', [MesinController::class, 'updatePreventive'])
-    //     ->name('mesins.updatePreventive');
     Route::get('dashboardmesins', [MesinController::class, 'index'])->name('dashboardmesins');
 
     Route::put('mesins/{mesin}/update-issue', [DetailPreventiveController::class, 'updateIssue'])
@@ -108,18 +95,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('mesins/{mesin}/update-perbaikan', [DetailPreventiveController::class, 'updatePerbaikan'])
         ->name('detailpreventives.updatePerbaikan');
 
-
-    // // Blok Jadwal Preventive
-    // Route::get('events/edit/{event}', [EventController::class, 'edit']);
-    // Route::get('events/editMaintenance/{event}', [EventController::class, 'editIssue']);
-    // Route::put('events/update/{event}', [EventController::class, 'update'])
-    //     ->name('events.update');
-    // Route::put('events/updateIssue/{event}', [EventController::class, 'updateIssue'])
-    //     ->name('events.updateIssue');
-    // Route::delete('/events/delete/{event}', [EventController::class, 'destroy'])->name('events.delete');
-
-
-    //Dept Maintenance
+    // Dept Maintenance
     Route::get('dashboarddeptmtce', [FormFPPController::class, 'DashboardDeptMTCE'])
         ->name('deptmtce.index');
     Route::get('lihatdeptmtce/{formperbaikan}', [FormFPPController::class, 'LihatDeptMTCE'])
@@ -133,29 +109,23 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('sparepart-import', [SparepartController::class, 'import'])->name('spareparts.import');
     Route::get('/spareparts/export/{nomor_mesin}', [SparepartController::class, 'export'])->name('spareparts.export');
 
+    Route::put('/update-preventive', [PreventiveController::class, 'update'])->name('updatePreventive');
 
-
-    // Route::get('mesins/{mesin}/lihat-issue', [MesinController::class, 'lihatIssue'])
-    //     ->name('mesins.lihatissue');
-    // Route::get('mesins/{mesin}/lihat-perbaikan', [MesinController::class, 'lihatPerbaikan'])
-    //     ->name('mesins.lihatperbaikan');
-
-    Route::put('/update-preventive',  [PreventiveController::class, 'update'])->name('updatePreventive');
-
-    //Sales
+    // Sales
     Route::get('dashboardfppsales', [FormFPPController::class, 'DashboardFPPSales'])
         ->name('sales.index');
     Route::get('lihatfppsales/{formperbaikan}', [FormFPPController::class, 'LihatFPPSales'])
         ->name('sales.lihat');
 
-    //Download File
+    // Download File
     Route::get('download-excel/{tindaklanjut}', [FormFPPController::class, 'downloadAttachment'])->name('download.attachment');
-    //DashboardforALL
+    // DashboardforALL
     Route::get('dashboardHandling', [DsController::class, 'dashboardHandling'])->name('dashboardHandling');
     Route::get('/getChartData', [HandlingController::class, 'getChartData']);
     Route::get('/get-data-by-year', [HandlingController::class, 'getDataByYear']);
     Route::get('/getRepairMaintenance', [DsController::class, 'getRepairMaintenance']);
     Route::get('/getPeriodeWaktuPengerjaan', [DsController::class, 'getPeriodeWaktuPengerjaan']);
+    Route::get('/api/filter-pie-chart-tipe', [HandlingController::class, 'FilterPieChartTipe']);
 
     Route::get('/getPeriodeMesin', [DsController::class, 'getPeriodeMesin']);
 
@@ -168,7 +138,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::patch('/changeStatus/{id}', [HandlingController::class, 'changeStatus'])->name('changeStatus');
     Route::get('/showHistory/{id}', [HandlingController::class, 'showHistory'])->name('showHistory');
 
-    //deptMan
+    // deptMan
     Route::get('deptMan', [DeptManController::class, 'submission'])->name('submission');
     Route::get('/showConfirm/{id}', [DeptManController::class, 'showConfirm'])->name('showConfirm');
     Route::put('/updateConfirm/{id}', [DeptManController::class, 'updateConfirm'])->name('updateConfirm');

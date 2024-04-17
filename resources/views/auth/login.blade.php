@@ -68,7 +68,7 @@
                                     @if (session('error'))
                                         <p style="color: red;">{{ session('error') }}</p>
                                     @endif
-                                    <form class="row g-3 needs-validation" method="POST" action="{{ route('login') }}"
+                                    <form class="row g-3 needs-validation" method="POST" action="{{ route('login_post') }}"
                                         novalidate>
                                         @csrf
                                         <div class="col-12">

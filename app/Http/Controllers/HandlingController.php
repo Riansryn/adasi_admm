@@ -8,6 +8,7 @@ use App\Models\ScheduleVisit;
 use App\Models\TypeMaterial;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 // import Facade "Storage"
 use Illuminate\View\View;
@@ -87,6 +88,36 @@ class HandlingController extends Controller
 
         // render view with handlings
         return view('sales.showHistory', compact('handlings', 'customers', 'type_materials', 'data'));
+    }
+
+    // Pie Chart
+    public function FilterPieChartTipe(Request $request)
+    {
+        // Mendapatkan nilai yang dipilih dari dropdown
+        $jenis = $request->input('jenis');
+        $type = $request->input('type');
+
+        // Mengambil data berdasarkan filter yang dipilih
+        $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+                        ->select(
+                            'type_materials.type_name AS type_name',
+                            DB::raw('SUM(handlings.qty) AS total_qty'),
+                            DB::raw('SUM(handlings.pcs) AS total_pcs'),
+                            DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
+                            DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim')
+                        )
+                        ->where(function ($query) use ($type) {
+                            if ($type == 'total_komplain') {
+                                $query->where('handlings.type_1', 'Komplain');
+                            } elseif ($type == 'total_klaim') {
+                                $query->where('handlings.type_2', 'Klaim');
+                            }
+                        })
+                        ->groupBy('handlings.type_id', 'type_materials.type_name')
+                        ->get();
+
+        // Mengembalikan data dalam format JSON
+        return response()->json($data);
     }
 
     /**
@@ -184,64 +215,63 @@ class HandlingController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-       // Validate form
-    $this->validate($request, [
-        'images.*' => 'image|mimes:jpeg,jpg,png|max:10000',
-    ]);
+        // Validate form
+        $this->validate($request, [
+            'images.*' => 'image|mimes:jpeg,jpg,png|max:10000',
+        ]);
 
-    // Get handling by ID
-    $handlings = Handling::findOrFail($id);
+        // Get handling by ID
+        $handlings = Handling::findOrFail($id);
 
-    // Initialize an array to hold new image paths
-    $newImagePaths = [];
+        // Initialize an array to hold new image paths
+        $newImagePaths = [];
 
-    // Check if images are uploaded
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
+        // Check if images are uploaded
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                // Move each image to the appropriate directory
+                $imagePath = $image->hashName();
+                $image->move(public_path('assets/image'), $imagePath);
 
-            // Move each image to the appropriate directory
-            $imagePath = $image->hashName();
-            $image->move(public_path('assets/image'), $imagePath);
-
-            // Add the new image path to the array
-            $newImagePaths[] = $imagePath;
-        }
-    }
-
-    // Delete old images (if any)
-    if ($handlings->image) {
-        $oldImagePaths = json_decode($handlings->image, true);
-
-        foreach ($oldImagePaths as $oldImagePath) {
-            $fullPath = public_path('assets/image/' . $oldImagePath);
-            if (file_exists($fullPath)) {
-                unlink($fullPath);
+                // Add the new image path to the array
+                $newImagePaths[] = $imagePath;
             }
         }
-    }
 
-    // Combine old and new image paths
-    $allImagePaths = array_merge($oldImagePaths ?? [], $newImagePaths);
+        // Delete old images (if any)
+        if ($handlings->image) {
+            $oldImagePaths = json_decode($handlings->image, true);
 
-    // Update post with new image paths
-    $handlings->update([
-        'no_wo' => $request->no_wo,
-        'customer_id' => $request->customer_id,
-        'type_id' => $request->type_id,
-        'thickness' => $request->thickness,
-        'weight' => $request->weight,
-        'outer_diameter' => $request->outer_diameter,
-        'inner_diameter' => $request->inner_diameter,
-        'length' => $request->lenght,
-        'qty' => $request->qty,
-        'pcs' => $request->pcs,
-        'category' => $request->category,
-        'results' => $request->results,
-        'process_type' => $request->process_type,
-        'type_1' => $request->type_1,
-        'image' => json_encode($allImagePaths),
-        'status' => 0,
-    ]);
+            foreach ($oldImagePaths as $oldImagePath) {
+                $fullPath = public_path('assets/image/'.$oldImagePath);
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
+        }
+
+        // Combine old and new image paths
+        $allImagePaths = array_merge($oldImagePaths ?? [], $newImagePaths);
+
+        // Update post with new image paths
+        $handlings->update([
+            'no_wo' => $request->no_wo,
+            'customer_id' => $request->customer_id,
+            'type_id' => $request->type_id,
+            'thickness' => $request->thickness,
+            'weight' => $request->weight,
+            'outer_diameter' => $request->outer_diameter,
+            'inner_diameter' => $request->inner_diameter,
+            'length' => $request->lenght,
+            'qty' => $request->qty,
+            'pcs' => $request->pcs,
+            'category' => $request->category,
+            'results' => $request->results,
+            'process_type' => $request->process_type,
+            'type_1' => $request->type_1,
+            'image' => json_encode($allImagePaths),
+            'status' => 0,
+        ]);
 
         // redirect to index
         return redirect()->route('index')->with(['success' => 'Data Berhasil Diubah!']);
