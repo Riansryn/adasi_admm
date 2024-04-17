@@ -180,7 +180,7 @@
                                                 (Jika ada)</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <textarea class="form-control" rows="5" id="results" name="results" style="width: 100%" required></textarea>
+                                            <textarea class="form-control" rows="5" id="results" name="results" style="width: 100%"></textarea>
                                         </div>
                                     </div>
                                     <br>
