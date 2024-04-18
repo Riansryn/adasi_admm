@@ -76,7 +76,7 @@ class DsController extends Controller
         if ($selectedSection === 'All' && empty($startMonth) && empty($endMonth)) {
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
                 ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
-                ->whereYear('form_f_p_p_s.created_at', date('Y'))
+                ->whereYear('form_f_p_p_s.created_at', $selectedYear)
                 ->where('form_f_p_p_s.status', 3)
                 ->first();
         } else {
