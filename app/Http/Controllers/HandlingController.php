@@ -23,10 +23,10 @@ class HandlingController extends Controller
     public function index()
     {
         $data = Handling::with('customers', 'type_materials')
-    ->whereIn('status', [1, 2, 0, 3]) // Filter berdasarkan status 1, 2, 0, dan 3
-    ->orderByRaw('FIELD(status, 1, 2, 3, 0)') // Urutkan berdasarkan urutan status yang diinginkan
-    ->orderByDesc('created_at') // Jika perlu, urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
-    ->paginate();
+            ->whereIn('status', [1, 2, 0, 3]) // Filter berdasarkan status 1, 2, 0, dan 3
+            ->orderByRaw('FIELD(status, 1, 2, 3, 0)') // Urutkan berdasarkan urutan status yang diinginkan
+            ->orderByDesc('created_at') // Jika perlu, urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
+            ->paginate();
 
         return view('sales.handling', compact('data'));
     }
@@ -38,9 +38,9 @@ class HandlingController extends Controller
 
         // Query untuk mengambil data berdasarkan tanggal mulai dan tanggal selesai
         $data = Handling::whereBetween('created_at', [$startDate, $endDate])
-                        ->selectRaw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as Open')
-                        ->selectRaw('COUNT(CASE WHEN status = 3 THEN 1 END) as Close')
-                        ->first();
+            ->selectRaw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as Open')
+            ->selectRaw('COUNT(CASE WHEN status = 3 THEN 1 END) as Close')
+            ->first();
 
         // Mengembalikan data dalam format JSON
         return response()->json($data);
@@ -90,40 +90,65 @@ class HandlingController extends Controller
         return view('sales.showHistory', compact('handlings', 'customers', 'type_materials', 'data'));
     }
 
-    // Pie Chart
-    public function FilterPieChartTipe(Request $request)
-    {
-        // Mendapatkan nilai yang dipilih dari dropdown
-        $type_name = $request->input('type_name');
-        $kategori = $request->input('kategori');
-        $jenis = $request->input('jenis');
-        $type = $request->input('type');
+        public function FilterPieChartTipe(Request $request)
+        {
+            // Mendapatkan nilai yang dipilih dari dropdown
+            $type_name = $request->input('type_name');
+            $kategori = $request->input('kategori');
+            $jenis = $request->input('jenis');
+            $type = $request->input('type');
+            $start_month = $request->input('start_month'); // Tambahkan parameter bulan mulai
+            $end_month = $request->input('end_month'); // Tambahkan parameter bulan akhir
 
-        // Mengambil data berdasarkan filter yang dipilih
-        $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
-                        ->select(
-                            'type_materials.type_name AS type_name',
-                            DB::raw('SUM(handlings.qty) AS total_qty'),
-                            DB::raw('SUM(handlings.pcs) AS total_pcs'),
-                            DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
-                            DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
-                            DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) + 
+            if (empty($start_month) && empty($end_month)) {
+                // Mengambil data berdasarkan filter yang dipilih
+                $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+                    ->select(
+                        'type_materials.type_name AS type_name',
+                        DB::raw('SUM(handlings.qty) AS total_qty'),
+                        DB::raw('SUM(handlings.pcs) AS total_pcs'),
+                        DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
+                        DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
+                        DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
                             SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
-                        )
-                        ->where(function ($query) use ($type) {
-                            if ($type == 'total_komplain') {
-                                $query->where('handlings.type_1', 'Komplain');
-                            } elseif ($type == 'total_klaim') {
-                                $query->where('handlings.type_2', 'Klaim');
-                            }
-                        })
-                        ->groupBy('handlings.type_id', 'type_materials.type_name')
-                        ->get();
+                    )
+                    ->where(function ($query) use ($type) {
+                        if ($type == 'total_komplain') {
+                            $query->where('handlings.type_1', 'Komplain');
+                        } elseif ($type == 'total_klaim') {
+                            $query->where('handlings.type_2', 'Klaim');
+                        }
+                    })
+                    ->groupBy('handlings.type_id', 'type_materials.type_name')
+                    ->get();
+            } else {
+                // Mengambil data berdasarkan filter yang dipilih
+                $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+                    ->select(
+                        'type_materials.type_name AS type_name',
+                        DB::raw('SUM(handlings.qty) AS total_qty'),
+                        DB::raw('SUM(handlings.pcs) AS total_pcs'),
+                        DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
+                        DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
+                        DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
+                      SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
+                    )
+                    ->where(function ($query) use ($type) {
+                        if ($type == 'total_komplain') {
+                            $query->where('handlings.type_1', 'Komplain');
+                        } elseif ($type == 'total_klaim') {
+                            $query->where('handlings.type_2', 'Klaim');
+                        }
+                    })
+                    ->whereBetween('handlings.created_at', [$start_month, $end_month]) // Filter berdasarkan rentang tanggal
+                    ->groupBy('handlings.type_id', 'type_materials.type_name')
+                    ->get();
+            }
 
-        // Mengembalikan data dalam format JSON
-        return response()->json($data);
-    }
 
+            // Mengembalikan data dalam format JSON
+            return response()->json($data);
+        }
     /**
      * create.
      */
@@ -169,7 +194,7 @@ class HandlingController extends Controller
         $currentYear = date('Y');
 
         // Buat nomor WO dengan menambahkan tahun saat ini
-        $no_wo = 'WO/'.$currentYear.'/'.$request->no_wo;
+        $no_wo = 'WO/' . $currentYear . '/' . $request->no_wo;
 
         // Buat data handling
         $handling = new Handling();
@@ -248,7 +273,7 @@ class HandlingController extends Controller
             $oldImagePaths = json_decode($handlings->image, true);
 
             foreach ($oldImagePaths as $oldImagePath) {
-                $fullPath = public_path('assets/image/'.$oldImagePath);
+                $fullPath = public_path('assets/image/' . $oldImagePath);
                 if (file_exists($fullPath)) {
                     unlink($fullPath);
                 }
@@ -296,7 +321,7 @@ class HandlingController extends Controller
         // delete old image
         // Hapus gambar lama jika ada
         if ($handlings->image) {
-            $oldImagePath = public_path('assets/image/'.$handlings->image);
+            $oldImagePath = public_path('assets/image/' . $handlings->image);
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }
