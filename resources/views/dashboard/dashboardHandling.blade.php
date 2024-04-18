@@ -8,8 +8,8 @@
             <h1>Dashboard Maintenance Handling</h1>
             <nav>
                 <!-- <ol class="breadcrumb">
-                                                                                                                                                                                                                            <li class="breadcrumb-item active">Dashboard</li>
-                                                                                                                                                                                                                        </ol> -->
+                                                                                                                                                                                                                                        <li class="breadcrumb-item active">Dashboard</li>
+                                                                                                                                                                                                                                    </ol> -->
             </nav>
         </div><!-- End Page Title -->
         <section class="section dashboard">
@@ -374,10 +374,12 @@
                                         <label for="end_month">Bulan Akhir:</label>
                                         <input type="date" id="end_month" name="end_month" class="form-control">
                                     </div>
+                                    {{-- filternya --}}
                                     <div class="col-lg-6" style="margin-top: 1%">
                                         <label for="jenis">Jenis:</label>
                                         <select id="jenis" class="form-select form-select-sm"
-                                            aria-label=".form-select-sm example" onchange="FilterPieChartTipe()">
+                                            aria-label=".form-select-sm example"
+                                            onchange="FilterPieChartTipe(); FilterKategori();">
                                             <option selected>--- Pilih Jenis ---</option>
                                             <option value="frekuensi">Frekuensi Jenis</option>
                                             <option value="qty">QTY</option>
@@ -387,7 +389,8 @@
                                     <div class="col-lg-6" style="margin-top: 1%">
                                         <label for="tipe">Kategori:</label>
                                         <select id="type" class="form-select form-select-sm"
-                                            aria-label=".form-select-sm example" onchange="FilterPieChartTipe()">
+                                            aria-label=".form-select-sm example"
+                                            onchange="FilterPieChartTipe(); FilterKategori();">
                                             <option selected>--- Pilih Kategori ---</option>
                                             <option value="kategori">All Kategori</option>
                                             <option value="type_1">Komplain</option>
@@ -424,50 +427,46 @@
             document.addEventListener('DOMContentLoaded', function() {
                 // Tambahkan event listener untuk memanggil FilterPieChartTipe saat terjadi perubahan pada dropdown jenis atau tipe
                 // document.getElementById('jenis').addEventListener('change', FilterPieChartTipe);
-                document.getElementById('type').addEventListener('change', FilterPieChartTipe);
 
+                document.getElementById('type').addEventListener('change', FilterPieChartTipe);
+                // Fungsi untuk merender chart dengan data yang diterima
                 function FilterPieChartTipe() {
                     var jenis = document.getElementById('jenis').value;
                     var typeSelected = document.getElementById('type').value;
-                    var filterType;
+                    var kategori = document.getElementById('type').options[document.getElementById('type').selectedIndex].text; // Mendapatkan nilai kategori dari dropdown
 
-                    // Jika jenis bukan qty atau pcs, filterType akan menjadi total_komplain atau total_klaim
+                    console.log('Memilih kategori:', kategori);
+                    var filterType;
                     filterType = (typeSelected === 'type_1') ? 'total_komplain' : 'total_klaim';
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/api/filter-pie-chart-tipe?jenis=' + jenis + '&type=' + typeSelected, true);
+                    xhr.open('GET', '/api/filter-pie-chart-tipe?jenis=' + jenis + '&type=' + typeSelected +
+                        '&kategori=' + encodeURIComponent(kategori), true); // Mengirim kategori ke endpoint API
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             var data = JSON.parse(xhr.responseText);
-                            renderChart(data, filterType,
-                            jenis); // Mengirimkan nilai filterType dan jenis ke fungsi renderChart
+                            renderChart(data, filterType, jenis,
+                            kategori); // Menyertakan kategori ke fungsi renderChart
                         }
                     };
                     xhr.send();
                 }
 
-                // Fungsi untuk merender chart dengan data yang diterima
-                function renderChart(data, filterType, jenis) {
-                    // Array untuk menyimpan data point pada chart
+                function renderChart(data, filterType, jenis, kategori) {
                     var chartData = [];
-
-                    // Mendapatkan nama filter yang sesuai dengan jenis yang dipilih
                     var filterName = (jenis === 'qty') ? 'total_qty' : 'total_pcs';
 
-                    // Iterasi data untuk memasukkan setiap data ke dalam array chartData
                     for (var i = 0; i < data.length; i++) {
-                        // Menambahkan label hanya jika nilai lebih besar dari 0
                         if (data[i][filterType] > 0) {
                             chartData.push({
                                 name: data[i].type_name,
                                 y: parseInt(data[i][filterType]),
-                                qty: data[i].total_qty, // Menyimpan total_qty
-                                pcs: data[i].total_pcs // Menyimpan total_pcs
+                                qty: data[i].total_qty,
+                                pcs: data[i].total_pcs
                             });
                         }
                     }
 
-                    // Konfigurasi chart dengan Highcharts
                     Highcharts.chart('ChartPieTypeMaterial', {
                         chart: {
                             type: 'pie'
@@ -477,7 +476,6 @@
                         },
                         tooltip: {
                             formatter: function() {
-                                console.log("Jenis:", jenis); // Cetak nilai jenis untuk debugging
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
                                 if (jenis === 'qty') {
                                     tooltip += this.point.qty + ' qty';
@@ -493,9 +491,9 @@
                                 allowPointSelect: true,
                                 cursor: 'pointer',
                                 dataLabels: {
-                                    enabled: false // Menonaktifkan label data di tengah pie
+                                    enabled: false
                                 },
-                                showInLegend: true // Menampilkan legend
+                                showInLegend: true
                             }
                         },
                         series: [{
