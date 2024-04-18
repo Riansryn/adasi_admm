@@ -94,6 +94,8 @@ class HandlingController extends Controller
     public function FilterPieChartTipe(Request $request)
     {
         // Mendapatkan nilai yang dipilih dari dropdown
+        $type_name = $request->input('type_name');
+        $kategori = $request->input('kategori');
         $jenis = $request->input('jenis');
         $type = $request->input('type');
 
@@ -104,7 +106,9 @@ class HandlingController extends Controller
                             DB::raw('SUM(handlings.qty) AS total_qty'),
                             DB::raw('SUM(handlings.pcs) AS total_pcs'),
                             DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
-                            DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim')
+                            DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
+                            DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) + 
+                            SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
                         )
                         ->where(function ($query) use ($type) {
                             if ($type == 'total_komplain') {
@@ -120,30 +124,30 @@ class HandlingController extends Controller
         return response()->json($data);
     }
 
-    public function FilterTipeAll(Request $request)
-    {
-        // Ambil nilai dari input select dengan nama 'all'
-        $filter = $request->input('all');
+    // public function FilterTipeAll(Request $request)
+    // {
+    //     // Ambil nilai dari input select dengan nama 'all'
+    //     $frekuensi = $request->input('frekuensi');
 
-        // Buat query untuk mengambil data dari tabel handlings dan tabel type_materials dengan menggunakan join
-        $query = DB::table('handlings')
-            ->join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
-            ->select('handlings.type_id', 'type_materials.type_name', 
-                DB::raw('SUM(handlings.qty + handlings.pcs) as total_all'))
-            ->groupBy('handlings.type_id', 'type_materials.type_name');
+    //     $kategori = $request->input('kategori');
+    //     $jenis = $request->input('jenis');
+    //     $type = $request->input('type');
 
-        // Jika filter adalah 'all', maka tidak perlu ada filter, biarkan query tetap seperti itu
-        if ($filter !== 'all') {
-            // Tambahkan klausa where untuk filter jenis tertentu
-            $query->where('type_materials.type_name', $filter);
-        }
+    //     // Eksekusi query SQL untuk mengambil data
+    //     $results = DB::table('handlings')
+    //                     ->join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+    //                     ->select('handlings.type_id',
+    //                         'type_materials.type_name',
+    //                         DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END), 0) AS type_1'),
+    //                         DB::raw('COALESCE(SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS type_2'),
+    //                         DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) + 
+    //                                   SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori'))
+    //                     ->groupBy('handlings.type_id', 'type_materials.type_name')
+    //                     ->get();
 
-        // Eksekusi query dan ambil hasilnya
-        $results = $query->get();
-
-        // Kembalikan hasil dalam format JSON
-        return response()->json($results);
-    }
+    //     // Kembalikan hasil dalam format JSON
+    //     return response()->json($results);
+    // }
 
     /**
      * create.
