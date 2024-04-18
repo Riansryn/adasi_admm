@@ -420,7 +420,40 @@
                 currentYear -= 1;
             }
 
-            //ChartPie
+             // DashboardPie
+             document.addEventListener('DOMContentLoaded', function() {
+                var pieData = {!! json_encode($formattedData) !!}; // Mendapatkan data dari controller
+
+                // Konfigurasi grafik Highcharts
+                Highcharts.chart('ChartPieTypeMaterial', {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Total Tipe Material'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.y}</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Total Type Materials',
+                        colorByPoint: true,
+                        data: pieData // Menggunakan data yang diterima dari controller
+                    }]
+                });
+            });
+            
+            //ChartPieFilter
             document.addEventListener('DOMContentLoaded', function() {
                 // Tambahkan event listener untuk memanggil FilterPieChartTipe saat terjadi perubahan pada dropdown jenis atau tipe
                 // document.getElementById('jenis').addEventListener('change', FilterPieChartTipe);

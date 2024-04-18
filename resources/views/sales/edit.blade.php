@@ -198,8 +198,8 @@
                                                 style="width: 100%" required>
                                                 <option value="">------------------- Jenis Proses -----------------
                                                 </option>
-                                                <option value="HeatTreatment"
-                                                    {{ $handlings->process_type == 'HeatTreatment' ? 'selected' : '' }}>
+                                                <option value="Heat Treatment"
+                                                    {{ $handlings->process_type == 'Heat Treatment' ? 'selected' : '' }}>
                                                     Heat
                                                     treatment</option>
                                                 <option value="Cutting"

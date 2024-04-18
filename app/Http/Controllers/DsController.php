@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Handling;
 use App\Models\FormFPP;
+use App\Models\Handling;
 use App\Models\Mesin;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DsController extends Controller
 {
-
     public function getRepairMaintenance(Request $request)
     {
-
         // Ambil parameter tahun dan bagian dari permintaan HTTP
         $selectedYear = $request->input('year', date('Y')); // Jika tidak ada parameter tahun, gunakan tahun saat ini sebagai default
         $selectedSection = $request->input('section', 'All');
@@ -41,7 +39,6 @@ class DsController extends Controller
                 ->orderBy('month')
                 ->get();
         }
-
 
         // Buat array lengkap dari label bulan
         $fullMonthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -106,11 +103,10 @@ class DsController extends Controller
                 }
             }
         }
+
         // Return data as JSON response
         return response()->json($periodeWaktuPengerjaan);
     }
-
-
 
     public function getPeriodeMesin(Request $request)
     {
@@ -227,7 +223,6 @@ class DsController extends Controller
                 return count($item);
             })
             ->toArray();
-
 
         $data = Handling::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
@@ -396,6 +391,20 @@ class DsController extends Controller
             $data2[] = $dataPoint->total_hour * 60;
         }
 
+        // Mengambil data dari database
+        $tipematerialDS = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+        ->select('type_materials.id', 'type_materials.type_name', \DB::raw('COUNT(*) as total_type_materials'))
+        ->groupBy('type_materials.id', 'type_materials.type_name')
+        ->get();
+
+        // Memformat data agar sesuai dengan format yang dibutuhkan oleh Highcharts
+        $formattedData = [];
+        foreach ($tipematerialDS as $item) {
+            $formattedData[] = [
+            'name' => $item->type_name,
+            'y' => $item->total_type_materials,
+            ];
+        }
 
         return view(
             'dashboard.dashboardHandling',
@@ -422,7 +431,8 @@ class DsController extends Controller
                 'sections',
                 'years2',
                 'data2',
-                'periodeMesin' // tambahkan data periodeMesin ke dalam array compact()
+                'periodeMesin', // tambahkan data periodeMesin ke dalam array compact()
+                'formattedData'
             )
         );
     }

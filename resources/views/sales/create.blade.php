@@ -194,7 +194,7 @@
                                                 style="width: 100%;" required>
                                                 <option value="">------------------- Tipe Proses -----------------
                                                 </option>
-                                                <option value="HeatTreatment">Heat treatment</option>
+                                                <option value="Heat Treatment">Heat treatment</option>
                                                 <option value="Cutting">Cutting</option>
                                                 <option value="Machining">Machining</option>
                                             </select>
