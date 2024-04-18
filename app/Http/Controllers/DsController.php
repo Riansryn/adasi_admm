@@ -68,70 +68,120 @@ class DsController extends Controller
     public function getPeriodeWaktuPengerjaan(Request $request)
     {
         $selectedSection = $request->input('section', 'All');
+        $startMonth = $request->input('start_month2');
+        $endMonth = $request->input('end_month2');
         $selectedYear = $request->input('year', date('Y'));
-        $startMonth = Carbon::parse($request->input('start_month2'))->startOfMonth();
-        $endMonth = Carbon::parse($request->input('end_month2'))->endOfMonth();
 
-        if ($selectedSection === 'All') {
+        // Jika bagian yang dipilih adalah 'All' dan tidak ada tanggal mulai dan akhir yang diberikan
+        if ($selectedSection === 'All' && empty($startMonth) && empty($endMonth)) {
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
-                ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
-                ->whereYear('form_f_p_p_s.created_at', $selectedYear)
-                ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
+                ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                ->whereYear('form_f_p_p_s.created_at', date('Y'))
                 ->where('form_f_p_p_s.status', 3)
-                ->groupBy('mesin.no_mesin') // Kelompokkan berdasarkan kolom no_mesin
                 ->first();
         } else {
-            $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
-                ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
-                ->whereYear('form_f_p_p_s.created_at', $selectedYear)
-                ->where('form_f_p_p_s.section', $selectedSection)
-                ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
-                ->where('form_f_p_p_s.status', 3)
-                ->groupBy('mesin.no_mesin') // Kelompokkan berdasarkan kolom no_mesin
-                ->first();
+            // Jika bagian yang dipilih adalah 'All' dan tanggal mulai dan akhir diberikan
+            if ($selectedSection === 'All') {
+                $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
+                    ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                    ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
+                    ->where('form_f_p_p_s.status', 3)
+                    ->first();
+            } else {
+                // Jika bagian yang dipilih bukan 'All' dan tanggal mulai dan akhir diberikan
+                if (empty($startMonth) && empty($endMonth)) {
+                    $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
+                        ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                        ->whereYear('form_f_p_p_s.created_at', $selectedYear)
+                        ->where('form_f_p_p_s.section', $selectedSection)
+                        ->where('form_f_p_p_s.status', 3)
+                        ->first();
+                } else {
+                    $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
+                        ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                        ->where('form_f_p_p_s.section', $selectedSection)
+                        ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
+                        ->where('form_f_p_p_s.status', 3)
+                        ->first();
+                }
+            }
         }
         // Return data as JSON response
         return response()->json($periodeWaktuPengerjaan);
     }
 
+
+
     public function getPeriodeMesin(Request $request)
     {
         $section = $request->input('section', 'All');
-        $startDate = Carbon::parse($request->input('start_mesin'))->startOfMonth();
-        $endDate = Carbon::parse($request->input('end_mesin'))->endOfMonth();
+        $startDate = $request->input('start_mesin');
+        $endDate = $request->input('end_mesin');
 
         // Memeriksa apakah opsi "All" dipilih
-        if ($section === 'All') {
+        if ($section === 'All' && empty($startDate) && empty($endDate)) {
             $periodeMesin = DB::table('mesin')
-                ->leftJoin('form_f_p_p_s', function ($join) use ($startDate, $endDate) {
+                ->leftJoin('form_f_p_p_s', function ($join) {
                     $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
                         ->where('form_f_p_p_s.status', 3)
-                        ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
+                        ->whereYear('form_f_p_p_s.created_at', date('Y'));
                 })
-                ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
+                ->select('mesin.no_mesin', 'mesin.section', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
                 ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
                 ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
-                ->groupBy('mesin.no_mesin')
+                ->groupBy('mesin.no_mesin', 'mesin.section')
                 ->get();
         } else {
-            $periodeMesin = DB::table('mesin')
-                ->leftJoin('form_f_p_p_s', function ($join) use ($section, $startDate, $endDate) {
-                    $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
-                        ->where('form_f_p_p_s.status', 3)
-                        ->where('form_f_p_p_s.section', $section)
-                        ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
-                })
-                ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
-                ->where('mesin.section', $section)
-                ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
-                ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
-                ->groupBy('mesin.no_mesin')
-                ->get();
+            // Jika section yang dipilih bukan 'All' dan tidak ada tanggal mulai dan akhir yang diberikan
+            if (empty($startDate) && empty($endDate)) {
+                $periodeMesin = DB::table('mesin')
+                    ->leftJoin('form_f_p_p_s', function ($join) use ($section) {
+                        $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+                            ->where('form_f_p_p_s.status', 3)
+                            ->where('form_f_p_p_s.section', $section);
+                    })
+                    ->select('mesin.no_mesin', 'mesin.section', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
+                    ->where('mesin.section', $section)
+                    ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
+                    ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
+                    ->groupBy('mesin.no_mesin', 'mesin.section')
+                    ->get();
+            } else {
+                $startDate = Carbon::parse($startDate);
+                $endDate = Carbon::parse($endDate);
+
+                if ($section === 'All') {
+                    $periodeMesin = DB::table('mesin')
+                        ->leftJoin('form_f_p_p_s', function ($join) use ($startDate, $endDate) {
+                            $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+                                ->where('form_f_p_p_s.status', 3)
+                                ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
+                        })
+                        ->select('mesin.no_mesin', 'mesin.section', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
+                        ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
+                        ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
+                        ->groupBy('mesin.no_mesin', 'mesin.section')
+                        ->get();
+                } else {
+                    $periodeMesin = DB::table('mesin')
+                        ->leftJoin('form_f_p_p_s', function ($join) use ($section, $startDate, $endDate) {
+                            $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+                                ->where('form_f_p_p_s.status', 3)
+                                ->where('form_f_p_p_s.section', $section)
+                                ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
+                        })
+                        ->select('mesin.no_mesin', 'mesin.section', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
+                        ->where('mesin.section', $section)
+                        ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
+                        ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
+                        ->groupBy('mesin.no_mesin', 'mesin.section')
+                        ->get();
+                }
+            }
         }
 
         return response()->json($periodeMesin);
     }
-
 
     // Buat Dashboard dan Chart
     public function dashboardHandling(Request $request)
@@ -261,19 +311,19 @@ class DsController extends Controller
             ->groupBy('month', 'form_f_p_p_s.section', 'form_f_p_p_s.mesin')
             ->get();
 
-
         $years2 = []; // Tambahkan tahun 2024 secara manual
         sort($years2);
-
-
-
         // Mendapatkan semua section yang tersedia dari tabel Mesin
-        $sections = Mesin::select('section')->distinct()->pluck('section');
+        $sections = Mesin::where('status', 0)->select('section')->distinct()->pluck('section');
+
+        $section = $request->input('section', 'All');
+        $startDate = Carbon::parse($request->input('start_mesin'));
+        $endDate = Carbon::parse($request->input('end_mesin'));
 
         $selectedYear = $request->input('year', date('Y'));
         $selectedSection = $request->input('section', 'All');
-        $startMonth = Carbon::parse($request->input('start_month2'))->startOfMonth();
-        $endMonth = Carbon::parse($request->input('end_month2'))->endOfMonth();
+        $startMonth = Carbon::parse($request->input('start_month2'));
+        $endMonth = Carbon::parse($request->input('end_month2'));
 
         if ($selectedSection === 'All') {
             $summaryData2 = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
@@ -287,12 +337,23 @@ class DsController extends Controller
                 ->get();
 
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
-                ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
                 ->whereYear('form_f_p_p_s.created_at', $selectedYear)
                 ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
                 ->where('form_f_p_p_s.status', 3)
-                ->groupBy('mesin.no_mesin') // Kelompokkan berdasarkan kolom no_mesin
                 ->first();
+
+            $periodeMesin = DB::table('mesin')
+                ->leftJoin('form_f_p_p_s', function ($join) use ($startDate, $endDate) {
+                    $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
+                        ->where('form_f_p_p_s.status', 3)
+                        ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
+                })
+                ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
+                ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
+                ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
+                ->groupBy('mesin.no_mesin')
+                ->get();
         } else {
             $summaryData2 = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
                 ->selectRaw('mesin.no_mesin, YEAR(form_f_p_p_s.created_at) as year,
@@ -306,40 +367,13 @@ class DsController extends Controller
                 ->get();
 
             $periodeWaktuPengerjaan = FormFPP::join('mesin', 'form_f_p_p_s.mesin', '=', 'mesin.no_mesin')
-                ->selectRaw('mesin.no_mesin, SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
+                ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) as total_minute')
                 ->whereYear('form_f_p_p_s.created_at', $selectedYear)
                 ->where('form_f_p_p_s.section', $selectedSection)
                 ->whereBetween('form_f_p_p_s.created_at', [$startMonth, $endMonth])
                 ->where('form_f_p_p_s.status', 3)
-                ->groupBy('mesin.no_mesin')
                 ->first();
-        }
 
-        $labels = [];
-        $data2 = [];
-        foreach ($summaryData2 as $dataPoint) {
-            $labels[] = date('F', mktime(0, 0, 0, $dataPoint->month, 1)); // Mendapatkan nama bulan dari angka bulan
-            $data2[] = $dataPoint->total_hour * 60;
-        }
-
-        $section = $request->input('section', 'All');
-        $startDate = Carbon::parse($request->input('start_mesin'))->startOfMonth();
-        $endDate = Carbon::parse($request->input('end_mesin'))->endOfMonth();
-
-        // Memeriksa apakah opsi "All" dipilih
-        if ($section === 'All') {
-            $periodeMesin = DB::table('mesin')
-                ->leftJoin('form_f_p_p_s', function ($join) use ($startDate, $endDate) {
-                    $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
-                        ->where('form_f_p_p_s.status', 3)
-                        ->whereBetween('form_f_p_p_s.created_at', [$startDate, $endDate]);
-                })
-                ->select('mesin.no_mesin', DB::raw('SUM(TIMESTAMPDIFF(SECOND, form_f_p_p_s.created_at, form_f_p_p_s.updated_at) / 60) AS total_minutes'))
-                ->orderByRaw("SUBSTRING(mesin.no_mesin FROM 1 FOR 1), CAST(REGEXP_SUBSTR(mesin.no_mesin, '[0-9]+') AS UNSIGNED)")
-                ->whereIn('mesin.section', ['cutting', 'machining', 'heat treatment', 'machining custom'])
-                ->groupBy('mesin.no_mesin')
-                ->get();
-        } else {
             $periodeMesin = DB::table('mesin')
                 ->leftJoin('form_f_p_p_s', function ($join) use ($section, $startDate, $endDate) {
                     $join->on('mesin.no_mesin', '=', 'form_f_p_p_s.mesin')
@@ -355,6 +389,12 @@ class DsController extends Controller
                 ->get();
         }
 
+        $labels = [];
+        $data2 = [];
+        foreach ($summaryData2 as $dataPoint) {
+            $labels[] = date('F', mktime(0, 0, 0, $dataPoint->month, 1)); // Mendapatkan nama bulan dari angka bulan
+            $data2[] = $dataPoint->total_hour * 60;
+        }
 
 
         return view(
