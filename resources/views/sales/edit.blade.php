@@ -195,7 +195,7 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <select name="process_type" class="form-control" id="process_type"
-                                                style="width: 25%" required>
+                                                style="width: 100%" required>
                                                 <option value="">------------------- Jenis Proses -----------------
                                                 </option>
                                                 <option value="HeatTreatment"
@@ -220,17 +220,17 @@
                                                     style="color: red;">*</span></label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <div class="form-check mr-2">
-                                                <input type="checkbox" class="form-check-input" id="type_1"
-                                                    name="type_1" value="Klaim"
-                                                    @if ($handlings->type_1 == 'Klaim') checked @endif>
-                                                <label class="form-check-label" for="check1">Klaim</label>
-                                            </div>
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" id="type_1"
                                                     name="type_1" value="Komplain"
                                                     @if ($handlings->type_1 == 'Komplain') checked @endif>
                                                 <label class="form-check-label" for="check2">Komplain</label>
+                                            </div>
+                                            <div class="form-check mr-2">
+                                                <input type="checkbox" class="form-check-input" id="type_2"
+                                                    name="type_2" value="Klaim"
+                                                    @if ($handlings->type_2 == 'Klaim') checked @endif>
+                                                <label class="form-check-label" for="check1">Klaim</label>
                                             </div>
                                         </div>
                                     </div>

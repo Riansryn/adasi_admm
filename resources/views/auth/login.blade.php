@@ -49,18 +49,14 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
                             <div class="d-flex justify-content-center py-4">
                                 <a href="" class="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/AdasiLogo.png" alt="" width="200" height="800">
+                                    <img src="{{ asset('assets/img/logo-login.png') }}" alt="" style="width: 200px; height: auto;">
                                     <span class="d-none d-lg-block"></span>
                                 </a>
                             </div><!-- End Logo -->
-
                             <div class="card mb-3">
-
                                 <div class="card-body">
-
                                     <div class="pt-4 pb-2">
                                         <h5 class="card-title text-center pb-0 fs-4">Login</h5>
                                         <p class="text-center small">Masukan Username dan Pasword</p>
@@ -68,7 +64,7 @@
                                     @if (session('error'))
                                         <p style="color: red;">{{ session('error') }}</p>
                                     @endif
-                                    <form class="row g-3 needs-validation" method="POST" action="{{ route('login') }}"
+                                    <form class="row g-3 needs-validation" method="POST" action="{{ route('login_post') }}"
                                         novalidate>
                                         @csrf
                                         <div class="col-12">

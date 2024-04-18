@@ -482,7 +482,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 
-
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <!-- Menghubungkan ke jsPDF -->
@@ -721,7 +720,7 @@
         // //jsDropdownCLaim-cutting
         document.getElementById('process_type').addEventListener('change', function() {
             var dropdownValue = this.value;
-            var checkBox1 = document.getElementById('type_1');
+            var checkBox1 = document.getElementById('type_2');
 
             if (dropdownValue === 'Cutting') {
                 checkBox1.checked = true;
