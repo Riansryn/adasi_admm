@@ -406,6 +406,30 @@ class DsController extends Controller
             ];
         }
 
+        // Query untuk menghitung jumlah setiap jenis proses
+        $processes = DB::table('handlings')
+            ->select(
+                DB::raw('SUM(CASE WHEN handlings.process_type = "Heat Treatment" THEN 1 ELSE 0 END) AS total_heat_treatment'),
+                DB::raw('SUM(CASE WHEN handlings.process_type = "Cutting" THEN 1 ELSE 0 END) AS total_cutting'),
+                DB::raw('SUM(CASE WHEN handlings.process_type = "Machining" THEN 1 ELSE 0 END) AS total_machining')
+            )
+            ->get();
+
+        $pieProses = [
+            [
+                'name' => 'Heat Treatment',
+                'y' => intval($processes[0]->total_heat_treatment),
+            ],
+            [
+                'name' => 'Cutting',
+                'y' => intval($processes[0]->total_cutting),
+            ],
+            [
+                'name' => 'Machining',
+                'y' => intval($processes[0]->total_machining),
+            ],
+        ];
+
         return view(
             'dashboard.dashboardHandling',
             compact(
@@ -432,7 +456,8 @@ class DsController extends Controller
                 'years2',
                 'data2',
                 'periodeMesin', // tambahkan data periodeMesin ke dalam array compact()
-                'formattedData'
+                'formattedData',
+                'pieProses'
             )
         );
     }

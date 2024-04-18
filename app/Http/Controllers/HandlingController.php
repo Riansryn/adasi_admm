@@ -124,31 +124,6 @@ class HandlingController extends Controller
         return response()->json($data);
     }
 
-    // public function FilterTipeAll(Request $request)
-    // {
-    //     // Ambil nilai dari input select dengan nama 'all'
-    //     $frekuensi = $request->input('frekuensi');
-
-    //     $kategori = $request->input('kategori');
-    //     $jenis = $request->input('jenis');
-    //     $type = $request->input('type');
-
-    //     // Eksekusi query SQL untuk mengambil data
-    //     $results = DB::table('handlings')
-    //                     ->join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
-    //                     ->select('handlings.type_id',
-    //                         'type_materials.type_name',
-    //                         DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END), 0) AS type_1'),
-    //                         DB::raw('COALESCE(SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS type_2'),
-    //                         DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) + 
-    //                                   SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori'))
-    //                     ->groupBy('handlings.type_id', 'type_materials.type_name')
-    //                     ->get();
-
-    //     // Kembalikan hasil dalam format JSON
-    //     return response()->json($results);
-    // }
-
     /**
      * create.
      */
