@@ -19,13 +19,13 @@ class SparepartExport implements FromCollection, WithHeadings, ShouldAutoSize //
 
     public function collection()
     {
-        return Sparepart::select("id", "nama_sparepart", "deskripsi", "jumlah_stok")
+        return Sparepart::select("nama_sparepart", "deskripsi", "jumlah_stok")
             ->where('nomor_mesin', $this->nomor_mesin)
             ->get();
     }
 
     public function headings(): array
     {
-        return ["No", "Nama Sparepart", "Deskripsi", "Jumlah Stok"];
+        return ["Nama Sparepart", "Deskripsi", "Jumlah Stok"];
     }
 }

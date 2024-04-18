@@ -31,7 +31,18 @@
                                     <label for="section" class="form-label">
                                         Section<span style="color: red;">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="section" name="section">
+                                    <select class="form-control" id="section" name="section">
+                                        <option value="">Pilih Section</option>
+                                        @php
+                                        // Filter mesins berdasarkan status 0
+                                        $mesinsWithStatusZero = $mesins->where('status', 0);
+                                        // Ambil nilai section yang unik dari mesins dengan status 0
+                                        $uniqueSections = $mesinsWithStatusZero->unique('section')->pluck('section');
+                                        @endphp
+                                        @foreach($uniqueSections as $section)
+                                        <option value="{{ $section }}">{{ $section }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">

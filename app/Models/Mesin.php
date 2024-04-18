@@ -25,6 +25,18 @@ class Mesin extends Model
         return Carbon::parse($value)->format('Y-m-d | H:i:s');
     }
 
+    public function getUmurMesinAttribute()
+    {
+        // Menghitung umur mesin berdasarkan tanggal_dibuat
+        if ($this->tanggal_dibuat) {
+            $tanggalDibuat = Carbon::parse($this->tanggal_dibuat);
+            $umur = $tanggalDibuat->diffInYears(Carbon::now()); // Menghitung selisih tahun
+            return $umur;
+        }
+
+        return null; // Jika tanggal_dibuat kosong, kembalikan null
+    }
+
     public function spareparts()
     {
         return $this->hasMany(Sparepart::class);

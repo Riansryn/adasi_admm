@@ -15,14 +15,15 @@ class MesinController extends Controller
 {
     public function index()
     {
-        $mesins = Mesin::latest()->get();
+        $mesins = Mesin::orderBy('updated_at', 'desc')->get();
 
         return view('mesins.index', compact('mesins'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     public function create()
     {
-        return view('mesins.create');
+        $mesins = Mesin::orderBy('updated_at', 'asc')->get();
+        return view('mesins.create', compact('mesins'));
     }
 
     public function store(Request $request)
@@ -110,8 +111,8 @@ class MesinController extends Controller
         // Cek apakah ada file foto yang diunggah
         if ($request->hasFile('sparepart')) {
             // Menghapus foto lama jika ada
-            if ($mesin->foto) {
-                $oldFotoPath = public_path('assets/' . $mesin->foto);
+            if ($mesin->sparepart) {
+                $oldFotoPath = public_path('assets/' . $mesin->sparepart);
                 if (file_exists($oldFotoPath)) {
                     unlink($oldFotoPath);
                 }
@@ -119,11 +120,12 @@ class MesinController extends Controller
             // Simpan foto baru
             $sparepart = $request->file('sparepart');
             $sparepartName = $sparepart->getClientOriginalName();
-            $sparepartPath = $sparepart->move(public_path('assets/sparepart'), $fotoName);
+            $sparepartPath = $sparepart->move(public_path('assets/sparepart'), $sparepartName);
 
             // Perbarui path foto di database
             $mesin->sparepart = 'sparepart/' . $sparepartName;
         }
+
         // Update data mesin
         $mesin->update([
             'section' => $request->section ?? $mesin->section,
