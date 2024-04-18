@@ -90,65 +90,65 @@ class HandlingController extends Controller
         return view('sales.showHistory', compact('handlings', 'customers', 'type_materials', 'data'));
     }
 
-        public function FilterPieChartTipe(Request $request)
-        {
-            // Mendapatkan nilai yang dipilih dari dropdown
-            $type_name = $request->input('type_name');
-            $kategori = $request->input('kategori');
-            $jenis = $request->input('jenis');
-            $type = $request->input('type');
-            $start_month = $request->input('start_month'); // Tambahkan parameter bulan mulai
-            $end_month = $request->input('end_month'); // Tambahkan parameter bulan akhir
+    public function FilterPieChartTipe(Request $request)
+    {
+        // Mendapatkan nilai yang dipilih dari dropdown
+        $type_name = $request->input('type_name');
+        $kategori = $request->input('kategori');
+        $jenis = $request->input('jenis');
+        $type = $request->input('type');
+        $start_month = $request->input('start_month'); // Tambahkan parameter bulan mulai
+        $end_month = $request->input('end_month'); // Tambahkan parameter bulan akhir
 
-            if (empty($start_month) && empty($end_month)) {
-                // Mengambil data berdasarkan filter yang dipilih
-                $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
-                    ->select(
-                        'type_materials.type_name AS type_name',
-                        DB::raw('SUM(handlings.qty) AS total_qty'),
-                        DB::raw('SUM(handlings.pcs) AS total_pcs'),
-                        DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
-                        DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
-                        DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
+        if (empty($start_month) && empty($end_month)) {
+            // Mengambil data berdasarkan filter yang dipilih
+            $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+                ->select(
+                    'type_materials.type_name AS type_name',
+                    DB::raw('SUM(handlings.qty) AS total_qty'),
+                    DB::raw('SUM(handlings.pcs) AS total_pcs'),
+                    DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
+                    DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
+                    DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
                             SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
-                    )
-                    ->where(function ($query) use ($type) {
-                        if ($type == 'total_komplain') {
-                            $query->where('handlings.type_1', 'Komplain');
-                        } elseif ($type == 'total_klaim') {
-                            $query->where('handlings.type_2', 'Klaim');
-                        }
-                    })
-                    ->groupBy('handlings.type_id', 'type_materials.type_name')
-                    ->get();
-            } else {
-                // Mengambil data berdasarkan filter yang dipilih
-                $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
-                    ->select(
-                        'type_materials.type_name AS type_name',
-                        DB::raw('SUM(handlings.qty) AS total_qty'),
-                        DB::raw('SUM(handlings.pcs) AS total_pcs'),
-                        DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
-                        DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
-                        DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
+                )
+                ->where(function ($query) use ($type) {
+                    if ($type == 'total_komplain') {
+                        $query->where('handlings.type_1', 'Komplain');
+                    } elseif ($type == 'total_klaim') {
+                        $query->where('handlings.type_2', 'Klaim');
+                    }
+                })
+                ->groupBy('handlings.type_id', 'type_materials.type_name')
+                ->get();
+        } else {
+            // Mengambil data berdasarkan filter yang dipilih
+            $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+                ->select(
+                    'type_materials.type_name AS type_name',
+                    DB::raw('SUM(handlings.qty) AS total_qty'),
+                    DB::raw('SUM(handlings.pcs) AS total_pcs'),
+                    DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
+                    DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
+                    DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
                       SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
-                    )
-                    ->where(function ($query) use ($type) {
-                        if ($type == 'total_komplain') {
-                            $query->where('handlings.type_1', 'Komplain');
-                        } elseif ($type == 'total_klaim') {
-                            $query->where('handlings.type_2', 'Klaim');
-                        }
-                    })
-                    ->whereBetween('handlings.created_at', [$start_month, $end_month]) // Filter berdasarkan rentang tanggal
-                    ->groupBy('handlings.type_id', 'type_materials.type_name')
-                    ->get();
-            }
-
-
-            // Mengembalikan data dalam format JSON
-            return response()->json($data);
+                )
+                ->where(function ($query) use ($type) {
+                    if ($type == 'total_komplain') {
+                        $query->where('handlings.type_1', 'Komplain');
+                    } elseif ($type == 'total_klaim') {
+                        $query->where('handlings.type_2', 'Klaim');
+                    }
+                })
+                ->whereBetween('handlings.created_at', [$start_month, $end_month]) // Filter berdasarkan rentang tanggal
+                ->groupBy('handlings.type_id', 'type_materials.type_name')
+                ->get();
         }
+
+
+        // Mengembalikan data dalam format JSON
+        return response()->json($data);
+    }
     /**
      * create.
      */
