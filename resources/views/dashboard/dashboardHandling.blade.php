@@ -8,8 +8,8 @@
             <h1>Dashboard Maintenance Handling</h1>
             <nav>
                 <!-- <ol class="breadcrumb">
-                                                                                                                <li class="breadcrumb-item active">Dashboard</li>
-                                                                                                            </ol> -->
+                                                                                                                                                                                                                            <li class="breadcrumb-item active">Dashboard</li>
+                                                                                                                                                                                                                        </ol> -->
             </nav>
         </div><!-- End Page Title -->
         <section class="section dashboard">
@@ -379,7 +379,7 @@
                                         <select id="jenis" class="form-select form-select-sm"
                                             aria-label=".form-select-sm example" onchange="FilterPieChartTipe()">
                                             <option selected>--- Pilih Jenis ---</option>
-                                            <option value="all">All Data Jenis</option>
+                                            <option value="frekuensi">Frekuensi Jenis</option>
                                             <option value="qty">QTY</option>
                                             <option value="pcs">PCS</option>
                                         </select>
@@ -389,7 +389,7 @@
                                         <select id="type" class="form-select form-select-sm"
                                             aria-label=".form-select-sm example" onchange="FilterPieChartTipe()">
                                             <option selected>--- Pilih Kategori ---</option>
-                                            <option value="all">All Data Kategori</option>
+                                            <option value="kategori">All Kategori</option>
                                             <option value="type_1">Komplain</option>
                                             <option value="type_2">Klaim</option>
                                         </select>
@@ -422,46 +422,47 @@
 
             //ChartPie
             document.addEventListener('DOMContentLoaded', function() {
-                // Simpan nilai type saat perubahan dropdown
-                var typeSelected = document.getElementById('type').value;
-
                 // Tambahkan event listener untuk memanggil FilterPieChartTipe saat terjadi perubahan pada dropdown jenis atau tipe
-                document.getElementById('type').addEventListener('change', function() {
-                    // Simpan kembali nilai type saat terjadi perubahan dropdown
-                    typeSelected = this.value;
-                    FilterPieChartTipe();
-                });
+                // document.getElementById('jenis').addEventListener('change', FilterPieChartTipe);
+                document.getElementById('type').addEventListener('change', FilterPieChartTipe);
 
-                // Fungsi untuk mengirim permintaan ke server saat ada perubahan pada dropdown jenis atau tipe
                 function FilterPieChartTipe() {
                     var jenis = document.getElementById('jenis').value;
+                    var typeSelected = document.getElementById('type').value;
+                    var filterType;
+
+                    // Jika jenis bukan qty atau pcs, filterType akan menjadi total_komplain atau total_klaim
+                    filterType = (typeSelected === 'type_1') ? 'total_komplain' : 'total_klaim';
 
                     var xhr = new XMLHttpRequest();
                     xhr.open('GET', '/api/filter-pie-chart-tipe?jenis=' + jenis + '&type=' + typeSelected, true);
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             var data = JSON.parse(xhr.responseText);
-                            renderChart(data);
+                            renderChart(data, filterType,
+                            jenis); // Mengirimkan nilai filterType dan jenis ke fungsi renderChart
                         }
                     };
                     xhr.send();
                 }
 
                 // Fungsi untuk merender chart dengan data yang diterima
-                function renderChart(data) {
+                function renderChart(data, filterType, jenis) {
                     // Array untuk menyimpan data point pada chart
                     var chartData = [];
 
-                    // Menyesuaikan nama kolom yang digunakan berdasarkan nilai tipeSelected
-                    var columnName = (typeSelected === 'type_1') ? 'total_komplain' : 'total_klaim';
+                    // Mendapatkan nama filter yang sesuai dengan jenis yang dipilih
+                    var filterName = (jenis === 'qty') ? 'total_qty' : 'total_pcs';
 
                     // Iterasi data untuk memasukkan setiap data ke dalam array chartData
                     for (var i = 0; i < data.length; i++) {
                         // Menambahkan label hanya jika nilai lebih besar dari 0
-                        if (data[i][columnName] > 0) {
+                        if (data[i][filterType] > 0) {
                             chartData.push({
                                 name: data[i].type_name,
-                                y: parseInt(data[i][columnName])
+                                y: parseInt(data[i][filterType]),
+                                qty: data[i].total_qty, // Menyimpan total_qty
+                                pcs: data[i].total_pcs // Menyimpan total_pcs
                             });
                         }
                     }
@@ -474,6 +475,29 @@
                         title: {
                             text: 'Pie Chart Berdasarkan Tipe'
                         },
+                        tooltip: {
+                            formatter: function() {
+                                console.log("Jenis:", jenis); // Cetak nilai jenis untuk debugging
+                                var tooltip = '<b>' + this.point.name + '</b>: ';
+                                if (jenis === 'qty') {
+                                    tooltip += this.point.qty + ' qty';
+                                } else if (jenis === 'pcs') {
+                                    tooltip += this.point.pcs + ' pcs';
+                                }
+                                tooltip += ' (' + this.point.percentage.toFixed(1) + '%)';
+                                return tooltip;
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: false // Menonaktifkan label data di tengah pie
+                                },
+                                showInLegend: true // Menampilkan legend
+                            }
+                        },
                         series: [{
                             name: 'Total Data',
                             data: chartData
@@ -481,7 +505,6 @@
                     });
                 }
             });
-
 
             // Tambahkan event listener untuk input tanggal
             document.getElementById('start_month').addEventListener('change', updateChart);

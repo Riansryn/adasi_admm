@@ -120,6 +120,31 @@ class HandlingController extends Controller
         return response()->json($data);
     }
 
+    public function FilterTipeAll(Request $request)
+    {
+        // Ambil nilai dari input select dengan nama 'all'
+        $filter = $request->input('all');
+
+        // Buat query untuk mengambil data dari tabel handlings dan tabel type_materials dengan menggunakan join
+        $query = DB::table('handlings')
+            ->join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+            ->select('handlings.type_id', 'type_materials.type_name', 
+                DB::raw('SUM(handlings.qty + handlings.pcs) as total_all'))
+            ->groupBy('handlings.type_id', 'type_materials.type_name');
+
+        // Jika filter adalah 'all', maka tidak perlu ada filter, biarkan query tetap seperti itu
+        if ($filter !== 'all') {
+            // Tambahkan klausa where untuk filter jenis tertentu
+            $query->where('type_materials.type_name', $filter);
+        }
+
+        // Eksekusi query dan ambil hasilnya
+        $results = $query->get();
+
+        // Kembalikan hasil dalam format JSON
+        return response()->json($results);
+    }
+
     /**
      * create.
      */
