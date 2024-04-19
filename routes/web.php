@@ -127,6 +127,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/getPeriodeWaktuPengerjaan', [DsController::class, 'getPeriodeWaktuPengerjaan']);
     Route::get('/api/filter-pie-chart-tipe', [HandlingController::class, 'FilterPieChartTipe']);
     Route::get('/api/filter-tipe-all', [HandlingController::class, 'FilterTipeAll']);
+    Route::get('/api/Filter-piechart-proses', [HandlingController::class, 'FilterPieChartProses']);
 
     Route::get('/getPeriodeMesin', [DsController::class, 'getPeriodeMesin']);
 
