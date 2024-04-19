@@ -8,8 +8,8 @@
             <h1>Dashboard Maintenance Handling</h1>
             <nav>
                 <!-- <ol class="breadcrumb">
-                                                                                                                                                                                                                                                                                                                <li class="breadcrumb-item active">Dashboard</li>
-                                                                                                                                                                                                                                                                                                            </ol> -->
+                                                                                                                                                                                                                                                                                                                        <li class="breadcrumb-item active">Dashboard</li>
+                                                                                                                                                                                                                                                                                                                    </ol> -->
             </nav>
         </div><!-- End Page Title -->
         <section class="section dashboard">
@@ -339,14 +339,14 @@
                                         <label for="yearDropdown">Pilih Tahun:</label>
                                         <select id='date-dropdown' style="width: 10%"></select>
                                         <canvas id="myChart"
-                                            style="position: relative; height:40vh; width:80vw"></canvas>
+                                            style="position: relative; height:57vh; width:80vw"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="card">
-                                <div class="card-body" style="height: 430px; overflow-y: auto;">
+                                <div class="card-body">
                                     <h5 class="card-title">Chart Bar Periode</h5>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -359,7 +359,7 @@
                                             <input type="date" id="end_periode" name="end_periode"
                                                 class="form-control">
                                         </div>
-                                        <canvas id="chartAllPeriode" height="260" style="margin-top: 5%;"></canvas>
+                                        <div id="chartAllPeriode" style="position: relative; height:40vh; width:80vw"></div>
                                     </div>
                                 </div>
                             </div>
@@ -473,70 +473,138 @@
                 currentYear -= 1;
             }
 
-            // Fungsi untuk membuat chart
-            function drawChart(data) {
-                var labels = ['Open', 'Close'];
-                var values = Object.values(data);
+            document.addEventListener('DOMContentLoaded', function () {
+            // Mendapatkan elemen input tanggal
+            var startDateInput = document.getElementById('start_periode');
+            var endDateInput = document.getElementById('end_periode');
 
-                var ctx = document.getElementById('chartAllPeriode').getContext('2d');
-                Periode = new Chart(ctx, {
-                    type: 'bar',
+            // Menambahkan event listener untuk memperbarui chart saat nilai input tanggal berubah
+            startDateInput.addEventListener('change', updateChart);
+            endDateInput.addEventListener('change', updateChart);
 
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: values,
-                            backgroundColor: [
-                                'rgba(54, 162, 235, 0.5)', // Biru dengan transparansi 0.5
-                                'rgba(255, 99, 132, 0.5)', // Merah dengan transparansi 0.5
-                            ],
-                            borderColor: [
-                                'rgba(54, 162, 235, 1)', // Biru solid
-                                'rgba(255, 99, 132, 1)', // Merah solid
-                            ],
-                            borderWidth: 2,
-                            barThickness: 23 // Ukuran batang
-                        }]
-                    },
-                    options: {
-                        animation: {
-                            duration: 2000, // Animasi durasi 2 detik
-                            easing: 'easeInOutQuart' // Efek animasi
-                        },
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu Y
-                                    fontSize: 14 // Ukuran font label sumbu Y
-                                },
-                                gridLines: {
-                                    color: 'rgba(0, 0, 0, 0.1)' // Warna garis grid
-                                }
-                            }],
-                            xAxes: [{
-                                ticks: {
-                                    fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu X
-                                    fontSize: 14 // Ukuran font label sumbu X
-                                },
-                                gridLines: {
-                                    display: false // Sembunyikan garis grid sumbu X
-                                }
-                            }]
-                        },
-                        legend: {
-                            display: true,
-                            labels: {
-                                fontColor: 'rgba(0, 0, 0, 0.7)', // Warna teks legenda
-                                fontSize: 14, // Ukuran font teks legenda
-                                usePointStyle: true // Menggunakan simbol titik pada legenda
-                            },
-                            onClick: null, // Menonaktifkan interaktivitas pada legenda
-                            position: 'bottom', // Letak legenda
+            function updateChart() {
+                var startDate = startDateInput.value;
+                var endDate = endDateInput.value;
+
+                // Mengirim permintaan AJAX untuk mendapatkan data dari controller
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/getChartData?start_date=' + startDate + '&end_date=' + endDate, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var responseData = JSON.parse(xhr.responseText);
+                            renderChart(responseData);
+                        } else {
+                            console.error('Error saat memuat data:', xhr.statusText);
                         }
                     }
+                };
+                xhr.send();
+            }
+
+            function renderChart(data) {
+                // Mengatur data yang diperlukan untuk chart
+                Highcharts.chart('chartAllPeriode', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Status Handling'
+                    },
+                    xAxis: {
+                        categories: ['Open', 'Close']
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Jumlah'
+                        }
+                    },
+                    plotOptions: {
+                        series: {
+                            borderRadius: 5,
+                            colorByPoint: true
+                        }
+                    },
+                    series: [{
+                        name: 'Data',
+                        data: [{
+                            name: 'Open',
+                            y: data.Open,
+                            color: '#0000FF'
+                        }, {
+                            name: 'Close',
+                            y: data.Close,
+                            color: '#FF0000'
+                        }]
+                    }]
                 });
             }
+        });
+
+            // // Fungsi untuk membuat chart
+            // function drawChart(data) {
+            //     var labels = ['Open', 'Close'];
+            //     var values = Object.values(data);
+
+            //     var ctx = document.getElementById('chartAllPeriode').getContext('2d');
+            //     Periode = new Chart(ctx, {
+            //         type: 'bar',
+
+            //         data: {
+            //             labels: labels,
+            //             datasets: [{
+            //                 data: values,
+            //                 backgroundColor: [
+            //                     'rgba(54, 162, 235, 0.5)', // Biru dengan transparansi 0.5
+            //                     'rgba(255, 99, 132, 0.5)', // Merah dengan transparansi 0.5
+            //                 ],
+            //                 borderColor: [
+            //                     'rgba(54, 162, 235, 1)', // Biru solid
+            //                     'rgba(255, 99, 132, 1)', // Merah solid
+            //                 ],
+            //                 borderWidth: 2,
+            //                 barThickness: 23 // Ukuran batang
+            //             }]
+            //         },
+            //         options: {
+            //             animation: {
+            //                 duration: 2000, // Animasi durasi 2 detik
+            //                 easing: 'easeInOutQuart' // Efek animasi
+            //             },
+            //             scales: {
+            //                 yAxes: [{
+            //                     ticks: {
+            //                         beginAtZero: true,
+            //                         fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu Y
+            //                         fontSize: 14 // Ukuran font label sumbu Y
+            //                     },
+            //                     gridLines: {
+            //                         color: 'rgba(0, 0, 0, 0.1)' // Warna garis grid
+            //                     }
+            //                 }],
+            //                 xAxes: [{
+            //                     ticks: {
+            //                         fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu X
+            //                         fontSize: 14 // Ukuran font label sumbu X
+            //                     },
+            //                     gridLines: {
+            //                         display: false // Sembunyikan garis grid sumbu X
+            //                     }
+            //                 }]
+            //             },
+            //             legend: {
+            //                 display: true,
+            //                 labels: {
+            //                     fontColor: 'rgba(0, 0, 0, 0.7)', // Warna teks legenda
+            //                     fontSize: 14, // Ukuran font teks legenda
+            //                     usePointStyle: true // Menggunakan simbol titik pada legenda
+            //                 },
+            //                 onClick: null, // Menonaktifkan interaktivitas pada legenda
+            //                 position: 'bottom', // Letak legenda
+            //             }
+            //         }
+            //     });
+            // }
 
             //Chart Handling /year
             // Fungsi untuk mengonversi angka bulan menjadi nama bulan dalam bahasa Inggris
@@ -1289,7 +1357,7 @@
                 function renderPieChart(data) {
                     var chartData = [];
 
-                    
+
                     // Konversi data ke format yang dibutuhkan oleh Highcharts
                     for (var i = 0; i < data.length; i++) {
                         chartData.push({
