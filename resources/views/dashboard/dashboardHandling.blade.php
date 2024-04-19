@@ -429,7 +429,7 @@
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="jenis">Jenis:</label>
                                             <select id="jenis2" class="form-select form-select-sm"
-                                                aria-label=".form-select-sm example" onchange="updatePieChart()">
+                                                aria-label=".form-select-sm example" onchange="updatePieChart(); FilterKategori();">
                                                 <option selected>--- Pilih Jenis ---</option>
                                                 <option value="frekuensi">Frekuensi Jenis</option>
                                                 <option value="qty">QTY</option>
@@ -439,7 +439,7 @@
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="tipe">Kategori:</label>
                                             <select id="type2" class="form-select form-select-sm"
-                                                aria-label=".form-select-sm example" onchange="updatePieChart()">
+                                                aria-label=".form-select-sm example" onchange="updatePieChart(); ">
                                                 <option selected>--- Pilih Kategori ---</option>
                                                 <option value="kategori">All Kategori</option>
                                                 <option value="type_1">Komplain</option>
@@ -1325,83 +1325,122 @@
                 }
             });
 
-            document.addEventListener('DOMContentLoaded', function() {
-                // Fungsi untuk memperbarui grafik pie
-                function updatePieChart() {
-                    var jenis2 = document.getElementById('jenis2').value;
-                    var typeSelected2 = document.getElementById('type2').value;
-                    var startMonth3 = document.getElementById('start_month3').value;
-                    var endMonth3 = document.getElementById('end_month3').value;
+        </script>
 
-                    console.log("updatePieChart() dipanggil");
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+        // Fungsi untuk merender grafik pie
+        function renderPieChart(data) {
+            var chartData = [];
+            var jenis = document.getElementById('jenis2').value;
+            var kategori = document.getElementById('type').options[document.getElementById('type2').selectedIndex].text;
 
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/api/FilterPieChartProses?&kategori=' + typeSelected2 +
-                        '&jenis2=' + jenis2 + '&type2=' + typeSelected2 + '&start_month3=' + startMonth3 +
-                        '&end_month3=' + endMonth3, true);
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState == 4) {
-                            if (xhr.status == 200) {
-                                var data = JSON.parse(xhr.responseText);
-                                console.log("Data yang diperoleh dari API:", data);
-                                renderPieChart(data);
-                            } else {
-                                console.error("Error saat memperbarui grafik pie:", xhr.statusText);
-                            }
+            // Konversi data ke format yang dibutuhkan oleh Highcharts
+            for (var i = 0; i < data.length; i++) {
+                chartData.push({
+                    name: data[i].type_name, // process_name dari controller Anda
+                    y: parseInt(data[i].kategori),
+                    qty: data[i].total_qty,
+                    pcs: data[i].total_pcs,
+                    total_klaim: data[i].total_klaim,
+                    total_komplain: data[i].total_komplain
+                });
+            }
+
+            // Konfigurasi tooltip
+            var tooltip = {
+                formatter: function() {
+                    var tooltipText = '<b>' + this.point.name + '</b>: ';
+
+                    if (jenis === 'qty') {
+                        tooltipText += this.point.qty + ' qty';
+                    } else if (jenis === 'pcs') {
+                        tooltipText += this.point.pcs + ' pcs';
+                    } else if (jenis === 'frekuensi') {
+                        // Jika jenis adalah 'frekuensi'
+                        if (kategori === 'All Kategori') {
+                            // Jika kategori adalah 'All Kategori', tampilkan jumlah keseluruhan klaim dan komplain
+                            tooltipText += 'Total Klaim: ' + this.point.total_klaim +
+                                ', Total Komplain: ' + this.point.total_komplain;
+                        } else if (kategori === 'Komplain') {
+                            // Jika kategori adalah 'Komplain', tampilkan jumlah klaim
+                            tooltipText += 'Jumlah Komplain: ' + this.point.total_komplain;
+                        } else if (kategori === 'Klaim') {
+                            // Jika kategori adalah 'Klaim', tampilkan jumlah komplain
+                            tooltipText += 'Jumlah Klaim: ' + this.point.total_klaim;
                         }
-                    };
-                    xhr.send();
-                }
-
-                // Fungsi untuk merender grafik pie
-                function renderPieChart(data) {
-                    var chartData = [];
-
-
-                    // Konversi data ke format yang dibutuhkan oleh Highcharts
-                    for (var i = 0; i < data.length; i++) {
-                        chartData.push({
-                            name: data[i].type_name, // process_name dari controller Anda
-                            y: parseInt(data[i].kategori),
-                            qty: data[i].total_qty,
-                            pcs: data[i].total_pcs,
-                            total_klaim: data[i].total_klaim,
-                            total_komplain: data[i].total_komplain
-                        });
                     }
-                    // Konfigurasi grafik pie menggunakan Highcharts
-                    Highcharts.chart('ChartPieProses', {
-                        chart: {
-                            type: 'pie'
-                        },
-                        title: {
-                            text: 'Total Proses'
-                        },
-                        plotOptions: {
-                            pie: {
-                                allowPointSelect: true,
-                                cursor: 'pointer',
-                                dataLabels: {
-                                    enabled: true,
-                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                                }
-                            }
-                        },
-                        series: [{
-                            name: 'Process',
-                            colorByPoint: true,
-                            data: chartData
-                        }]
-                    });
+                    tooltipText += ' (' + this.point.percentage.toFixed(1) + '%)';
+                    return tooltipText;
                 }
+            };
 
-                // updatePieChart();
-
-                // Menambahkan pendengar acara pada elemen yang melakukan seleksi
-                document.getElementById('type2').addEventListener('change', updatePieChart);
-                document.getElementById('start_month3').addEventListener('change', updatePieChart);
-                document.getElementById('end_month3').addEventListener('change', updatePieChart);
+            // Konfigurasi grafik pie menggunakan Highcharts
+            Highcharts.chart('ChartPieProses', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Total Proses'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                tooltip: tooltip, // Menggunakan tooltip yang telah dikonfigurasi
+                series: [{
+                    name: 'Process',
+                    colorByPoint: true,
+                    data: chartData
+                }]
             });
+        }
+
+        // updatePieChart();
+
+        // Menambahkan pendengar acara pada elemen yang melakukan seleksi
+        document.getElementById('type2').addEventListener('change', updatePieChart);
+        document.getElementById('start_month3').addEventListener('change', updatePieChart);
+        document.getElementById('end_month3').addEventListener('change', updatePieChart);
+
+// Fungsi untuk memperbarui grafik pie
+function updatePieChart() {
+    var jenis2 = document.getElementById('jenis2').value;
+    var typeSelected2 = document.getElementById('type2').value;
+    var kategori = document.getElementById('type').options[document.getElementById('type').selectedIndex].text; // Mendapatkan nilai kategori dari dropdown
+    var startMonth3 = document.getElementById('start_month3').value;
+    var endMonth3 = document.getElementById('end_month3').value;
+
+    console.log("updatePieChart() dipanggil");
+
+    var xhr = new XMLHttpRequest();
+    // Memperbarui URL dengan nilai-nilai filter yang benar
+    xhr.open('GET', '/api/FilterPieChartProses?type_name=' + typeSelected2 +
+        '&kategori=' + (kategori === 'All' ? '' : kategori) + '&jenis2=' + jenis2 + '&type2=' + typeSelected2 + '&start_month3=' + startMonth3 +
+        '&end_month3=' + endMonth3, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("Data yang diperoleh dari API:", data);
+                renderPieChart(data);
+            } else {
+                console.error("Error saat memperbarui grafik pie:", xhr.statusText);
+            }
+        }
+    };
+    xhr.send();
+}
+
+
+
+    });
 
             document.addEventListener('DOMContentLoaded', function() {
                 var chartData = {!! json_encode($pieProses) !!};
@@ -1431,7 +1470,7 @@
                     }]
                 });
             });
-        </script>
+            </script>
 
 
 
