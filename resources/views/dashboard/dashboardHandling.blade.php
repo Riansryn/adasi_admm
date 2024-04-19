@@ -339,7 +339,7 @@
                                         <label for="yearDropdown">Pilih Tahun:</label>
                                         <select id='date-dropdown' style="width: 10%"></select>
                                         <canvas id="myChart"
-                                            style="position: relative; height:57vh; width:80vw"></canvas>
+                                        style="height:auto; width:100%"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -359,7 +359,7 @@
                                             <input type="date" id="end_periode" name="end_periode"
                                                 class="form-control">
                                         </div>
-                                        <div id="chartAllPeriode" style="position: relative; height:40vh; width:80vw"></div>
+                                        <div id="chartAllPeriode" style="height:21.5vh; width:100%"></div>
                                     </div>
                                 </div>
                             </div>
