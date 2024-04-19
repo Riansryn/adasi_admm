@@ -97,10 +97,10 @@ class HandlingController extends Controller
         $kategori = $request->input('kategori');
         $jenis = $request->input('jenis');
         $type = $request->input('type');
-        $start_month3 = $request->input('start_month3'); // Tambahkan parameter bulan mulai
-        $end_month3 = $request->input('end_month3'); // Tambahkan parameter bulan akhir
+        $start_month = $request->input('start_month'); // Tambahkan parameter bulan mulai
+        $end_month = $request->input('end_month'); // Tambahkan parameter bulan akhir
 
-        if (empty($start_month3) && empty($end_month3)) {
+        if (empty($start_month) && empty($end_month)) {
             // Mengambil data berdasarkan filter yang dipilih
             $data = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
                 ->select(
@@ -140,7 +140,7 @@ class HandlingController extends Controller
                         $query->where('handlings.type_2', 'Klaim');
                     }
                 })
-                ->whereBetween('handlings.created_at', [$start_month3, $end_month3]) // Filter berdasarkan rentang tanggal
+                ->whereBetween('handlings.created_at', [$start_month, $end_month]) // Filter berdasarkan rentang tanggal
                 ->groupBy('handlings.type_id', 'type_materials.type_name')
                 ->get();
         }
@@ -154,16 +154,16 @@ class HandlingController extends Controller
         // Mendapatkan nilai yang dipilih dari dropdown
         $type_name = $request->input('type_name');
         $kategori = $request->input('kategori');
-        $jenis = $request->input('jenis');
-        $type = $request->input('type');
-        $start_month = $request->input('start_month'); // Tambahkan parameter bulan mulai
-        $end_month = $request->input('end_month'); // Tambahkan parameter bulan akhir
+        $jenis2 = $request->input('jenis2');
+        $type2 = $request->input('type2');
+        $start_month3 = $request->input('start_month3'); // Tambahkan parameter bulan mulai
+        $end_month3 = $request->input('end_month3'); // Tambahkan parameter bulan akhir
 
-        if (empty($start_month) && empty($end_month)) {
+        if (empty($start_month3) && empty($end_month3)) {
             // Mengambil data berdasarkan filter yang dipilih
             $data = DB::table('handlings')
             ->select(
-                'handlings.process_type AS process_name',
+                'handlings.process_type AS type_name',
                 DB::raw('SUM(handlings.qty) AS total_qty'),
                 DB::raw('SUM(handlings.pcs) AS total_pcs'),
                 DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
@@ -171,14 +171,14 @@ class HandlingController extends Controller
                 DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
                          SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
             )
-            ->where(function ($query) use ($type) {
-                if ($type == 'total_komplain') {
+            ->where(function ($query) use ($type2) {
+                if ($type2 == 'total_komplain') {
                     $query->where('handlings.type_1', 'Komplain');
-                } elseif ($type == 'total_klaim') {
+                } elseif ($type2 == 'total_klaim') {
                     $query->where('handlings.type_2', 'Klaim');
                 }
             })
-            ->groupBy('handlings.type_id')
+            ->groupBy('handlings.process_type')
             ->get();
         } else {
             $data = DB::table('handlings')
@@ -191,17 +191,19 @@ class HandlingController extends Controller
                 DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
                          SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
             )
-            ->where(function ($query) use ($type) {
-                if ($type == 'total_komplain') {
+            ->where(function ($query) use ($type2) {
+                if ($type2 == 'total_komplain') {
                     $query->where('handlings.type_1', 'Komplain');
-                } elseif ($type == 'total_klaim') {
+                } elseif ($type2 == 'total_klaim') {
                     $query->where('handlings.type_2', 'Klaim');
                 }
             })
-            ->whereBetween('handlings.created_at', [$start_month, $end_month]) // Filter berdasarkan rentang tanggal
-            ->groupBy('handlings.type_id')
+            ->whereBetween('handlings.created_at', [$start_month3, $end_month3]) // Filter berdasarkan rentang tanggal
+            ->groupBy('handlings.process_type')
             ->get();
         }
+
+        // dd($data);
 
         // Mengembalikan data dalam format JSON
         return response()->json($data);

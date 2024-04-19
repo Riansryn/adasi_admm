@@ -49,14 +49,14 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                            <div class="d-flex justify-content-center py-4">
-                                <a href="" class="logo d-flex align-items-center w-auto">
-                                    <img src="{{ asset('assets/img/logo-login.png') }}" alt="" style="width: 200px; height: auto;">
-                                    <span class="d-none d-lg-block"></span>
-                                </a>
-                            </div><!-- End Logo -->
                             <div class="card mb-3">
                                 <div class="card-body">
+                                    <div class="d-flex justify-content-center py-4">
+                                        <a href="" class="logo d-flex align-items-center w-auto">
+                                            <img src="{{ asset('assets/img/logo-login.png') }}" alt="" style="height: 200px;">
+                                            <span class="d-none d-lg-block"></span>
+                                        </a>
+                                    </div>
                                     <div class="pt-4 pb-2">
                                         <h5 class="card-title text-center pb-0 fs-4">Login</h5>
                                         <p class="text-center small">Masukan Username dan Pasword</p>

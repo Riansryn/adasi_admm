@@ -8,8 +8,8 @@
             <h1>Dashboard Maintenance Handling</h1>
             <nav>
                 <!-- <ol class="breadcrumb">
-                                                                                                                                                                                                                                                                                        <li class="breadcrumb-item active">Dashboard</li>
-                                                                                                                                                                                                                                                                                    </ol> -->
+                                                                                                                                                                                                                                                                                                                <li class="breadcrumb-item active">Dashboard</li>
+                                                                                                                                                                                                                                                                                                            </ol> -->
             </nav>
         </div><!-- End Page Title -->
         <section class="section dashboard">
@@ -428,7 +428,7 @@
                                         {{-- filternya --}}
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="jenis">Jenis:</label>
-                                            <select id="jenis" class="form-select form-select-sm"
+                                            <select id="jenis2" class="form-select form-select-sm"
                                                 aria-label=".form-select-sm example" onchange="updatePieChart()">
                                                 <option selected>--- Pilih Jenis ---</option>
                                                 <option value="frekuensi">Frekuensi Jenis</option>
@@ -438,7 +438,7 @@
                                         </div>
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="tipe">Kategori:</label>
-                                            <select id="type" class="form-select form-select-sm"
+                                            <select id="type2" class="form-select form-select-sm"
                                                 aria-label=".form-select-sm example" onchange="updatePieChart()">
                                                 <option selected>--- Pilih Kategori ---</option>
                                                 <option value="kategori">All Kategori</option>
@@ -1258,51 +1258,28 @@
             });
 
             document.addEventListener('DOMContentLoaded', function() {
-                var chartData = {!! json_encode($pieProses) !!};
-                console.log(chartData); // Pastikan untuk memeriksa data yang tercetak di konsol
-
-                Highcharts.chart('ChartPieProses', {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Total Proses'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Process',
-                        colorByPoint: true,
-                        data: chartData
-                    }]
-                });                   
-            });
-
-            document.addEventListener('DOMContentLoaded', function() {
                 // Fungsi untuk memperbarui grafik pie
                 function updatePieChart() {
-                    var jenis = document.getElementById('jenis').value;
-                    var typeSelected = document.getElementById('type').value;
+                    var jenis2 = document.getElementById('jenis2').value;
+                    var typeSelected2 = document.getElementById('type2').value;
                     var startMonth3 = document.getElementById('start_month3').value;
                     var endMonth3 = document.getElementById('end_month3').value;
 
+                    console.log("updatePieChart() dipanggil");
+
                     var xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/api/FilterPieChartProses?type_name=' + jenis + '&kategori=' + typeSelected +
-                        '&jenis=' + jenis + '&type=' + typeSelected + '&start_month=' + startMonth3 +
-                        '&end_month=' + endMonth3, true);
+                    xhr.open('GET', '/api/FilterPieChartProses?&kategori=' + typeSelected2 +
+                        '&jenis2=' + jenis2 + '&type2=' + typeSelected2 + '&start_month3=' + startMonth3 +
+                        '&end_month3=' + endMonth3, true);
                     xhr.onreadystatechange = function() {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            var data = JSON.parse(xhr.responseText);
-                            console.log("Data yang diperoleh dari API:", data);
-                            renderPieChart(data);
+                        if (xhr.readyState == 4) {
+                            if (xhr.status == 200) {
+                                var data = JSON.parse(xhr.responseText);
+                                console.log("Data yang diperoleh dari API:", data);
+                                renderPieChart(data);
+                            } else {
+                                console.error("Error saat memperbarui grafik pie:", xhr.statusText);
+                            }
                         }
                     };
                     xhr.send();
@@ -1311,10 +1288,12 @@
                 // Fungsi untuk merender grafik pie
                 function renderPieChart(data) {
                     var chartData = [];
+
+                    
                     // Konversi data ke format yang dibutuhkan oleh Highcharts
                     for (var i = 0; i < data.length; i++) {
                         chartData.push({
-                            name: data[i].type_name,
+                            name: data[i].type_name, // process_name dari controller Anda
                             y: parseInt(data[i].kategori),
                             qty: data[i].total_qty,
                             pcs: data[i].total_pcs,
@@ -1348,12 +1327,41 @@
                     });
                 }
 
-                // Memanggil fungsi updatePieChart() saat halaman dimuat dan nilai filter berubah
-                updatePieChart();
-                document.getElementById('jenis').addEventListener('change', updatePieChart);
-                document.getElementById('type').addEventListener('change', updatePieChart);
+                // updatePieChart();
+
+                // Menambahkan pendengar acara pada elemen yang melakukan seleksi
+                document.getElementById('type2').addEventListener('change', updatePieChart);
                 document.getElementById('start_month3').addEventListener('change', updatePieChart);
                 document.getElementById('end_month3').addEventListener('change', updatePieChart);
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var chartData = {!! json_encode($pieProses) !!};
+                console.log(chartData); // Pastikan untuk memeriksa data yang tercetak di konsol
+
+                Highcharts.chart('ChartPieProses', {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Total Proses'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Process',
+                        colorByPoint: true,
+                        data: chartData
+                    }]
+                });
             });
         </script>
 
