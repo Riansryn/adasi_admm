@@ -85,15 +85,20 @@
                                     </label>
                                     <textarea class="form-control" id="kendala" name="kendala"></textarea>
                                 </div>
-
                                 <div class="mb-3">
-                                    <img id="gambarPreview" src="" alt="" width="300" height="200" style="display: none;">
+                                    <img id="gambarPreview" src="" alt="" width="300" height="200" style="display: none; cursor: pointer;" onclick="toggleImageModal()">
                                 </div>
                                 <div class="mb-3">
                                     <label for="gambar" class="form-label">
                                         Upload Gambar (Jika Ada)<span style="color: red;">*</span>
                                     </label>
                                     <input type="file" class="form-control" id="gambar" name="gambar" onchange="previewImage()">
+                                </div>
+
+                                <!-- Modal -->
+                                <div id="imageModal" class="modal">
+                                    <span class="close" onclick="closeImageModal()">&times;</span>
+                                    <img class="modal-content" id="img01">
                                 </div>
 
                                 <input type="hidden" name="note" id="note" value="">
@@ -109,7 +114,6 @@
             </div>
         </div>
     </section>
-
 
     <script>
         function resetForm() {
@@ -166,29 +170,50 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Menangkap elemen input file
             var gambarInput = document.getElementById('gambar');
-
-            // Menangkap elemen gambar preview
             var gambarPreview = document.getElementById('gambarPreview');
+            var modal = document.getElementById("imageModal");
+            var modalImg = document.getElementById("img01");
 
-            // Mengatur listener untuk input file
             gambarInput.addEventListener('change', function() {
                 previewImage(this, gambarPreview);
             });
 
-            // Fungsi untuk menampilkan preview gambar
             function previewImage(input, previewElement) {
                 var file = input.files[0];
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
                     previewElement.src = e.target.result;
-                    previewElement.style.display = 'block'; // Menampilkan preview setelah gambar diunggah
+                    previewElement.style.display = 'block';
                 };
 
                 reader.readAsDataURL(file);
             }
+
+            function toggleImageModal() {
+                if (modal.style.display === "block") {
+                    closeImageModal();
+                } else {
+                    modal.style.display = "block";
+                    modalImg.src = gambarPreview.src;
+                }
+            }
+
+            function closeImageModal() {
+                modal.style.display = "none";
+            }
+
+            // Menambahkan event listener untuk menutup modal saat tombol "X" diklik
+            var closeButton = document.querySelector(".close");
+            closeButton.addEventListener('click', function() {
+                closeImageModal();
+            });
+
+            // Menambahkan event listener untuk menutup modal saat gambar pratinjau diklik kembali
+            gambarPreview.addEventListener('click', function() {
+                toggleImageModal();
+            });
         });
     </script>
     <script>
@@ -250,6 +275,48 @@
             }
         });
     </script>
+    <style>
+        /* CSS untuk modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            /* Ubah ukuran lebar */
+            height: 400px;
+            /* Ubah ukuran tinggi */
+            overflow: auto;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        /* CSS untuk tombol close */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* CSS untuk gambar di dalam modal */
+        .modal-content {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 
 </main>
 @endsection

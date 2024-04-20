@@ -37,7 +37,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('full-calenderDept', [EventController::class, 'blokDeptMaintenance'])->name('blokDeptMaintenance');
 
     Route::post('full-calender-AJAX', [EventController::class, 'ajax']);
-    Route::get('generate-pdf/{mesin}', [PDFController::class, 'generatePDF'])->name('pdf.mesin');
+    Route::get('generate-pdf/{mesin}', 'App\Http\Controllers\PDFController@generatePDF')->name('pdf.mesin');
     Route::get('dashboardMaintenance', [EventController::class, 'dashboardMaintenance'])->name('dashboardMaintenance');
 
     Route::resource('mesins', MesinController::class);

@@ -97,18 +97,34 @@
                                     <input type="date" class="form-control" id="tanggal_preventif" name="tanggal_preventif">
                                 </div>
 
-                                <img id="fotoPreview" src="" alt="" style="max-width: 300px; max-height: 200px; display: none;">
+                                <img id="fotoPreview" src="" alt="" style="max-width: 300px; max-height: 200px; display: none; cursor: pointer;">
 
                                 <div class="mb-3">
                                     <label for="foto" class="form-label">Upload Foto (Jika ada)</label>
                                     <input type="file" class="form-control" id="foto" name="foto">
                                 </div>
 
-                                <img id="sparepartPreview" src="" alt="Preview Sparepart" style="max-width: 300px; max-height: 200px; display: none;">
+                                <img id="sparepartPreview" src="" alt="Preview Sparepart" style="max-width: 300px; max-height: 200px; display: none; cursor: pointer;">
 
                                 <div class="mb-3">
                                     <label for="sparepart" class="form-label">Upload Data Sparepart (Jika ada)</label>
                                     <input type="file" class="form-control" id="sparepart" name="sparepart">
+                                </div>
+
+                                <!-- Modal untuk foto -->
+                                <div id="fotoModal" class="modal">
+                                    <span class="close" onclick="closeFotoModal()">&times;</span>
+                                    <div class="modal-content">
+                                        <img id="fotoModalImage" src="" alt="">
+                                    </div>
+                                </div>
+
+                                <!-- Modal untuk sparepart -->
+                                <div id="sparepartModal" class="modal">
+                                    <span class="close" onclick="closeSparepartModal()">&times;</span>
+                                    <div class="modal-content">
+                                        <img id="sparepartModalImage" src="" alt="">
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
@@ -154,18 +170,14 @@
         }, 1000 * 60 * 60 * 24); // Perbarui setiap hari
     </script>
 
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Menangkap elemen input file
             var fotoInput = document.getElementById('foto');
             var sparepartInput = document.getElementById('sparepart');
 
-            // Menangkap elemen gambar preview
             var fotoPreview = document.getElementById('fotoPreview');
             var sparepartPreview = document.getElementById('sparepartPreview');
 
-            // Mengatur listener untuk input file
             fotoInput.addEventListener('change', function() {
                 previewImage(this, fotoPreview);
             });
@@ -174,20 +186,116 @@
                 previewImage(this, sparepartPreview);
             });
 
-            // Fungsi untuk menampilkan preview gambar
             function previewImage(input, previewElement) {
                 var file = input.files[0];
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
                     previewElement.src = e.target.result;
-                    previewElement.style.display = 'block'; // Menampilkan preview setelah gambar diunggah
+                    previewElement.style.display = 'block';
                 };
 
                 reader.readAsDataURL(file);
             }
+
+            function toggleFotoModal() {
+                var modal = document.getElementById("fotoModal");
+                var modalImg = document.getElementById("fotoModalImage");
+                if (modal.style.display === "block") {
+                    modal.style.display = "none";
+                } else {
+                    modal.style.display = "block";
+                    modalImg.src = fotoPreview.src;
+                }
+            }
+
+            function closeFotoModal() {
+                var modal = document.getElementById("fotoModal");
+                modal.style.display = "none";
+            }
+
+            function toggleSparepartModal() {
+                var modal = document.getElementById("sparepartModal");
+                var modalImg = document.getElementById("sparepartModalImage");
+                if (modal.style.display === "block") {
+                    modal.style.display = "none";
+                } else {
+                    modal.style.display = "block";
+                    modalImg.src = sparepartPreview.src;
+                }
+            }
+
+            function closeSparepartModal() {
+                var modal = document.getElementById("sparepartModal");
+                modal.style.display = "none";
+            }
+
+            var fotoModal = document.getElementById("fotoModal");
+            var sparepartModal = document.getElementById("sparepartModal");
+
+            // Menambahkan event listener untuk menutup modal saat tombol "X" diklik
+            fotoModal.querySelector(".close").addEventListener('click', function() {
+                closeFotoModal();
+            });
+
+            sparepartModal.querySelector(".close").addEventListener('click', function() {
+                closeSparepartModal();
+            });
+
+            // Menambahkan event listener untuk menutup modal saat gambar pratinjau diklik kembali
+            fotoPreview.addEventListener('click', function() {
+                toggleFotoModal();
+            });
+
+            sparepartPreview.addEventListener('click', function() {
+                toggleSparepartModal();
+            });
         });
     </script>
+
+
+    <style>
+        /* CSS untuk modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            /* Ubah ukuran lebar */
+            height: 400px;
+            /* Ubah ukuran tinggi */
+            overflow: auto;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        /* CSS untuk tombol close */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* CSS untuk gambar di dalam modal */
+        .modal-content {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 
 </main><!-- End #main -->
 @endsection
