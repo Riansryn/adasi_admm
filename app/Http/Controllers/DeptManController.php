@@ -24,18 +24,18 @@ class DeptManController extends Controller
     // viewSubmission
     public function submission()
     {
-        $data = Handling::with('customers', 'type_materials')
+        $view1 = Handling::with('customers', 'type_materials')
             ->where('status', '=', 0) // Filter berdasarkan status '0'
             ->orderByDesc('created_at') // Urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
             ->paginate();
 
-        $data2 = Handling::with('customers', 'type_materials')
+        $view2 = Handling::with('customers', 'type_materials')
         ->whereIn('status', [1, 2, 3]) // Filter berdasarkan status 1, 2, dan 3
         ->orderByRaw('FIELD(status, 1, 2, 3)') // Urutkan berdasarkan urutan status yang diinginkan
         ->orderByDesc('created_at') // Jika perlu, urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
         ->paginate();
 
-        return view('deptman.submission', compact('data', 'data2'));
+        return view('deptman.submission', compact('view1', 'view2'));
     }
 
     public function scheduleVisit()

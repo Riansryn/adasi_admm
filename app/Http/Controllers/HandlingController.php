@@ -23,10 +23,11 @@ class HandlingController extends Controller
     public function index()
     {
         $data = Handling::with('customers', 'type_materials')
-            ->whereIn('status', [1, 2, 0, 3]) // Filter berdasarkan status 1, 2, 0, dan 3
-            ->orderByRaw('FIELD(status, 1, 2, 3, 0)') // Urutkan berdasarkan urutan status yang diinginkan
-            ->orderByDesc('created_at') // Jika perlu, urutkan secara descending berdasarkan kolom 'created_at' atau sesuaikan dengan kolom yang sesuai
-            ->paginate();
+    ->whereIn('status', [1, 2, 0, 3])
+    ->orderByRaw('FIELD(status, 3, 2, 0, 1)')
+    ->orderByDesc('created_at')
+    ->paginate();
+        $data = $data->reverse();
 
         return view('sales.handling', compact('data'));
     }
@@ -151,59 +152,54 @@ class HandlingController extends Controller
 
     public function FilterPieChartProses(Request $request)
     {
-        // Mendapatkan nilai yang dipilih dari dropdown
         $type_name = $request->input('type_name');
-        $kategori = $request->input('kategori');
+        $kategori2 = $request->input('kategori2');
         $jenis2 = $request->input('jenis2');
         $type2 = $request->input('type2');
-        $start_month3 = $request->input('start_month3'); // Tambahkan parameter bulan mulai
-        $end_month3 = $request->input('end_month3'); // Tambahkan parameter bulan akhir
+        $start_month3 = $request->input('start_month3');
+        $end_month3 = $request->input('end_month3');
+
+        $dataQuery = DB::table('handlings')
+            ->select(
+                'handlings.process_type AS type_name',
+                DB::raw('SUM(handlings.qty) AS total_qty'),
+                DB::raw('SUM(handlings.pcs) AS total_pcs'),
+                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
+                DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim')
+            );
 
         if (empty($start_month3) && empty($end_month3)) {
-            // Mengambil data berdasarkan filter yang dipilih
-            $data = DB::table('handlings')
-            ->select(
-                'handlings.process_type AS type_name',
-                DB::raw('SUM(handlings.qty) AS total_qty'),
-                DB::raw('SUM(handlings.pcs) AS total_pcs'),
-                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
-                DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
-                DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
-                         SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
-            )
-            ->where(function ($query) use ($type2) {
+            $dataQuery->where(function ($query) use ($type2) {
                 if ($type2 == 'total_komplain') {
                     $query->where('handlings.type_1', 'Komplain');
                 } elseif ($type2 == 'total_klaim') {
                     $query->where('handlings.type_2', 'Klaim');
                 }
-            })
-            ->groupBy('handlings.process_type')
-            ->get();
+            });
         } else {
-            $data = DB::table('handlings')
-            ->select(
-                'handlings.process_type AS type_name',
-                DB::raw('SUM(handlings.qty) AS total_qty'),
-                DB::raw('SUM(handlings.pcs) AS total_pcs'),
-                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
-                DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
-                DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
-                         SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
-            )
-            ->where(function ($query) use ($type2) {
+            $dataQuery->where(function ($query) use ($type2) {
                 if ($type2 == 'total_komplain') {
                     $query->where('handlings.type_1', 'Komplain');
                 } elseif ($type2 == 'total_klaim') {
                     $query->where('handlings.type_2', 'Klaim');
                 }
             })
-            ->whereBetween('handlings.created_at', [$start_month3, $end_month3]) // Filter berdasarkan rentang tanggal
-            ->groupBy('handlings.process_type')
-            ->get();
+            ->whereBetween('handlings.created_at', [$start_month3, $end_month3]);
         }
 
-        // dd($data);
+        if ($kategori2 === 'All Kategori') {
+            $data = $dataQuery
+                ->selectRaw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
+                     SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS kategori2')
+                ->groupBy() // Menghilangkan groupBy karena kita ingin total untuk semua jenis
+                ->get();
+        } else {
+            $data = $dataQuery
+                ->selectRaw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
+                     SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori2')
+                ->groupBy('handlings.process_type')
+                ->get();
+        }
 
         // Mengembalikan data dalam format JSON
         return response()->json($data);
@@ -313,6 +309,18 @@ class HandlingController extends Controller
         // Get handling by ID
         $handlings = Handling::findOrFail($id);
 
+        // Delete old images (if any)
+        if ($handlings->image) {
+            $oldImagePaths = json_decode($handlings->image, true);
+
+            foreach ($oldImagePaths as $oldImagePath) {
+                $fullPath = public_path('assets/image/'.$oldImagePath);
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
+        }
+
         // Initialize an array to hold new image paths
         $newImagePaths = [];
 
@@ -328,20 +336,8 @@ class HandlingController extends Controller
             }
         }
 
-        // Delete old images (if any)
-        if ($handlings->image) {
-            $oldImagePaths = json_decode($handlings->image, true);
-
-            foreach ($oldImagePaths as $oldImagePath) {
-                $fullPath = public_path('assets/image/'.$oldImagePath);
-                if (file_exists($fullPath)) {
-                    unlink($fullPath);
-                }
-            }
-        }
-
         // Combine old and new image paths
-        $allImagePaths = array_merge($oldImagePaths ?? [], $newImagePaths);
+        $allImagePaths = $newImagePaths;
 
         // Update post with new image paths
         $handlings->update([

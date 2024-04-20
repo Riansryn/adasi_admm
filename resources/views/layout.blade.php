@@ -80,81 +80,6 @@
                     </a>
                 </li><!-- End Search Icon-->
 
-                {{-- <li class="nav-item dropdown">
-
-                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-bell"></i>
-                        <span class="badge bg-primary badge-number">4</span>
-                    </a><!-- End Notification Icon -->
-
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                        <li class="dropdown-header">
-                            You have 4 new notifications
-                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li class="notification-item">
-                            <i class="bi bi-exclamation-circle text-warning"></i>
-                            <div>
-                                <h4>Lorem Ipsum</h4>
-                                <p>Quae dolorem earum veritatis oditseno</p>
-                                <p>30 min. ago</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li class="notification-item">
-                            <i class="bi bi-x-circle text-danger"></i>
-                            <div>
-                                <h4>Atque rerum nesciunt</h4>
-                                <p>Quae dolorem earum veritatis oditseno</p>
-                                <p>1 hr. ago</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li class="notification-item">
-                            <i class="bi bi-check-circle text-success"></i>
-                            <div>
-                                <h4>Sit rerum fuga</h4>
-                                <p>Quae dolorem earum veritatis oditseno</p>
-                                <p>2 hrs. ago</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li class="notification-item">
-                            <i class="bi bi-info-circle text-primary"></i>
-                            <div>
-                                <h4>Dicta reprehenderit</h4>
-                                <p>Quae dolorem earum veritatis oditseno</p>
-                                <p>4 hrs. ago</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li class="dropdown-footer">
-                            <a href="#">Show all notifications</a>
-                        </li>
-
-                    </ul><!-- End Notification Dropdown Items -->
-
-                </li><!-- End Notification Nav --> --}}
-
                 <li class="nav-item dropdown pe-3">
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                         data-bs-toggle="dropdown">
@@ -176,7 +101,6 @@
                 @csrf
                 <!-- CSRF token untuk keamanan -->
             </form>
-
             <b>
                 <li class="nav-label">DMS Menu</h5>
             </b>
@@ -219,7 +143,7 @@
                 </ul>
             </li>
             @if (Auth::check())
-                @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 ||Auth::user()->role_id == 9 || Auth::user()->role_id == 1)
                     <li class="nav-label">Production</li>
                     <li class="nav-item">
                         <a class="nav-link collapsed" data-bs-toggle="collapse" href="#prod-forms-nav">
@@ -270,24 +194,11 @@
                                     <span>Tabel Preventif</span>
                                 </a>
                             </li>
-                            {{-- <li class="nav-item">
-                <a class="nav-link collapsed" href="">
-                    <i class="bi bi-calendar"></i>
-                    <span>Data Jadwal Preventive</span>
-                </a>
-            </li>  --}}
-                            <!-- <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ route('blokMaintanence') }}">
-                            <i class="bi bi-check2"></i>
-                            <span>Blok Jadwal Preventive</span>
-                        </a>
-                    </li> -->
                         </ul>
                     </li><!-- End Maint Received Nav -->
                 @endif
                 <!-- End Prod Forms Nav -->
                 <ul class="sidebar-nav">
-
                     @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                         {{-- Role ID untuk Maintenance --}}
                         {{-- Tampilkan sidebar untuk Maintenance --}}
@@ -324,19 +235,6 @@
                                         <span>Tabel Preventif</span>
                                     </a>
                                 </li>
-
-                                <!-- <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ asset('deptmtcepreventive') }}">
-                    <i class="bi bi-check2"></i>
-                    <span>Data Jadwal Preventive</span>
-                </a>
-            </li> -->
-                                <!-- <li class="nav-item">
-                            <a class="nav-link collapsed" href="{{ route('blokDeptMaintenance') }}">
-                                <i class="bi bi-check2"></i>
-                                <span>Blok Jadwal Preventive</span>
-                            </a>
-                        </li> -->
                             </ul>
                         </li><!-- End Dept Maint Nav -->
                         <li class="nav-item">
@@ -364,10 +262,7 @@
                             </ul>
                         </li><!-- End Dept Complain & Claim Nav -->
                     @endif
-                    @if (Auth::user()->role_id == 2 ||
-                            Auth::user()->role_id == 1 ||
-                            Auth::user()->role_id == 3 ||
-                            Auth::user()->role_id == 4)
+                    @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4)
                         {{-- Role ID untuk Sales --}}
                         <li class="nav-label">Sales</li>
                         <li class="nav-item">

@@ -31,8 +31,8 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <input type="text" class="form-control" id="no_wo" name="no_wo"
-                                                maxlength="6" style="width: 100%;"
-                                                value="{{ $handlings->no_wo }}" required>
+                                                maxlength="6" style="width: 100%;" value="{{ $handlings->no_wo }}"
+                                                required>
                                         </div>
                                     </div>
                                     <br>
@@ -260,14 +260,22 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="row mt-3">
-                                                <div id="imagePreviewContainer" class="row">
-                                                    <div class="col-lg-12 mb-2 d-flex justify-content-start">
-                                                        @foreach(json_decode($handlings->image) as $image)
-                                                            <img src="{{ asset('assets/image/' . $image) }}" class="img-fluid rounded mx-1" alt="image" style="max-width: 200px; object-fit: cover;">
+                                                <div class="col-lg-12">
+                                                    <div id="existingImages" class="row">
+                                                        @php $count = 0; @endphp
+                                                        @foreach (json_decode($handlings->image) as $image)
+                                                            @if ($count < 4)
+                                                                <div class="col-lg-6 mb-2 d-flex justify-content-start">
+                                                                    <img src="{{ asset('assets/image/' . $image) }}"
+                                                                        class="img-fluid rounded mx-1" alt="image"
+                                                                        style="max-width: 100%; object-fit: cover;">
+                                                                </div>
+                                                                @php $count++; @endphp
+                                                            @endif
                                                         @endforeach
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -305,26 +313,31 @@
                 reader.readAsDataURL(event.target.files[0]);
             });
 
-            //cancel upload
             function viewImages(event) {
-                const files = event.target.files;
-                const previewContainer = document.getElementById('imagePreviewContainer');
-                previewContainer.innerHTML = '';
+                var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                var existingImagesContainer = document.getElementById('existingImages');
 
-                for (const file of files) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const imgElement = document.createElement('img');
-                        imgElement.src = e.target.result;
-                        imgElement.style.maxWidth = '30%'; // Lebar maksimum gambar
-                        imgElement.style.height = 'auto'; // Tinggi gambar disesuaikan
-                        imgElement.style.marginRight = '10px'; // Spasi antar gambar
-                        imgElement.style.marginBottom = '10px'; // Spasi antar baris
-                        imgElement.className = 'img-fluid rounded';
-                        previewContainer.appendChild(imgElement);
-                    };
-                    reader.readAsDataURL(file);
+                imagePreviewContainer.innerHTML = ''; // Kosongkan kontainer untuk gambar baru
+
+                // Menampilkan gambar-gambar baru
+                for (var i = 0; i < event.target.files.length; i++) {
+                    var file = event.target.files[i];
+
+                    if (file.type.match('image.*')) {
+                        var img = document.createElement('img');
+                        img.classList.add('img-fluid', 'rounded', 'mx-1');
+                        img.style.maxWidth = '200px';
+                        img.style.objectFit = 'cover';
+
+                        var imageURL = URL.createObjectURL(file);
+                        img.src = imageURL;
+
+                        imagePreviewContainer.appendChild(img);
+                    }
                 }
+
+                // Menghapus gambar-gambar yang sudah ada dari tampilan
+                existingImagesContainer.style.display = 'none';
             }
         </script>
 

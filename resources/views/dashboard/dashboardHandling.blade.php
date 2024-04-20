@@ -7,9 +7,7 @@
         <div class="pagetitle">
             <h1>Dashboard Maintenance Handling</h1>
             <nav>
-                <!-- <ol class="breadcrumb">
-                                                                                                                                                                                                                                                                                                                        <li class="breadcrumb-item active">Dashboard</li>
-                                                                                                                                                                                                                                                                                                                    </ol> -->
+                </ol> -->
             </nav>
         </div><!-- End Page Title -->
         <section class="section dashboard">
@@ -168,8 +166,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="col-sm-4">
                     <div class="card" style="height: 560px;">
                         <div class="card-body">
@@ -195,8 +191,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="col-sm-12">
                     <div id="highcharts-container" class="card">
                         <div class="card-body">
@@ -338,8 +332,7 @@
                                     <div>
                                         <label for="yearDropdown">Pilih Tahun:</label>
                                         <select id='date-dropdown' style="width: 10%"></select>
-                                        <canvas id="myChart"
-                                        style="height:auto; width:100%"></canvas>
+                                        <canvas id="myChart" style="height:24.5vh; width:100%"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -429,7 +422,8 @@
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="jenis">Jenis:</label>
                                             <select id="jenis2" class="form-select form-select-sm"
-                                                aria-label=".form-select-sm example" onchange="updatePieChart(); FilterKategori();">
+                                                aria-label=".form-select-sm example"
+                                                onchange="updatePieChart(); FilterKategori();">
                                                 <option selected>--- Pilih Jenis ---</option>
                                                 <option value="frekuensi">Frekuensi Jenis</option>
                                                 <option value="qty">QTY</option>
@@ -441,7 +435,7 @@
                                             <select id="type2" class="form-select form-select-sm"
                                                 aria-label=".form-select-sm example" onchange="updatePieChart(); ">
                                                 <option selected>--- Pilih Kategori ---</option>
-                                                <option value="kategori">All Kategori</option>
+                                                <option value="kategori2">All Kategori</option>
                                                 <option value="type_1">Komplain</option>
                                                 <option value="type_2">Klaim</option>
                                             </select>
@@ -473,138 +467,73 @@
                 currentYear -= 1;
             }
 
-            document.addEventListener('DOMContentLoaded', function () {
-            // Mendapatkan elemen input tanggal
-            var startDateInput = document.getElementById('start_periode');
-            var endDateInput = document.getElementById('end_periode');
+            document.addEventListener('DOMContentLoaded', function() {
+                // Mendapatkan elemen input tanggal
+                var startDateInput = document.getElementById('start_periode');
+                var endDateInput = document.getElementById('end_periode');
 
-            // Menambahkan event listener untuk memperbarui chart saat nilai input tanggal berubah
-            startDateInput.addEventListener('change', updateChart);
-            endDateInput.addEventListener('change', updateChart);
+                // Menambahkan event listener untuk memperbarui chart saat nilai input tanggal berubah
+                startDateInput.addEventListener('change', updateChart);
+                endDateInput.addEventListener('change', updateChart);
 
-            function updateChart() {
-                var startDate = startDateInput.value;
-                var endDate = endDateInput.value;
+                function updateChart() {
+                    var startDate = startDateInput.value;
+                    var endDate = endDateInput.value;
 
-                // Mengirim permintaan AJAX untuk mendapatkan data dari controller
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', '/getChartData?start_date=' + startDate + '&end_date=' + endDate, true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            var responseData = JSON.parse(xhr.responseText);
-                            renderChart(responseData);
-                        } else {
-                            console.error('Error saat memuat data:', xhr.statusText);
+                    // Mengirim permintaan AJAX untuk mendapatkan data dari controller
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/getChartData?start_date=' + startDate + '&end_date=' + endDate, true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                var responseData = JSON.parse(xhr.responseText);
+                                renderChart(responseData);
+                            } else {
+                                console.error('Error saat memuat data:', xhr.statusText);
+                            }
                         }
-                    }
-                };
-                xhr.send();
-            }
+                    };
+                    xhr.send();
+                }
 
-            function renderChart(data) {
-                // Mengatur data yang diperlukan untuk chart
-                Highcharts.chart('chartAllPeriode', {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: 'Status Handling'
-                    },
-                    xAxis: {
-                        categories: ['Open', 'Close']
-                    },
-                    yAxis: {
+                function renderChart(data) {
+                    // Mengatur data yang diperlukan untuk chart
+                    Highcharts.chart('chartAllPeriode', {
+                        chart: {
+                            type: 'column'
+                        },
                         title: {
-                            text: 'Jumlah'
-                        }
-                    },
-                    plotOptions: {
-                        series: {
-                            borderRadius: 5,
-                            colorByPoint: true
-                        }
-                    },
-                    series: [{
-                        name: 'Data',
-                        data: [{
-                            name: 'Open',
-                            y: data.Open,
-                            color: '#0000FF'
-                        }, {
-                            name: 'Close',
-                            y: data.Close,
-                            color: '#FF0000'
+                            text: 'Status Handling'
+                        },
+                        xAxis: {
+                            categories: ['Open', 'Close']
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Jumlah'
+                            }
+                        },
+                        plotOptions: {
+                            series: {
+                                borderRadius: 5,
+                                colorByPoint: true
+                            }
+                        },
+                        series: [{
+                            name: 'Data',
+                            data: [{
+                                name: 'Open',
+                                y: data.Open,
+                                color: '#0000FF'
+                            }, {
+                                name: 'Close',
+                                y: data.Close,
+                                color: '#FF0000'
+                            }]
                         }]
-                    }]
-                });
-            }
-        });
-
-            // // Fungsi untuk membuat chart
-            // function drawChart(data) {
-            //     var labels = ['Open', 'Close'];
-            //     var values = Object.values(data);
-
-            //     var ctx = document.getElementById('chartAllPeriode').getContext('2d');
-            //     Periode = new Chart(ctx, {
-            //         type: 'bar',
-
-            //         data: {
-            //             labels: labels,
-            //             datasets: [{
-            //                 data: values,
-            //                 backgroundColor: [
-            //                     'rgba(54, 162, 235, 0.5)', // Biru dengan transparansi 0.5
-            //                     'rgba(255, 99, 132, 0.5)', // Merah dengan transparansi 0.5
-            //                 ],
-            //                 borderColor: [
-            //                     'rgba(54, 162, 235, 1)', // Biru solid
-            //                     'rgba(255, 99, 132, 1)', // Merah solid
-            //                 ],
-            //                 borderWidth: 2,
-            //                 barThickness: 23 // Ukuran batang
-            //             }]
-            //         },
-            //         options: {
-            //             animation: {
-            //                 duration: 2000, // Animasi durasi 2 detik
-            //                 easing: 'easeInOutQuart' // Efek animasi
-            //             },
-            //             scales: {
-            //                 yAxes: [{
-            //                     ticks: {
-            //                         beginAtZero: true,
-            //                         fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu Y
-            //                         fontSize: 14 // Ukuran font label sumbu Y
-            //                     },
-            //                     gridLines: {
-            //                         color: 'rgba(0, 0, 0, 0.1)' // Warna garis grid
-            //                     }
-            //                 }],
-            //                 xAxes: [{
-            //                     ticks: {
-            //                         fontColor: 'rgba(0, 0, 0, 0.7)', // Warna label sumbu X
-            //                         fontSize: 14 // Ukuran font label sumbu X
-            //                     },
-            //                     gridLines: {
-            //                         display: false // Sembunyikan garis grid sumbu X
-            //                     }
-            //                 }]
-            //             },
-            //             legend: {
-            //                 display: true,
-            //                 labels: {
-            //                     fontColor: 'rgba(0, 0, 0, 0.7)', // Warna teks legenda
-            //                     fontSize: 14, // Ukuran font teks legenda
-            //                     usePointStyle: true // Menggunakan simbol titik pada legenda
-            //                 },
-            //                 onClick: null, // Menonaktifkan interaktivitas pada legenda
-            //                 position: 'bottom', // Letak legenda
-            //             }
-            //         }
-            //     });
-            // }
+                    });
+                }
+            });
 
             //Chart Handling /year
             // Fungsi untuk mengonversi angka bulan menjadi nama bulan dalam bahasa Inggris
@@ -1216,40 +1145,36 @@
                 });
 
 
-
                 document.getElementById('type').addEventListener('change', FilterPieChartTipe);
 
                 function FilterPieChartTipe() {
-                    var jenis = document.getElementById('jenis').value;
-                    var typeSelected = document.getElementById('type').value;
-                    var kategori = document.getElementById('type').options[document.getElementById('type')
-                        .selectedIndex].text; // Mendapatkan nilai kategori dari dropdown
+                    var jenis2 = document.getElementById('jenis2').value;
+                    var typeSelected2 = document.getElementById('type2').value;
+                    var kategori2 = document.getElementById('type').options[document.getElementById('type')
+                        .selectedIndex].text;
 
-                    console.log('Memilih kategori:', kategori);
                     var filterType;
-                    filterType = (typeSelected === 'type_1') ? 'total_komplain' : 'total_klaim';
-                    var startMonth = document.getElementById('start_month').value;
-                    var endMonth = document.getElementById('end_month').value;
+                    filterType = (typeSelected2 === 'type_1') ? 'total_komplain' : 'total_klaim';
+                    var startMonth3 = document.getElementById('start_month3').value;
+                    var endMonth3 = document.getElementById('end_month3').value;
+
+                    console.log("updatePieChart() dipanggil");
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/api/filter-pie-chart-tipe?jenis=' + jenis + '&type=' + typeSelected +
-                        '&kategori=' + encodeURIComponent(kategori) + '&start_month=' + startMonth + '&end_month=' +
-                        endMonth, true); // Mengirim kategori ke endpoint API
+                    xhr.open('GET', '/api/FilterPieChartProses?jenis2=' + jenis2 + '&type2=' + typeSelected2 +
+                        '&kategori2=' + encodeURIComponent(kategori2) + '&start_month3=' + startMonth3 +
+                        '&end_month3=' +
+                        endMonth3, true);
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             var data = JSON.parse(xhr.responseText);
-                            if (jenis === 'frekuensi' && kategori === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori';
-                            } else if (jenis === 'qty' && kategori === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori';
-                            } else if (jenis === 'pcs' && kategori === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori';
+                            if ((jenis2 === 'frekuensi' || jenis2 === 'qty' || jenis2 === 'pcs') && kategori2 ===
+                                'All Kategori') {
+                                // Jika jenis adalah 'frekuensi', 'qty', atau 'pcs', dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType = 'kategori2';
                             }
-                            renderChart(data, filterType, jenis,
-                                kategori); // Menyertakan kategori ke fungsi renderChart
+                            renderPieChart(data, filterType, jenis2,
+                            kategori2); // Menyertakan kategori ke fungsi renderChart
                         }
                     };
                     xhr.send();
@@ -1285,7 +1210,7 @@
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
 
                                 if (jenis === 'qty') {
-                                    tooltip += this.point.qty + ' qty';
+                                    tooltip += this.point.qty + 'kg';
                                 } else if (jenis === 'pcs') {
                                     tooltip += this.point.pcs + ' pcs';
                                 } else if (jenis === 'frekuensi') {
@@ -1306,7 +1231,6 @@
                                 return tooltip;
                             }
                         },
-
                         plotOptions: {
                             pie: {
                                 allowPointSelect: true,
@@ -1324,123 +1248,135 @@
                     });
                 }
             });
-
         </script>
 
-<script>
- document.addEventListener('DOMContentLoaded', function() {
-        // Fungsi untuk merender grafik pie
-        function renderPieChart(data) {
-            var chartData = [];
-            var jenis = document.getElementById('jenis2').value;
-            var kategori = document.getElementById('type').options[document.getElementById('type2').selectedIndex].text;
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
 
-            // Konversi data ke format yang dibutuhkan oleh Highcharts
-            for (var i = 0; i < data.length; i++) {
-                chartData.push({
-                    name: data[i].type_name, // process_name dari controller Anda
-                    y: parseInt(data[i].kategori),
-                    qty: data[i].total_qty,
-                    pcs: data[i].total_pcs,
-                    total_klaim: data[i].total_klaim,
-                    total_komplain: data[i].total_komplain
-                });
-            }
+                function updatePieChart() {
+                    var jenis2 = document.getElementById('jenis2').value;
+                    var typeSelected2 = document.getElementById('type2').value;
+                    var kategori2 = document.getElementById('type').options[document.getElementById('type')
+                        .selectedIndex].text;
 
-            // Konfigurasi tooltip
-            var tooltip = {
-                formatter: function() {
-                    var tooltipText = '<b>' + this.point.name + '</b>: ';
+                    var filterType;
+                    filterType = (typeSelected2 === 'type_1') ? 'total_komplain' : 'total_klaim';
+                    var startMonth3 = document.getElementById('start_month3').value;
+                    var endMonth3 = document.getElementById('end_month3').value;
 
-                    if (jenis === 'qty') {
-                        tooltipText += this.point.qty + ' qty';
-                    } else if (jenis === 'pcs') {
-                        tooltipText += this.point.pcs + ' pcs';
-                    } else if (jenis === 'frekuensi') {
-                        // Jika jenis adalah 'frekuensi'
-                        if (kategori === 'All Kategori') {
-                            // Jika kategori adalah 'All Kategori', tampilkan jumlah keseluruhan klaim dan komplain
-                            tooltipText += 'Total Klaim: ' + this.point.total_klaim +
-                                ', Total Komplain: ' + this.point.total_komplain;
-                        } else if (kategori === 'Komplain') {
-                            // Jika kategori adalah 'Komplain', tampilkan jumlah klaim
-                            tooltipText += 'Jumlah Komplain: ' + this.point.total_komplain;
-                        } else if (kategori === 'Klaim') {
-                            // Jika kategori adalah 'Klaim', tampilkan jumlah komplain
-                            tooltipText += 'Jumlah Klaim: ' + this.point.total_klaim;
+                    console.log("updatePieChart() dipanggil");
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/api/FilterPieChartProses?jenis2=' + jenis2 + '&type2=' + typeSelected2 +
+                        '&kategori2=' + encodeURIComponent(kategori2) + '&start_month3=' + startMonth3 +
+                        '&end_month3=' +
+                        endMonth3, true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            var data = JSON.parse(xhr.responseText);
+                            if (jenis2 === 'frekuensi' && kategori2 === 'All Kategori') {
+                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType = 'kategori2';
+                            } else if (jenis2 === 'qty' && kategori2 === 'All Kategori') {
+                                // Jika jenis adalah 'Qty' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType = 'kategori2';
+                            } else if (jenis2 === 'pcs' && kategori2 === 'All Kategori') {
+                                // Jika jenis adalah 'Pcs' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType = 'kategori2';
+                            }
+                            renderPieChart(data, filterType, jenis2,
+                                kategori2); // Menyertakan kategori ke fungsi renderChart
                         }
-                    }
-                    tooltipText += ' (' + this.point.percentage.toFixed(1) + '%)';
-                    return tooltipText;
+                    };
+                    xhr.send();
                 }
-            };
+                // Fungsi untuk merender grafik pie
+                function renderPieChart(data, filterType, jenis2, kategori2) {
+                    var chartData = [];
+                    var totalKomplain = 0;
+                    var totalKlaim = 0;
 
-            // Konfigurasi grafik pie menggunakan Highcharts
-            Highcharts.chart('ChartPieProses', {
-                chart: {
-                    type: 'pie'
-                },
-                title: {
-                    text: 'Total Proses'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                        }
+                    // Menghitung total komplain dan klaim untuk semua jenis
+                    for (var i = 0; i < data.length; i++) {
+                        // Menambahkan nilai total komplain dan klaim dari setiap jenis
+                        totalKomplain += parseInt(data[i].total_komplain);
+                        totalKlaim += parseInt(data[i].total_klaim);
+
+                        // Menambahkan data untuk setiap jenis untuk ditampilkan di grafik
+                        chartData.push({
+                            name: data[i].type_name,
+                            y: parseInt(data[i][filterType]),
+                            qty: data[i].total_qty,
+                            pcs: data[i].total_pcs,
+                            total_klaim: data[i].total_klaim,
+                            total_komplain: data[i].total_komplain
+                        });
                     }
-                },
-                tooltip: tooltip, // Menggunakan tooltip yang telah dikonfigurasi
-                series: [{
-                    name: 'Process',
-                    colorByPoint: true,
-                    data: chartData
-                }]
+
+                    // Jika kategori adalah 'All Kategori', tambahkan satu entri untuk menampilkan total komplain dan klaim
+                    if (kategori2 === 'All Kategori') {
+                        chartData.push({
+                            name: 'All Kategori',
+                            y: totalKomplain + totalKlaim,
+                            total_klaim: totalKlaim,
+                            total_komplain: totalKomplain
+                        });
+                    }
+
+                    // Konfigurasi grafik pie menggunakan Highcharts
+                    Highcharts.chart('ChartPieProses', {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Total Proses'
+                        },
+                        tooltip: {
+                            formatter: function() {
+                                var tooltip = '<b>' + this.point.name + '</b>: ';
+                                if (jenis2 === 'qty') {
+                                    tooltip += this.point.qty + 'kg';
+                                } else if (jenis2 === 'pcs') {
+                                    tooltip += this.point.pcs + ' pcs';
+                                } else if (jenis2 === 'frekuensi') {
+                                    // Jika jenis adalah 'frekuensi'
+                                    if (this.point.name === 'All Kategori') {
+                                        // Jika data adalah untuk 'All Kategori', tampilkan jumlah total klaim dan komplain
+                                        tooltip += 'Total Klaim: ' + this.point.total_klaim +
+                                            ', Total Komplain: ' + this.point.total_komplain;
+                                    } else {
+                                        // Jika data adalah untuk jenis tertentu, tampilkan jumlah klaim dan komplain
+                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim +
+                                            ', Jumlah Komplain: ' + this.point.total_komplain;
+                                    }
+                                }
+                                tooltip += ' (' + this.point.percentage.toFixed(1) + '%)';
+                                return tooltip;
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                showInLegend: true
+                            }
+                        },
+                        series: [{
+                            name: 'Total Data',
+                            colorByPoint: true,
+                            data: chartData
+                        }]
+                    });
+                }
+                // Menambahkan pendengar acara pada elemen yang melakukan seleksi
+                document.getElementById('type2').addEventListener('change', updatePieChart);
+                document.getElementById('start_month3').addEventListener('change', updatePieChart);
+                document.getElementById('end_month3').addEventListener('change', updatePieChart);
             });
-        }
 
-        // updatePieChart();
-
-        // Menambahkan pendengar acara pada elemen yang melakukan seleksi
-        document.getElementById('type2').addEventListener('change', updatePieChart);
-        document.getElementById('start_month3').addEventListener('change', updatePieChart);
-        document.getElementById('end_month3').addEventListener('change', updatePieChart);
-
-// Fungsi untuk memperbarui grafik pie
-function updatePieChart() {
-    var jenis2 = document.getElementById('jenis2').value;
-    var typeSelected2 = document.getElementById('type2').value;
-    var kategori = document.getElementById('type').options[document.getElementById('type').selectedIndex].text; // Mendapatkan nilai kategori dari dropdown
-    var startMonth3 = document.getElementById('start_month3').value;
-    var endMonth3 = document.getElementById('end_month3').value;
-
-    console.log("updatePieChart() dipanggil");
-
-    var xhr = new XMLHttpRequest();
-    // Memperbarui URL dengan nilai-nilai filter yang benar
-    xhr.open('GET', '/api/FilterPieChartProses?type_name=' + typeSelected2 +
-        '&kategori=' + (kategori === 'All' ? '' : kategori) + '&jenis2=' + jenis2 + '&type2=' + typeSelected2 + '&start_month3=' + startMonth3 +
-        '&end_month3=' + endMonth3, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
-                var data = JSON.parse(xhr.responseText);
-                console.log("Data yang diperoleh dari API:", data);
-                renderPieChart(data);
-            } else {
-                console.error("Error saat memperbarui grafik pie:", xhr.statusText);
-            }
-        }
-    };
-    xhr.send();
-}
-
-
-
-    });
 
             document.addEventListener('DOMContentLoaded', function() {
                 var chartData = {!! json_encode($pieProses) !!};
@@ -1470,7 +1406,7 @@ function updatePieChart() {
                     }]
                 });
             });
-            </script>
+        </script>
 
 
 

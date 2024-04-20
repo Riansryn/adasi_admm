@@ -47,7 +47,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $row)
+                                        @foreach ($view1 as $row)
                                             <tr>
                                                 <td class="text-center py-3">{{ $loop->iteration }}</td>
                                                 <td class="text-center py-3">{{ $row->no_wo }}</td>
@@ -126,7 +126,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data2 as $row)
+                                        @foreach ($view2 as $row)
                                             <tr>
                                                 <td class="text-center py-3">{{ $loop->iteration }}</td>
                                                 <td class="text-center py-3">{{ $row->no_wo }}</td>

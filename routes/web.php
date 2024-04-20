@@ -4,7 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\http\Controllers\DeptManController;
 use App\Http\Controllers\DetailPreventiveController;
-use App\http\Controllers\DsController;
 use App\Http\Controllers\EventController;
 use App\http\Controllers\ExcelController;
 use App\Http\Controllers\FormFPPController;
@@ -120,16 +119,16 @@ Route::middleware(['web', 'auth'])->group(function () {
     // Download File
     Route::get('download-excel/{tindaklanjut}', [FormFPPController::class, 'downloadAttachment'])->name('download.attachment');
     // DashboardforALL
-    Route::get('dashboardHandling', [DsController::class, 'dashboardHandling'])->name('dashboardHandling');
-    Route::get('/getChartData', [HandlingController::class, 'getChartData']);
-    Route::get('/get-data-by-year', [HandlingController::class, 'getDataByYear']);
-    Route::get('/getRepairMaintenance', [DsController::class, 'getRepairMaintenance']);
-    Route::get('/getPeriodeWaktuPengerjaan', [DsController::class, 'getPeriodeWaktuPengerjaan']);
-    Route::get('/api/filter-pie-chart-tipe', [HandlingController::class, 'FilterPieChartTipe']);
-    Route::get('/api/filter-tipe-all', [HandlingController::class, 'FilterTipeAll']);
-    Route::get('/api/FilterPieChartProses', [HandlingController::class, 'FilterPieChartProses']);
+    Route::get('/dashboardHandling', 'App\Http\Controllers\DsController@dashboardHandling')->name('dashboardHandling');
+    Route::get('/getChartData', 'App\Http\Controllers\HandlingController@getChartData');
+    Route::get('/get-data-by-year', 'App\Http\Controllers\HandlingController@getDataByYear');
+    Route::get('/getRepairMaintenance', 'App\Http\Controllers\DsController@getRepairMaintenance');
+    Route::get('/getPeriodeWaktuPengerjaan', 'App\Http\Controllers\DsController@getPeriodeWaktuPengerjaan');
+    Route::get('/api/filter-pie-chart-tipe', 'App\Http\Controllers\HandlingController@FilterPieChartTipe');
+    Route::get('/api/filter-tipe-all', 'App\Http\Controllers\HandlingController@FilterTipeAll');
+    Route::get('/api/FilterPieChartProses', 'App\Http\Controllers\HandlingController@FilterPieChartProses');
 
-    Route::get('/getPeriodeMesin', [DsController::class, 'getPeriodeMesin']);
+    Route::get('/getPeriodeMesin', 'App\Http\Controllers\DsController@getPeriodeMesin');
 
     Route::get('handling', [HandlingController::class, 'index'])->name('index');
     Route::get('create', [HandlingController::class, 'create'])->name('create');
@@ -141,15 +140,13 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/showHistory/{id}', [HandlingController::class, 'showHistory'])->name('showHistory');
 
     // deptMan
-    Route::get('deptMan', [DeptManController::class, 'submission'])->name('submission');
-    Route::get('/showConfirm/{id}', [DeptManController::class, 'showConfirm'])->name('showConfirm');
-    Route::put('/updateConfirm/{id}', [DeptManController::class, 'updateConfirm'])->name('updateConfirm');
-    Route::get('/showFollowUp/{id}', [DeptManController::class, 'showFollowUp'])->name('showFollowUp');
-    Route::get('/showHistoryProgres/{id}', [DeptManController::class, 'showHistoryProgres'])->name('showHistoryProgres');
-    Route::put('/updateFollowUp/{id}', [DeptManController::class, 'updateFollowUp'])->name('updateFollowUp');
-    Route::get('scheduleVisit', [DeptManController::class, 'scheduleVisit'])->name('scheduleVisit');
-    Route::get('showHistoryCLaimComplain', [DeptManController::class, 'showHistoryCLaimComplain'])->name('showHistoryCLaimComplain');
-    Route::get('/export-excel', [ExcelController::class, 'exportExcel'])->name('export.excel');
-    Route::get('/showCloseProgres/{id}', [DeptManController::class, 'showCloseProgres'])->name('showCloseProgres');
-    // Tambahkan rute lainnya di sini
+    Route::get('/deptMan', 'App\Http\Controllers\DeptManController@submission')->name('submission');
+    Route::get('/showConfirm/{id}', 'App\Http\Controllers\DeptManController@showConfirm')->name('showConfirm');
+    Route::put('/updateConfirm/{id}', 'App\Http\Controllers\DeptManController@updateConfirm')->name('updateConfirm');
+    Route::get('/showFollowUp/{id}', 'App\Http\Controllers\DeptManController@showFollowUp')->name('showFollowUp');
+    Route::get('/showHistoryProgres/{id}', 'App\Http\Controllers\DeptManController@showHistoryProgres')->name('showHistoryProgres');
+    Route::put('/updateFollowUp/{id}', 'App\Http\Controllers\DeptManController@updateFollowUp')->name('updateFollowUp');
+    Route::get('scheduleVisit', 'App\Http\Controllers\DeptManController@scheduleVisit')->name('scheduleVisit');
+    Route::get('showHistoryCLaimComplain', 'App\Http\Controllers\DeptManController@showHistoryCLaimComplain')->name('showHistoryCLaimComplain');
+    Route::get('/showCloseProgres', 'App\Http\Controllers\DeptManController@showCloseProgres')->name('showCloseProgres');
 });

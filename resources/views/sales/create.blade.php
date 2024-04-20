@@ -2,6 +2,7 @@
 
 @section('content')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
     <main id="main" class="main">
 
         <div class="pagetitle">
@@ -131,12 +132,14 @@
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">OD:</label>
                                             <input type="text" class="form-control input-sm" id="outer_diameter"
-                                                name="outer_diameter" placeholder="Outer Diameter" style="max-width: 80%">
+                                                name="outer_diameter" placeholder="Outer Diameter"
+                                                style="max-width: 80%">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">ID:</label>
                                             <input type="text" class="form-control input-sm" id="inner_diameter"
-                                                name="inner_diameter" placeholder="Inner Diameter" style="max-width: 80%">
+                                                name="inner_diameter" placeholder="Inner Diameter"
+                                                style="max-width: 80%">
                                         </div>
                                     </div>
                                     <br>
@@ -144,14 +147,12 @@
                                         <div class="col-md-3">
                                             <label for="qty" class="form-label">QTY (Kg):</label>
                                             <input type="text" class="form-control input-sm" id="qty"
-                                                name="qty" style="max-width: 80%;" 
-                                                required>
+                                                name="qty" style="max-width: 80%;" required>
                                         </div>
                                         <div class="col-md-3">
                                             <label for="pcs" class="form-label">Unit (Pcs):</label>
                                             <input type="text" class="form-control input-sm" id="pcs"
-                                                name="pcs" style="max-width: 80%" 
-                                                required>
+                                                name="pcs" style="max-width: 80%" required>
                                         </div>
                                     </div>
                                     <br>
@@ -221,24 +222,43 @@
                                     </div>
                                 </div>
                                 <br>
+
                                 <div class="col lg-6">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <label for="image_upload" class="col-sm-5 col-form-label">Unggah Gambar:<span
-                                                    style="color: red;">*</span></label>
+                                    <div class="col lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="image_upload" class="col-sm-5 col-form-label">Unggah
+                                                    Gambar:<span style="color: red;">*</span></label>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" type="file" id="formFile" name="image[]"
+                                                    accept="image/*" style="width: 100%" onchange="viewImage(event);"
+                                                    required multiple>
+                                            </div>
+                                            <small id="fileError" class="text-danger" style="display:none;">Format berkas
+                                                tidak sesuai. Silakan unggah gambar.</small>
+                                            <!-- error message untuk title -->
+                                            <div id="imageError" class="alert alert-danger mt-2" style="display:none;">
+                                            </div>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <input class="form-control" type="file" id="formFile" name="image[]" accept="image/*" style="width: 100%" onchange="viewImage(event);" required multiple>
+                                        <div class="row mt-3">
+                                            <div id="imagePreviewContainer" class="row"
+                                                style="display: flex; flex-wrap: wrap;">
+                                                <!-- Gambar akan ditampilkan di sini -->
+                                            </div>
                                         </div>
-                                        <small id="fileError" class="text-danger" style="display:none;">Format berkas
-                                            tidak sesuai. Silakan unggah gambar.</small>
-                                        <!-- error message untuk title -->
-                                        <div id="imageError" class="alert alert-danger mt-2" style="display:none;"></div>
                                     </div>
-                                    <div class="row mt-3">
-                                        <div id="imagePreviewContainer" class="row"
-                                            style="display: flex; flex-wrap: wrap;"></div>
-                                    </div>
+                                </div>
+                            </div>
+                            <div id="imageModal" class="modal"
+                                style="display: none; position: fixed; z-index: 1; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.9);">
+                                <div
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 700px; background-color: #fefefe; border-radius: 5px;">
+                                    <span class="close"
+                                        style="position: absolute; top: 10px; right: 10px; color: #000; font-size: 30px; font-weight: bold; cursor: pointer;"
+                                        onclick="closeModal()">&times;</span>
+                                    <img class="modal-content" id="modalImage"
+                                        style="display: block; margin: auto; width: 50%; max-width: 70%;">
                                 </div>
                             </div>
                             <div class="row mb-3" style="margin-top: 2%">
@@ -261,43 +281,64 @@
             var imageError = document.getElementById('imageError');
             imageError.style.display = 'none';
 
-            var fileInput = document.getElementById('formFile');
-            fileInput.addEventListener('change', function(event) {
-                var files = event.target.files;
+            // Fungsi untuk menampilkan modal saat gambar di klik
+            // Fungsi untuk menampilkan modal saat gambar di klik
+            function showModal(imageSrc) {
+                var modal = document.getElementById("imageModal");
+                var modalImg = document.getElementById("modalImage");
+                modal.style.display = "block";
+                modalImg.src = imageSrc;
+            }
 
-                var imagePreviewContainer = document.getElementById('imagePreviewContainer');
-                imagePreviewContainer.innerHTML = '';
+            // Fungsi untuk menutup modal saat tombol "x" di klik
+            function closeModal() {
+                var modal = document.getElementById("imageModal");
+                modal.style.display = "none";
+            }
 
-                if (files.length === 0) {
-                    return;
-                }
+            // Fungsi untuk menampilkan gambar saat diunggah
+            function viewImage(event) {
+                var imageContainer = document.getElementById('imagePreviewContainer');
+                imageContainer.innerHTML = ''; // Kosongkan kontainer gambar sebelum menambahkan gambar baru
 
+                var files = event.target.files; // Ambil file-file yang diunggah
+
+                // Iterasi melalui setiap file
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
-                    var reader = new FileReader();
+                    var reader = new FileReader(); // Buat pembaca file
 
                     reader.onload = function(e) {
-                        var img = new Image();
-                        img.onload = function() {
-                            var imagePreview = document.createElement('img');
-                            imagePreview.src = e.target.result;
-                            imagePreview.style.width = '30%'; // Set width to 30%
-                            imagePreview.style.height = 'auto'; // Maintain aspect ratio
-                            imagePreview.style.marginRight = '10px'; // Set margin right
-                            imagePreview.style.marginBottom = '10px'; // Set margin bottom
-                            imagePreviewContainer.appendChild(imagePreview);
+                        // Buat elemen gambar baru
+                        var imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+
+                        // Tentukan ukuran gambar berdasarkan jumlah file yang diunggah
+                        if (files.length === 1 || files.length === 2) {
+                            imgElement.style.width = '50%'; // Set lebar gambar menjadi 50% untuk 1 atau 2 gambar
+                        } else {
+                            imgElement.style.width = '33.33%'; // Set lebar gambar menjadi 33.33% untuk lebih dari 2 gambar
+                        }
+
+                        // Tambahkan gambar ke dalam kontainer
+                        imageContainer.appendChild(imgElement);
+
+                        // Tambahkan fungsi untuk menampilkan modal saat gambar di klik
+                        imgElement.onclick = function() {
+                            showModal(this.src);
                         };
-                        img.onerror = function() {
-                            imageError.innerHTML = 'File yang dipilih bukan gambar valid.';
-                            imageError.style.display = 'block';
-                        };
-                        img.src = e.target.result;
                     };
 
-                    reader.readAsDataURL(file);
+                    reader.readAsDataURL(file); // Baca file sebagai URL data
                 }
-            });
 
+                // Setelah semua gambar ditambahkan, kita akan mengatur ulang lebar kontainer gambar
+                setTimeout(function() {
+                    var images = imageContainer.querySelectorAll('img');
+                    var containerWidth = (files.length > 2) ? '100%' : '50%'; // Tentukan lebar kontainer
+                    imageContainer.style.width = containerWidth;
+                }, 100); // Beri sedikit waktu agar gambar ditampilkan sebelum menyesuaikan lebar kontainer
+            }
             //ddlselect
             document.addEventListener('DOMContentLoaded', function() {
                 // Ambil elemen-elemen yang diperlukan
@@ -332,7 +373,7 @@
                 var type_1 = document.getElementById('type_1').value.trim();
 
                 // Memeriksa apakah ada input yang kosong
-                if (!no_wo || !image || !customerName || !customerCode || !area || !qty || !pcs || !category || ! process_type ||
+                if (!no_wo || !image || !customerName || !customerCode || !area || !qty || !pcs || !category || !process_type ||
                     type_1.length === 0) {
                     // Menampilkan sweet alert error jika ada input yang kosong
                     Swal.fire({

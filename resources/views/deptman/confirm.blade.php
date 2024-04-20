@@ -31,8 +31,8 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <input type="text" class="form-control" id="no_wo" name="no_wo"
-                                                maxlength="6" style="width: 100%; max-width: 400px;"
-                                                value="{{ $handlings->no_wo }}" required disabled>
+                                                maxlength="6" style="width: 100%;" value="{{ $handlings->no_wo }}" required
+                                                disabled>
                                         </div>
                                     </div>
                                     <br>
@@ -93,7 +93,8 @@
                                                     style="color: red;">*</span></label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <select name="type_id" id="type_id" class="" style="width: 100%" disabled>
+                                            <select name="type_id" id="type_id" class="" style="width: 100%"
+                                                disabled>
                                                 @foreach ($type_materials as $typeMaterial)
                                                     <option value="{{ $typeMaterial->id }}"
                                                         @if ($typeMaterial->id == $handlings->type_id) selected @endif>
@@ -256,22 +257,41 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="row mt-3">
-                                                <div id="imagePreviewContainer" class="row">
-                                                    <div class="col-lg-12 mb-2 d-flex justify-content-start">
-                                                        @foreach(json_decode($handlings->image) as $image)
-                                                            <img src="{{ asset('assets/image/' . $image) }}" class="img-fluid rounded mx-1" alt="image" style="max-width: 200px; object-fit: cover;">
+                                                <div class="col-lg-12">
+                                                    <div id="imagePreviewContainer" class="row">
+                                                        @php $count = 0; @endphp
+                                                        @foreach (json_decode($handlings->image) as $image)
+                                                            @if ($count < 4)
+                                                                <div class="col-lg-6 mb-2 d-flex justify-content-start">
+                                                                    <img src="{{ asset('assets/image/' . $image) }}"
+                                                                        class="img-fluid rounded mx-1" alt="image"
+                                                                        style="max-width: 100%; object-fit: cover;"
+                                                                        onclick="showModal('{{ asset('assets/image/' . $image) }}')">
+                                                                </div>
+                                                                @php $count++; @endphp
+                                                            @endif
                                                         @endforeach
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div id="imageModal" class="modal"
+                                    style="display: none; position: fixed; z-index: 1; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.9);">
+                                    <div
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 700px; background-color: #fefefe; border-radius: 5px;">
+                                        <span class="close"
+                                            style="position: absolute; top: 10px; right: 10px; color: #000; font-size: 30px; font-weight: bold; cursor: pointer;"
+                                            onclick="closeModal()">&times;</span>
+                                        <img class="modal-content" id="modalImage"
+                                            style="display: block; margin: auto; width: 50%; max-width: 70%;">
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3" style="margin-top: 2%">
                                 <div class="col-sm-12 d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary mb-4 me-2"
-                                        onclick="buttonConfirm()">
+                                    <button type="submit" class="btn btn-primary mb-4 me-2" onclick="buttonConfirm()">
                                         <i class="fas fa-save"></i> Konfirmasi
                                     </button>
                                     <button type="button" class="btn btn-primary mb-4 me-2" onclick="goToSubmission()">
@@ -293,11 +313,65 @@
                     icon: 'success',
                     title: 'Berhasil',
                     text: 'Data telah berhasil di simpan',
-                    showConfirmButton: false 
+                    showConfirmButton: false
                 });
             }
 
+            function showModal(imageSrc) {
+                var modal = document.getElementById("imageModal");
+                var modalImg = document.getElementById("modalImage");
+                modal.style.display = "block";
+                modalImg.src = imageSrc;
+            }
+
+            // Fungsi untuk menutup modal saat tombol "x" di klik
+            function closeModal() {
+                var modal = document.getElementById("imageModal");
+                modal.style.display = "none";
+            }
+
+            function viewImage(event) {
+                var imageContainer = document.getElementById('imagePreviewContainer');
+                imageContainer.innerHTML = ''; // Kosongkan kontainer gambar sebelum menambahkan gambar baru
+
+                var files = event.target.files; // Ambil file-file yang diunggah
+
+                // Iterasi melalui setiap file
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader(); // Buat pembaca file
+
+                    reader.onload = function(e) {
+                        // Buat elemen gambar baru
+                        var imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+
+                        // Tentukan ukuran gambar berdasarkan jumlah file yang diunggah
+                        if (files.length === 1 || files.length === 2) {
+                            imgElement.style.width = '50%'; // Set lebar gambar menjadi 50% untuk 1 atau 2 gambar
+                        } else {
+                            imgElement.style.width = '33.33%'; // Set lebar gambar menjadi 33.33% untuk lebih dari 2 gambar
+                        }
+
+                        // Tambahkan gambar ke dalam kontainer
+                        imageContainer.appendChild(imgElement);
+
+                        // Tambahkan fungsi untuk menampilkan modal saat gambar di klik
+                        imgElement.onclick = function() {
+                            showModal(this.src);
+                        };
+                    };
+
+                    reader.readAsDataURL(file); // Baca file sebagai URL data
+                }
+
+                // Setelah semua gambar ditambahkan, kita akan mengatur ulang lebar kontainer gambar
+                setTimeout(function() {
+                    var images = imageContainer.querySelectorAll('img');
+                    var containerWidth = (files.length > 2) ? '100%' : '50%'; // Tentukan lebar kontainer
+                    imageContainer.style.width = containerWidth;
+                }, 100); // Beri sedikit waktu agar gambar ditampilkan sebelum menyesuaikan lebar kontainer
+            }
         </script>
     </main><!-- End #main -->
-    
 @endsection

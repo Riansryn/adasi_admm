@@ -8,9 +8,15 @@ use App\Models\Mesin;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class DsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function getRepairMaintenance(Request $request)
     {
         // Ambil parameter tahun dan bagian dari permintaan HTTP
@@ -233,15 +239,6 @@ class DsController extends Controller
             ->groupBy('month')
             ->get();
 
-        $years = Handling::select(
-            DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
-            DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
-            DB::raw('YEAR(created_at) as years')
-            // Menggunakan YEAR() untuk mengambil tahun
-        )
-            ->groupBy('years') // Mengelompokkan berdasarkan years (tahun)
-            ->get();
-
         $countPeriode = Handling::select(
             DB::raw('COUNT(CASE WHEN status_2 = 0 THEN 1 END) as total_status_2_0'),
             DB::raw('COUNT(CASE WHEN status = 3 THEN 1 END) as total_status_3'),
@@ -447,14 +444,12 @@ class DsController extends Controller
                 'chartMachining',
                 'chartMachiningCustom',
                 'chartHeatTreatment',
-                'years',
                 'countPeriode',
                 'labels',
                 'data2',
                 'periodeWaktuPengerjaan',
                 'sections',
                 'years2',
-                'data2',
                 'periodeMesin', // tambahkan data periodeMesin ke dalam array compact()
                 'formattedData',
                 'pieProses'
