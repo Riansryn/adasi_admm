@@ -1171,10 +1171,10 @@
                                 filterType = 'kategori';
                             } else if (jenis === 'qty' && kategori === 'All Kategori') {
                                 // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori';
+                                filterType = 'total_qty';
                             } else if (jenis === 'pcs' && kategori === 'All Kategori') {
                                 // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori';
+                                filterType = 'total_pcs';
                             }
                             renderChart(data, filterType, jenis,
                                 kategori); // Menyertakan kategori ke fungsi renderChart
@@ -1213,7 +1213,7 @@
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
 
                                 if (jenis === 'qty') {
-                                    tooltip += this.point.qty + ' qty';
+                                    tooltip += this.point.qty + ' kg';
                                 } else if (jenis === 'pcs') {
                                     tooltip += this.point.pcs + ' pcs';
                                 } else if (jenis === 'frekuensi') {
@@ -1234,7 +1234,6 @@
                                 return tooltip;
                             }
                         },
-
                         plotOptions: {
                             pie: {
                                 allowPointSelect: true,
@@ -1263,77 +1262,52 @@
                     var kategori2 = document.getElementById('type').options[document.getElementById('type')
                         .selectedIndex].text;
 
-                    var filterType;
-                    filterType = (typeSelected2 === 'type_1') ? 'total_komplain' : 'total_klaim';
+                    console.log('Memilih kategori2:', kategori2);
+                    var filterType2;
+                    filterType2 = (typeSelected2 === 'type_1') ? 'total_komplain2' : 'total_klaim2';
                     var startMonth3 = document.getElementById('start_month3').value;
                     var endMonth3 = document.getElementById('end_month3').value;
-
-                    console.log("updatePieChart() dipanggil");
 
                     var xhr = new XMLHttpRequest();
                     xhr.open('GET', '/api/FilterPieChartProses?jenis2=' + jenis2 + '&type2=' + typeSelected2 +
                         '&kategori2=' + encodeURIComponent(kategori2) + '&start_month3=' + startMonth3 +
-                        '&end_month3=' +
-                        endMonth3, true);
+                        '&end_month3=' + endMonth3, true);
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             var data = JSON.parse(xhr.responseText);
                             if (jenis2 === 'frekuensi' && kategori2 === 'All Kategori') {
                                 // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori2';
+                                filterType2 = 'kategori';
                             } else if (jenis2 === 'qty' && kategori2 === 'All Kategori') {
-                                // Jika jenis adalah 'Qty' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori2';
+                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType2 = 'total_qty';
                             } else if (jenis2 === 'pcs' && kategori2 === 'All Kategori') {
-                                // Jika jenis adalah 'Pcs' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori2';
+                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType2 = 'total_pcs';
                             }
-                            renderPieChart(data, filterType, jenis2,
-                                kategori2); // Menyertakan kategori ke fungsi renderChart
+                            renderPieChart(data, filterType2, jenis2,
+                                kategori2); // Menyertakan kategori ke fungsi renderPieChart
                         }
                     };
                     xhr.send();
                 }
-                // Fungsi untuk merender grafik pie
-                function renderPieChart(data, filterType, jenis2, kategori2) {
+
+                function renderPieChart(data, filterType2, jenis2, kategori2) {
                     var chartData = [];
-                    var totalKomplain = 0;
-                    var totalKlaim = 0;
 
                     // Memproses data yang diterima untuk grafik
                     for (var i = 0; i < data.length; i++) {
-                        // Memeriksa apakah nama jenis adalah Cutting, Machining, atau Heat Treatment
-                        if (data[i].type_name === 'Cutting' || data[i].type_name === 'Machining' || data[i]
-                            .type_name === 'Heat Treatment') {
-                            // Menambahkan nilai total komplain dan klaim dari setiap jenis yang dipilih
-                            totalKomplain += parseInt(data[i].total_komplain);
-                            totalKlaim += parseInt(data[i].total_klaim);
-
-                            // Menambahkan data untuk setiap jenis yang dipilih untuk ditampilkan di grafik
+                        if (data[i][filterType2] > 0) {
                             chartData.push({
-                                name: data[i].type_name,
-                                y: parseInt(data[i][filterType]),
+                                name: data[i].type_name2,
+                                y: parseInt(data[i][filterType2]),
                                 qty: data[i].total_qty,
                                 pcs: data[i].total_pcs,
-                                kategori2: data[i].kategori2,
-                                total_klaim: data[i].total_klaim,
-                                total_komplain: data[i].total_komplain
+                                total_klaim2: data[i].total_klaim2,
+                                total_komplain2: data[i].total_komplain2
                             });
                         }
                     }
-
-                    // Jika kategori adalah 'All Kategori', tambahkan satu entri untuk menampilkan total komplain dan klaim
-                    if (kategori2 === 'All Kategori') {
-                        chartData.push({
-                            name: 'All Kategori',
-                            y: totalKomplain + totalKlaim,
-                            kategori2: 'All Kategori',
-                            total_klaim: totalKlaim,
-                            total_komplain: totalKomplain
-                        });
-                    }
-
-                    // Konfigurasi grafik pie menggunakan Highcharts
                     Highcharts.chart('ChartPieProses', {
                         chart: {
                             type: 'pie'
@@ -1345,19 +1319,21 @@
                             formatter: function() {
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
                                 if (jenis2 === 'qty') {
-                                    tooltip += this.point.qty + 'kg';
+                                    tooltip += this.point.qty + ' kg';
                                 } else if (jenis2 === 'pcs') {
                                     tooltip += this.point.pcs + ' pcs';
                                 } else if (jenis2 === 'frekuensi') {
                                     // Jika jenis adalah 'frekuensi'
-                                    if (this.point.name === 'All Kategori') {
-                                        // Jika data adalah untuk 'All Kategori', tampilkan jumlah total klaim dan komplain
-                                        tooltip += 'Total Klaim: ' + this.point.total_klaim +
-                                            ', Total Komplain: ' + this.point.total_komplain;
-                                    } else {
-                                        // Jika data adalah untuk jenis tertentu, tampilkan jumlah klaim dan komplain
-                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim +
-                                            ', Jumlah Komplain: ' + this.point.total_komplain;
+                                    if (kategori2 === 'All Kategori') {
+                                        // Jika kategori adalah 'All Kategori', tampilkan jumlah keseluruhan klaim dan komplain
+                                        tooltip += 'Total Klaim: ' + this.point.total_klaim2 +
+                                            ', Total Komplain: ' + this.point.total_komplain2;
+                                    } else if (kategori2 === 'Komplain') {
+                                        // Jika kategori adalah 'Komplain', tampilkan jumlah klaim
+                                        tooltip += 'Jumlah Komplain: ' + this.point.total_komplain2;
+                                    } else if (kategori2 === 'Klaim') {
+                                        // Jika kategori adalah 'Klaim', tampilkan jumlah komplain
+                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim2;
                                     }
                                 }
                                 tooltip += ' (' + this.point.percentage.toFixed(1) + '%)';
@@ -1376,15 +1352,16 @@
                         },
                         series: [{
                             name: 'Total Data',
-                            colorByPoint: true,
                             data: chartData
                         }]
                     });
                 }
-                // Menambahkan pendengar acara pada elemen yang melakukan seleksi
+
                 document.getElementById('type2').addEventListener('change', updatePieChart);
-                document.getElementById('start_month3').addEventListener('change', updatePieChart);
-                document.getElementById('end_month3').addEventListener('change', updatePieChart);
+                // document.getElementById('start_month3').addEventListener('change', updatePieChart);
+                // document.getElementById('end_month3').addEventListener('change', updatePieChart);
+                // updatePieChart(); // Panggil updatePieChart saat DOM dimuat
+
             });
 
 
@@ -1416,6 +1393,36 @@
                     }]
                 });
             });
+
+
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     var chartData = {!! json_encode($pieProses) !!};
+            //     console.log(chartData); // Pastikan untuk memeriksa data yang tercetak di konsol
+
+            //     Highcharts.chart('ChartPieProses', {
+            //         chart: {
+            //             type: 'pie'
+            //         },
+            //         title: {
+            //             text: 'Total Proses'
+            //         },
+            //         plotOptions: {
+            //             pie: {
+            //                 allowPointSelect: true,
+            //                 cursor: 'pointer',
+            //                 dataLabels: {
+            //                     enabled: true,
+            //                     format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            //                 }
+            //             }
+            //         },
+            //         series: [{
+            //             name: 'Process',
+            //             colorByPoint: true,
+            //             data: chartData
+            //         }]
+            //     });
+            // });
         </script>
 
 
