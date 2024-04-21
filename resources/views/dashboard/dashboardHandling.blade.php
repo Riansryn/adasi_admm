@@ -422,8 +422,7 @@
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="jenis">Jenis:</label>
                                             <select id="jenis2" class="form-select form-select-sm"
-                                                aria-label=".form-select-sm example"
-                                                onchange="updatePieChart(); FilterKategori();">
+                                                aria-label=".form-select-sm example" onchange="updatePieChart();">
                                                 <option selected>--- Pilih Jenis ---</option>
                                                 <option value="frekuensi">Frekuensi Jenis</option>
                                                 <option value="qty">QTY</option>
@@ -1147,34 +1146,38 @@
 
                 document.getElementById('type').addEventListener('change', FilterPieChartTipe);
 
+                //Chart Type
                 function FilterPieChartTipe() {
-                    var jenis2 = document.getElementById('jenis2').value;
-                    var typeSelected2 = document.getElementById('type2').value;
-                    var kategori2 = document.getElementById('type').options[document.getElementById('type')
-                        .selectedIndex].text;
+                    var jenis = document.getElementById('jenis').value;
+                    var typeSelected = document.getElementById('type').value;
+                    var kategori = document.getElementById('type').options[document.getElementById('type')
+                        .selectedIndex].text; // Mendapatkan nilai kategori dari dropdown
 
+                    console.log('Memilih kategori:', kategori);
                     var filterType;
-                    filterType = (typeSelected2 === 'type_1') ? 'total_komplain' : 'total_klaim';
-                    var startMonth3 = document.getElementById('start_month3').value;
-                    var endMonth3 = document.getElementById('end_month3').value;
-
-                    console.log("updatePieChart() dipanggil");
+                    filterType = (typeSelected === 'type_1') ? 'total_komplain' : 'total_klaim';
+                    var startMonth = document.getElementById('start_month').value;
+                    var endMonth = document.getElementById('end_month').value;
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/api/FilterPieChartProses?jenis2=' + jenis2 + '&type2=' + typeSelected2 +
-                        '&kategori2=' + encodeURIComponent(kategori2) + '&start_month3=' + startMonth3 +
-                        '&end_month3=' +
-                        endMonth3, true);
+                    xhr.open('GET', '/api/filter-pie-chart-tipe?jenis=' + jenis + '&type=' + typeSelected +
+                        '&kategori=' + encodeURIComponent(kategori) + '&start_month=' + startMonth + '&end_month=' +
+                        endMonth, true); // Mengirim kategori ke endpoint API
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             var data = JSON.parse(xhr.responseText);
-                            if ((jenis2 === 'frekuensi' || jenis2 === 'qty' || jenis2 === 'pcs') && kategori2 ===
-                                'All Kategori') {
-                                // Jika jenis adalah 'frekuensi', 'qty', atau 'pcs', dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori2';
+                            if (jenis === 'frekuensi' && kategori === 'All Kategori') {
+                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType = 'kategori';
+                            } else if (jenis === 'qty' && kategori === 'All Kategori') {
+                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType = 'kategori';
+                            } else if (jenis === 'pcs' && kategori === 'All Kategori') {
+                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                                filterType = 'kategori';
                             }
-                            renderPieChart(data, filterType, jenis2,
-                            kategori2); // Menyertakan kategori ke fungsi renderChart
+                            renderChart(data, filterType, jenis,
+                                kategori); // Menyertakan kategori ke fungsi renderChart
                         }
                     };
                     xhr.send();
@@ -1210,7 +1213,7 @@
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
 
                                 if (jenis === 'qty') {
-                                    tooltip += this.point.qty + 'kg';
+                                    tooltip += this.point.qty + ' qty';
                                 } else if (jenis === 'pcs') {
                                     tooltip += this.point.pcs + ' pcs';
                                 } else if (jenis === 'frekuensi') {
@@ -1231,6 +1234,7 @@
                                 return tooltip;
                             }
                         },
+
                         plotOptions: {
                             pie: {
                                 allowPointSelect: true,
@@ -1296,21 +1300,26 @@
                     var totalKomplain = 0;
                     var totalKlaim = 0;
 
-                    // Menghitung total komplain dan klaim untuk semua jenis
+                    // Memproses data yang diterima untuk grafik
                     for (var i = 0; i < data.length; i++) {
-                        // Menambahkan nilai total komplain dan klaim dari setiap jenis
-                        totalKomplain += parseInt(data[i].total_komplain);
-                        totalKlaim += parseInt(data[i].total_klaim);
+                        // Memeriksa apakah nama jenis adalah Cutting, Machining, atau Heat Treatment
+                        if (data[i].type_name === 'Cutting' || data[i].type_name === 'Machining' || data[i]
+                            .type_name === 'Heat Treatment') {
+                            // Menambahkan nilai total komplain dan klaim dari setiap jenis yang dipilih
+                            totalKomplain += parseInt(data[i].total_komplain);
+                            totalKlaim += parseInt(data[i].total_klaim);
 
-                        // Menambahkan data untuk setiap jenis untuk ditampilkan di grafik
-                        chartData.push({
-                            name: data[i].type_name,
-                            y: parseInt(data[i][filterType]),
-                            qty: data[i].total_qty,
-                            pcs: data[i].total_pcs,
-                            total_klaim: data[i].total_klaim,
-                            total_komplain: data[i].total_komplain
-                        });
+                            // Menambahkan data untuk setiap jenis yang dipilih untuk ditampilkan di grafik
+                            chartData.push({
+                                name: data[i].type_name,
+                                y: parseInt(data[i][filterType]),
+                                qty: data[i].total_qty,
+                                pcs: data[i].total_pcs,
+                                kategori2: data[i].kategori2,
+                                total_klaim: data[i].total_klaim,
+                                total_komplain: data[i].total_komplain
+                            });
+                        }
                     }
 
                     // Jika kategori adalah 'All Kategori', tambahkan satu entri untuk menampilkan total komplain dan klaim
@@ -1318,6 +1327,7 @@
                         chartData.push({
                             name: 'All Kategori',
                             y: totalKomplain + totalKlaim,
+                            kategori2: 'All Kategori',
                             total_klaim: totalKlaim,
                             total_komplain: totalKomplain
                         });
