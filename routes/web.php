@@ -123,12 +123,16 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/getChartData', 'App\Http\Controllers\HandlingController@getChartData');
     Route::get('/get-data-by-year', 'App\Http\Controllers\HandlingController@getDataByYear');
     Route::get('/getRepairMaintenance', 'App\Http\Controllers\DsController@getRepairMaintenance');
+    Route::get('/getRepairAlatBantu', 'App\Http\Controllers\DsController@getRepairAlatBantu');
     Route::get('/getPeriodeWaktuPengerjaan', 'App\Http\Controllers\DsController@getPeriodeWaktuPengerjaan');
+    Route::get('/getPeriodeWaktuAlat', 'App\Http\Controllers\DsController@getPeriodeWaktuAlat');
     Route::get('/api/filter-pie-chart-tipe', 'App\Http\Controllers\HandlingController@FilterPieChartTipe');
     Route::get('/api/filter-tipe-all', 'App\Http\Controllers\HandlingController@FilterTipeAll');
     Route::get('/api/FilterPieChartProses', 'App\Http\Controllers\HandlingController@FilterPieChartProses');
 
     Route::get('/getPeriodeMesin', 'App\Http\Controllers\DsController@getPeriodeMesin');
+    Route::get('/getPeriodeAlat', 'App\Http\Controllers\DsController@getPeriodeAlat');
+
 
     Route::get('handling', [HandlingController::class, 'index'])->name('index');
     Route::get('create', [HandlingController::class, 'create'])->name('create');

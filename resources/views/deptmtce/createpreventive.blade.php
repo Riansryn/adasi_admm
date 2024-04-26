@@ -36,7 +36,7 @@
                                         <option value="">Pilih Mesin</option>
                                         @foreach($mesins as $mesin)
                                         <option value="{{ $mesin->no_mesin }}" data-tipe="{{$mesin->tipe}}">
-                                            {{ $mesin->section }} | {{ $mesin->tipe }} | {{ $mesin->no_mesin }}
+                                            {{ $mesin->section }} | {{ $mesin->no_mesin }} | {{ $mesin->tipe }}
                                         </option>
                                         @endforeach
                                     </select>

@@ -62,6 +62,9 @@
                             </div>
 
                             <input type="hidden" name="confirmed_finish3" id="confirmed_finish3" value='0'>
+                            <input type="hidden" name="confirmed_finish4" id="confirmed_finish4" value='0'>
+                            <input type="hidden" name="note" id="note" value="{{ $formperbaikan->note }}">
+
 
                             <div class="mb-3">
                                 <label for="gambar" class="form-label">Gambar</label>
@@ -149,6 +152,7 @@
                             </table>
                         </div>
                         <div class="text-end">
+                            <button type="button" class="btn btn-danger" onclick="showCheckAgain()">Check Again</button>
                             <button type="button" class="btn btn-primary" id="confirmedButton" onclick="showConfirmationAlert()">Closed</button>
                         </div>
                     </div>
@@ -204,6 +208,42 @@
             container.appendChild(img);
         };
         reader.readAsDataURL(input.files[0]);
+    }
+</script>
+<script>
+    function showCheckAgain() {
+        Swal.fire({
+            title: "Masukkan catatan",
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off"
+            },
+            showCancelButton: true,
+            confirmButtonText: "Simpan",
+            cancelButtonText: "Batal",
+            allowOutsideClick: () => !Swal.isLoading(),
+            preConfirm: (note) => {
+                if (!note) {
+                    Swal.showValidationMessage("Catatan tidak boleh kosong");
+                } else {
+                    // Set the note value to the hidden input field in the form
+                    document.getElementById('note').value = note;
+                    // Set the confirmed_finish4 value to 1
+                    document.getElementById('confirmed_finish4').value = '1';
+                    // If validation is successful, submit the form
+                    document.getElementById('closedForm').submit();
+                    return note;
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Note",
+                    text: result.value,
+                    icon: "success"
+                });
+            }
+        });
     }
 </script>
 <script>

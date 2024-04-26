@@ -12,8 +12,11 @@ class PreventiveController extends Controller
 {
     public function dashboardPreventive(Request $request)
     {
-        // Mengambil data mesin beserta jadwal preventif
-        $mesins = Mesin::with('preventifs')->get();
+        // Mengambil data mesin beserta jadwal preventif, diurutkan berdasarkan section dan statusnya 0
+        $mesins = Mesin::with('preventifs')
+            ->where('status', 0)
+            ->orderBy('section')
+            ->get();
 
         // Mengirimkan data ke tampilan
         return view('deptmtce.tabelpreventive', compact('mesins'));
@@ -21,13 +24,18 @@ class PreventiveController extends Controller
 
     public function dashboardPreventiveMaintenance(Request $request, JadwalPreventif $preventive)
     {
-        // Mengambil data mesin beserta jadwal preventif
-        $mesins = Mesin::with('preventifs')->get();
+        // Mengambil data mesin beserta jadwal preventif, diurutkan berdasarkan section dan statusnya 0
+        $mesins = Mesin::with('preventifs')
+            ->where('status', 0)
+            ->orderBy('section')
+            ->get();
+
         $preventives = JadwalPreventif::latest()->get();
 
         // Mengirimkan data ke tampilan
         return view('maintenance.tabelpreventive', compact('mesins', 'preventives', 'preventive'));
     }
+
 
     // public function dashboardPreventiveMaintenance(Request $request)
     // {

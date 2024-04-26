@@ -290,6 +290,7 @@ class FormFPPController extends Controller
         $confirmedFinish4 = $request->input('confirmed_finish4'); // Ubah status menjadi On Progress ketika Check Again
         $confirmedFinish5 = $request->input('confirmed_finish5'); // Save Tidak mengubah status
         $confirmedFinish6 = $request->input('confirmed_finish6'); // Save Tidak mengubah status
+        $confirmedFinish7 = $request->input('confirmed_finish7'); // Save Tidak mengubah status
 
         // Check the confirmed_finish conditions
         if ($confirmedFinish === "1") {
@@ -331,6 +332,11 @@ class FormFPPController extends Controller
             $formperbaikan->update(['status' => '1']);
             $newTindakLanjut->update(['note' => 'Sedang Ditindaklanjuti', 'status' => '1']);
             return redirect()->route('maintenance.index')->with('success', 'Form FPP updated successfully');
+        } elseif ($confirmedFinish7 === "1") {
+            // Update the status and note accordingly in the original TindakLanjut
+            $formperbaikan->update(['status' => '1']);
+            $newTindakLanjut->update(['status' => '1']);
+            return redirect()->route('fpps.index')->with('success', 'Form FPP updated successfully');
         } else {
             $newTindakLanjut->update(['note' => 'Sedang Ditindaklanjuti', 'status' => '1']);
             $formperbaikan->update(['status' => '1']);

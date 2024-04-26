@@ -48,7 +48,7 @@
                                     <select class="form-control" id="section" name="section">
                                         <option value="">Pilih Section</option>
                                         @php
-                                        $uniqueSections = $mesins->unique('section')->pluck('section');
+                                        $uniqueSections = $mesins->where('status', 0)->unique('section')->pluck('section');
                                         @endphp
                                         @foreach($uniqueSections as $section)
                                         <option value="{{ $section }}">{{ $section }}</option>
