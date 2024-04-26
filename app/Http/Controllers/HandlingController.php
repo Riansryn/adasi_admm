@@ -158,38 +158,44 @@ class HandlingController extends Controller
         return response()->json($data);
     }
 
-    public function FilterPieChartProses(Request $request)
+    public function filterPieChartProses(Request $request)
     {
         $type_name2 = $request->input('type_name');
         $kategori2 = $request->input('kategori_2');
         $jenis2 = $request->input('jenis2');
         $tipe2 = $request->input('tipe2');
-        $start_month3 = $request->input('start_month3'); // Tambahkan parameter bulan mulai
+        $start_month3 = $request->input('start_month3');
         $end_month3 = $request->input('end_month3');
 
-        $query2 = Handling::select('handlings.process_type AS type_name',
-            DB::raw('SUM(handlings.qty) AS total_qty'),
-            DB::raw('SUM(handlings.pcs) AS total_pcs'),
-            DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain2'),
-            DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim2'),
-            DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
-                SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori_2')
-        )
-        ->where(function ($query2) use ($tipe2) {
-            if ($tipe2 == 'total_komplain') {
-                $query2->where('handlings.type_1', 'Komplain');
-            } elseif ($tipe2 == 'total_klaim') {
-                $query2->where('handlings.type_2', 'Klaim');
-            } elseif ($tipe2 == 'qty') {
-                $query2->selectSub('total_qty', 'total');
-            } elseif ($tipe2 == 'pcs') {
-                $query2->selectSub('total_pcs', 'total');
-            }
-        })
-        ->groupBy('handlings.process_type');
+        $query2 = DB::table('handlings')
+            ->select(
+                'handlings.process_type AS type_name',
+                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN handlings.qty ELSE 0 END) AS qty_komplain'),
+                DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN handlings.qty ELSE 0 END) AS qty_klaim'),
+                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN handlings.pcs ELSE 0 END) AS pcs_komplain'),
+                DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN handlings.pcs ELSE 0 END) AS pcs_klaim'),
+                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" OR handlings.type_2 = "Klaim" THEN handlings.qty ELSE 0 END) AS qty_all'),
+                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" OR handlings.type_2 = "Klaim" THEN handlings.pcs ELSE 0 END) AS pcs_all'),
+                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain2'),
+                DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim2'),
+                DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
+                         SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori_2')
+            )
+            ->where(function ($query2) use ($tipe2) {
+                if ($tipe2 == 'total_komplain2') {
+                    $query2->where('handlings.type_1', 'Komplain');
+                } elseif ($tipe2 == 'total_klaim2') {
+                    $query2->where('handlings.type_2', 'Klaim');
+                } elseif ($tipe2 == 'qty') {
+                    $query2->selectSub('total_qty', 'total');
+                } elseif ($tipe2 == 'pcs') {
+                    $query2->selectSub('total_pcs', 'total');
+                }
+            })
+            ->groupBy('handlings.process_type');
 
         if (!empty($start_month3) && !empty($end_month3)) {
-            $query2->whereBetween('handlings.created_at', [$start_month3, $end_month3]); // Filter berdasarkan rentang tanggal
+            $query2->whereBetween('handlings.created_at', [$start_month3, $end_month3]);
         }
 
         $data = $query2->get();

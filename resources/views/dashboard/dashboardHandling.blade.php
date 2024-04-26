@@ -1342,11 +1342,16 @@
                                     }
                                 } else if (jenis === 'frekuensi') {
                                     if (kategori === 'All Kategori') {
-                                        tooltip += '<br>'+'Total Klaim: ' + this.point.total_klaim +'<br>'+' Total Komplain: ' + this.point.total_komplain + '<br>'+'Total Qty: ' + this.point.qty_all +'<br>'+'Total Pcs: ' + this.point.pcs_all;
+                                        tooltip += '<br>' + 'Total Klaim: ' + this.point.total_klaim +
+                                            '<br>' + ' Total Komplain: ' + this.point.total_komplain +
+                                            '<br>' + 'Total Qty: ' + this.point.qty_all + '<br>' +
+                                            'Total Pcs: ' + this.point.pcs_all;
                                     } else if (kategori === 'Komplain') {
-                                        tooltip += 'Jumlah Komplain: ' + this.point.total_komplain +'<br>'+' Total Qty: ' + this.point.qty_all;
+                                        tooltip += 'Jumlah Komplain: ' + this.point.total_komplain +
+                                            '<br>' + ' Total Qty: ' + this.point.qty_all;
                                     } else if (kategori === 'Klaim') {
-                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim +'<br>'+' Total Pcs: ' + this.point.pcs_all;
+                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim + '<br>' +
+                                            ' Total Pcs: ' + this.point.pcs_all;
                                     }
                                 }
                                 tooltip += ' (' + this.point.percentage.toFixed(1) + '%)';
@@ -1377,7 +1382,6 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('tipe2').addEventListener('change', updatePieChart);
-                // document.getElementById('end_month3').addEventListener('change', updatePieChart);
 
                 function updatePieChart() {
                     var jenis2 = document.getElementById('jenis2').value;
@@ -1386,7 +1390,33 @@
                         .selectedIndex].text;
 
                     var filterType2;
-                    filterType2 = (typeSelected2 === 'type_1') ? 'total_komplain2' : 'total_klaim2';
+
+                    if (jenis2 === 'frekuensi2') {
+                        if (typeSelected2 === 'kategori_2') {
+                            filterType2 = 'kategori_2';
+                        } else if (typeSelected2 === 'type_1') {
+                            filterType2 = 'total_komplain2';
+                        } else if (typeSelected2 === 'type_2') {
+                            filterType2 = 'total_klaim2';
+                        }
+                    } else if (jenis2 === 'qty') {
+                        if (typeSelected2 === 'kategori_2') {
+                            filterType2 = 'qty_all';
+                        } else if (typeSelected2 === 'type_1') {
+                            filterType2 = 'qty_komplain';
+                        } else if (typeSelected2 === 'type_2') {
+                            filterType2 = 'qty_klaim';
+                        }
+                    } else if (jenis2 === 'pcs') {
+                        if (typeSelected2 === 'kategori_2') {
+                            filterType2 = 'pcs_all';
+                        } else if (typeSelected2 === 'type_1') {
+                            filterType2 = 'pcs_komplain';
+                        } else if (typeSelected2 === 'type_2') {
+                            filterType2 = 'pcs_klaim';
+                        }
+                    }
+
                     var startMonth3 = document.getElementById('start_month3').value;
                     var endMonth3 = document.getElementById('end_month3').value;
 
@@ -1395,22 +1425,12 @@
                         '&kategori_2=' + encodeURIComponent(kategori_2) + '&start_month3=' + startMonth3 +
                         '&end_month3=' + endMonth3, true);
 
-                    var data; // Mendeklarasikan variabel data di luar blok fungsi xhr.onreadystatechange
-
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
-                            data = JSON.parse(xhr.responseText);
-                            if (jenis2 === 'frekuensi2' && kategori_2 === 'All Kategori') {
-                                filterType2 = 'kategori_2';
-                            } else if (jenis2 === 'qty' && kategori_2 === 'All Kategori') {
-                                filterType2 = 'total_qty';
-                            } else if (jenis2 === 'pcs' && kategori_2 === 'All Kategori') {
-                                filterType2 = 'total_pcs';
-                            }
+                            var data = JSON.parse(xhr.responseText);
                             renderPieChart(data, filterType2, jenis2, kategori_2);
-                            console.log("menampilkan : ", data);
                         }
-
+                        console.log("kategori masuk1: ", data);
                     };
                     xhr.send();
                 }
@@ -1429,7 +1449,13 @@
                                 qty: data[i].total_qty,
                                 pcs: data[i].total_pcs,
                                 total_klaim2: data[i].total_klaim2,
-                                total_komplain2: data[i].total_komplain2
+                                total_komplain2: data[i].total_komplain2,
+                                qty_komplain: data[i].qty_komplain,
+                                qty_klaim: data[i].qty_klaim,
+                                pcs_komplain: data[i].pcs_komplain,
+                                pcs_klaim: data[i].pcs_klaim,
+                                qty_all: data[i].qty_all,
+                                pcs_all: data[i].pcs_all
                             });
                             console.log("kategori masuk: ", data);
                         }
@@ -1446,26 +1472,37 @@
                         tooltip: {
                             formatter: function() {
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
-
-                                // Menambahkan informasi tambahan berdasarkan jenis2 dan kategori_2
                                 if (jenis2 === 'qty') {
-                                    tooltip += this.point.qty + ' kg';
-                                } else if (jenis2 === 'pcs') {
-                                    tooltip += this.point.pcs + ' pcs';
-                                } else if (jenis2 === 'frekuensi2') {
-                                    // Jika jenis adalah 'frekuensi'
                                     if (kategori_2 === 'All Kategori') {
-                                        // Jika kategori adalah 'All Kategori', tampilkan jumlah keseluruhan klaim dan komplain
-                                        tooltip += 'Total Klaim: ' + this.point.total_klaim2 +
-                                            ', Total Komplain: ' + this.point.total_komplain2;
+                                        tooltip += this.point.qty_all + ' kg';
                                     } else if (kategori_2 === 'Komplain') {
-                                        // Jika kategori adalah 'Komplain', tampilkan jumlah klaim
-                                        tooltip += 'Jumlah Komplain: ' + this.point.total_komplain2;
+                                        tooltip += this.point.qty_komplain + ' kg';
                                     } else if (kategori_2 === 'Klaim') {
-                                        // Jika kategori adalah 'Klaim', tampilkan jumlah komplain
-                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim2;
+                                        tooltip += this.point.qty_klaim + ' kg';
+                                    }
+                                } else if (jenis2 === 'pcs') {
+                                    if (kategori_2 === 'All Kategori') {
+                                        tooltip += this.point.pcs_all + ' pcs';
+                                    } else if (kategori_2 === 'Komplain') {
+                                        tooltip += this.point.pcs_komplain + ' pcs';
+                                    } else if (kategori_2 === 'Klaim') {
+                                        tooltip += this.point.pcs_klaim + ' pcs';
+                                    }
+                                } else if (jenis2 === 'frekuensi2') {
+                                    if (kategori_2 === 'All Kategori') {
+                                        tooltip += '<br>' + 'Total Klaim: ' + this.point.total_klaim2 +
+                                            '<br>' + ' Total Komplain: ' + this.point.total_komplain2 +
+                                            '<br>' + 'Total Qty: ' + this.point.qty_all + '<br>' +
+                                            'Total Pcs: ' + this.point.pcs_all;
+                                    } else if (kategori_2 === 'Komplain') {
+                                        tooltip += 'Jumlah Komplain: ' + this.point.total_komplain2 +
+                                            '<br>' + ' Total Qty: ' + this.point.qty_all;
+                                    } else if (kategori_2 === 'Klaim') {
+                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim2 + '<br>' +
+                                            ' Total Pcs: ' + this.point.pcs_all;
                                     }
                                 }
+
                                 tooltip += ' (' + this.point.percentage.toFixed(1) + '%)';
                                 return tooltip;
                             }
