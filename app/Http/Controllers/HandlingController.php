@@ -101,16 +101,40 @@ class HandlingController extends Controller
         $start_month = $request->input('start_month'); // Tambahkan parameter bulan mulai
         $end_month = $request->input('end_month'); // Tambahkan parameter bulan akhir
 
-        $query = Handling::join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
-            ->select(
-                'type_materials.type_name AS type_name',
-                DB::raw('SUM(handlings.qty) AS total_qty'),
-                DB::raw('SUM(handlings.pcs) AS total_pcs'),
-                DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
-                DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
-                DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
-                    SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
-            )
+        $query = DB::table('handlings')
+        ->join('type_materials', 'handlings.type_id', '=', 'type_materials.id')
+                ->select(
+                    'type_materials.id',
+                    'type_materials.type_name AS type_name',
+                    DB::raw('(SELECT SUM(handlings.qty) 
+                            FROM handlings 
+                            WHERE handlings.type_id = type_materials.id 
+                                AND handlings.type_1 = "Komplain") AS qty_komplain'),
+                    DB::raw('(SELECT SUM(handlings.qty) 
+                            FROM handlings 
+                            WHERE handlings.type_id = type_materials.id 
+                                AND handlings.type_2 = "Klaim") AS qty_klaim'),
+                    DB::raw('(SELECT SUM(handlings.pcs) 
+                            FROM handlings 
+                            WHERE handlings.type_id = type_materials.id 
+                                AND handlings.type_1 = "Komplain") AS pcs_komplain'),
+                    DB::raw('(SELECT SUM(handlings.pcs) 
+                            FROM handlings 
+                            WHERE handlings.type_id = type_materials.id 
+                                AND handlings.type_2 = "Klaim") AS pcs_klaim'),
+                    DB::raw('(SELECT SUM(handlings.qty) 
+                            FROM handlings 
+                            WHERE handlings.type_id = type_materials.id 
+                                AND (handlings.type_1 = "Komplain" OR handlings.type_2 = "Klaim")) AS qty_all'),
+                    DB::raw('(SELECT SUM(handlings.pcs) 
+                            FROM handlings 
+                            WHERE handlings.type_id = type_materials.id 
+                                AND (handlings.type_1 = "Komplain" OR handlings.type_2 = "Klaim")) AS pcs_all'),
+                    DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain'),
+                    DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim'),
+                    DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
+                                SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori')
+                )
             ->where(function ($query) use ($type) {
                 if ($type == 'total_komplain') {
                     $query->where('handlings.type_1', 'Komplain');
@@ -122,7 +146,7 @@ class HandlingController extends Controller
                     $query->selectSub('total_pcs', 'total');
                 }
             })
-            ->groupBy('handlings.type_id', 'type_materials.type_name');
+            ->groupBy('type_materials.id', 'handlings.type_id', 'type_materials.type_name');
 
         if (!empty($start_month) && !empty($end_month)) {
             $query->whereBetween('handlings.created_at', [$start_month, $end_month]); // Filter berdasarkan rentang tanggal

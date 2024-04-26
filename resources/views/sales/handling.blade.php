@@ -112,6 +112,12 @@
                                                                 <i class="fas fa-trash fa-1x"></i>
                                                             </button>
                                                             @endif
+                                                            @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 11 ||Auth::user()->role_id == 12 ||  Auth::user()->role_id == 13 || Auth::user()->role_id == 14)
+                                                                <a href="{{ route('showHistory', $row->id) }}"
+                                                                    class="btn btn-sm btn-success">
+                                                                    <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+                                                                </a>
+                                                            @endif
                                                         @elseif($row->status == 1)
                                                             <a href="{{ route('showHistory', $row->id) }}"
                                                                 class="btn btn-sm btn-success">
@@ -124,10 +130,12 @@
                                                                 onclick="confirmStatusChange({{ $row->id }})">
                                                                 <i class="fa fa-window-close fa-1x"></i>
                                                             </button>
+                                                            @endif    
+                                                            @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 14)
                                                             <a href="{{ route('showHistory', $row->id) }}" class="btn btn-sm btn-success">
                                                                 <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
                                                             </a>                  
-                                                            @endif                                          
+                                                            @endif                                 
                                                         @elseif($row->status == 3)
                                                             <a href="{{ route('showHistory', $row->id) }}"
                                                                 class="btn btn-sm btn-success">

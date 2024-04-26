@@ -227,92 +227,97 @@
 
             <div class="row">
 
-<div class="col-sm-8">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Linestop Alat Bantu (Dalam Menit)</h5>
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="yearDropdown">Pilih Tahun:</label>
-                        <select id="date-dropdown-alat" class="form-control" onchange="updateChartAlat()">
-                            @foreach ($years2 as $year)
-                                <option value="{{ $year }}">{{ $year }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="sectionDropdown">Pilih Section:</label>
-                        <select id="section-dropdown-alat" class="form-control" onchange="updateChartAlat()">
-                            <option value="All" selected>All</option> <!-- Default option -->
-                            @foreach ($sections as $section)
-                                <option value="{{ $section }}">{{ $section }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div id="repairAlatBantu" style="width: 100%; height: auto;"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4">
-        <div class="card" style="height: 560px;">
-            <div class="card-body">
-                <h5 class="card-title">Linestop Alat Bantu (Dalam Menit)</h5>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="start_month_alat">Bulan Mulai:</label>
-                            <input type="date" id="start_month_alat" name="start_month_alat" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="end_month_alat">Bulan Akhir:</label>
-                            <input type="date" id="end_month_alat" name="end_month_alat" class="form-control">
+                <div class="col-sm-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Linestop Alat Bantu (Dalam Menit)</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="yearDropdown">Pilih Tahun:</label>
+                                    <select id="date-dropdown-alat" class="form-control" onchange="updateChartAlat()">
+                                        @foreach ($years2 as $year)
+                                            <option value="{{ $year }}">{{ $year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="sectionDropdown">Pilih Section:</label>
+                                    <select id="section-dropdown-alat" class="form-control" onchange="updateChartAlat()">
+                                        <option value="All" selected>All</option> <!-- Default option -->
+                                        @foreach ($sections as $section)
+                                            <option value="{{ $section }}">{{ $section }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="repairAlatBantu" style="width: 100%; height: auto;"></div>
                         </div>
                     </div>
                 </div>
-                <div class="chart-container"
-                    style="position: relative; height: calc(100% - 10px); width: 100%;">
-                    <canvas id="periodeRepairAlat" style="height: 100%;"></canvas>
+
+                <div class="col-sm-4">
+                    <div class="card" style="height: 560px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Linestop Alat Bantu (Dalam Menit)</h5>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="start_month_alat">Bulan Mulai:</label>
+                                        <input type="date" id="start_month_alat" name="start_month_alat"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="end_month_alat">Bulan Akhir:</label>
+                                        <input type="date" id="end_month_alat" name="end_month_alat"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container"
+                                style="position: relative; height: calc(100% - 10px); width: 100%;">
+                                <canvas id="periodeRepairAlat" style="height: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-sm-12">
-<div id="highcharts-container" class="card">
-<div class="card-body">
-<h5 class="card-title">Detail Linestop / Alat Bantu (Dalam Menit)</h5>
-<div class="row">
-  <!-- Tambahkan dropdown dan input date untuk filter -->
-<div class="col-md-3">
-<label for="sectionDropdown">Pilih Section:</label>
-<select id="section-dropdown-periode-alat" class="form-control" onchange="updateChartPeriodeAlat()">
-<option value="All" selected>All</option>
-@foreach ($sections as $section)
-<option value="{{ $section }}">{{ $section }}</option>
-@endforeach
-</select>
-</div>
-<div class="col-md-3">
-<label for="start_alat">Bulan Mulai:</label>
-<input type="date" id="start_alat" name="start_alat" class="form-control" onchange="updateChartPeriodeAlat()">
-</div>
-<div class="col-md-3">
-<label for="end_alat">Bulan Akhir:</label>
-<input type="date" id="end_alat" name="end_alat" class="form-control" onchange="updateChartPeriodeAlat()">
-</div>
+                <div class="col-sm-12">
+                    <div id="highcharts-container" class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Detail Linestop / Alat Bantu (Dalam Menit)</h5>
+                            <div class="row">
+                                <!-- Tambahkan dropdown dan input date untuk filter -->
+                                <div class="col-md-3">
+                                    <label for="sectionDropdown">Pilih Section:</label>
+                                    <select id="section-dropdown-periode-alat" class="form-control"
+                                        onchange="updateChartPeriodeAlat()">
+                                        <option value="All" selected>All</option>
+                                        @foreach ($sections as $section)
+                                            <option value="{{ $section }}">{{ $section }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="start_alat">Bulan Mulai:</label>
+                                    <input type="date" id="start_alat" name="start_alat" class="form-control"
+                                        onchange="updateChartPeriodeAlat()">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="end_alat">Bulan Akhir:</label>
+                                    <input type="date" id="end_alat" name="end_alat" class="form-control"
+                                        onchange="updateChartPeriodeAlat()">
+                                </div>
 
-<!-- Elemen untuk menampilkan grafik -->
-<div id="periodeAlat" style="width: 100%; height: 400px;"></div>
-</div>
-</div>
-</div>
+                                <!-- Elemen untuk menampilkan grafik -->
+                                <div id="periodeAlat" style="width: 100%; height: 400px;"></div>
+                            </div>
+                        </div>
+                    </div>
 
 
-</div>
+                </div>
 
         </section>
 
@@ -1234,48 +1239,61 @@
 
                 document.getElementById('type').addEventListener('change', FilterPieChartTipe);
 
-                //Chart Type
                 function FilterPieChartTipe() {
                     var jenis = document.getElementById('jenis').value;
                     var typeSelected = document.getElementById('type').value;
                     var kategori = document.getElementById('type').options[document.getElementById('type')
-                        .selectedIndex].text; // Mendapatkan nilai kategori dari dropdown
+                        .selectedIndex].text;
 
                     console.log('Memilih kategori:', kategori);
                     var filterType;
-                    filterType = (typeSelected === 'type_1') ? 'total_komplain' : 'total_klaim';
+
+                    if (jenis === 'frekuensi') {
+                        if (typeSelected === 'kategori') {
+                            filterType = 'kategori';
+                        } else if (typeSelected === 'type_1') {
+                            filterType = 'total_komplain';
+                        } else if (typeSelected === 'type_2') {
+                            filterType = 'total_klaim';
+                        }
+                    } else if (jenis === 'qty') {
+                        if (typeSelected === 'kategori') {
+                            filterType = 'qty_all';
+                        } else if (typeSelected === 'type_1') {
+                            filterType = 'qty_komplain';
+                        } else if (typeSelected === 'type_2') {
+                            filterType = 'qty_klaim';
+                        }
+                    } else if (jenis === 'pcs') {
+                        if (typeSelected === 'kategori') {
+                            filterType = 'pcs_all';
+                        } else if (typeSelected === 'type_1') {
+                            filterType = 'pcs_komplain';
+                        } else if (typeSelected === 'type_2') {
+                            filterType = 'pcs_klaim';
+                        }
+                    }
+
                     var startMonth = document.getElementById('start_month').value;
                     var endMonth = document.getElementById('end_month').value;
 
                     var xhr = new XMLHttpRequest();
                     xhr.open('GET', '/api/filter-pie-chart-tipe?jenis=' + jenis + '&type=' + typeSelected +
                         '&kategori=' + encodeURIComponent(kategori) + '&start_month=' + startMonth + '&end_month=' +
-                        endMonth, true); // Mengirim kategori ke endpoint API
+                        endMonth, true);
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             var data = JSON.parse(xhr.responseText);
-                            if (jenis === 'frekuensi' && kategori === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'kategori';
-                            } else if (jenis === 'qty' && kategori === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'total_qty';
-                            } else if (jenis === 'pcs' && kategori === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType = 'total_pcs';
-                            }
-                            renderChart(data, filterType, jenis,
-                                kategori); // Menyertakan kategori ke fungsi renderChart
+                            renderChart(data, filterType, jenis, kategori);
                         }
+                        console.log("kategori masuk1: ", data);
                     };
                     xhr.send();
                 }
 
-
                 function renderChart(data, filterType, jenis, kategori) {
                     var chartData = [];
                     console.log('Nilai kategori:', kategori);
-                    // Memproses data yang diterima untuk grafik
                     for (var i = 0; i < data.length; i++) {
                         if (data[i][filterType] > 0) {
                             chartData.push({
@@ -1284,7 +1302,13 @@
                                 qty: data[i].total_qty,
                                 pcs: data[i].total_pcs,
                                 total_klaim: data[i].total_klaim,
-                                total_komplain: data[i].total_komplain
+                                total_komplain: data[i].total_komplain,
+                                qty_komplain: data[i].qty_komplain,
+                                qty_klaim: data[i].qty_klaim,
+                                pcs_komplain: data[i].pcs_komplain,
+                                pcs_klaim: data[i].pcs_klaim,
+                                qty_all: data[i].qty_all,
+                                pcs_all: data[i].pcs_all
                             });
                         }
                     }
@@ -1301,21 +1325,28 @@
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
 
                                 if (jenis === 'qty') {
-                                    tooltip += this.point.qty + ' kg';
-                                } else if (jenis === 'pcs') {
-                                    tooltip += this.point.pcs + ' pcs';
-                                } else if (jenis === 'frekuensi') {
-                                    // Jika jenis adalah 'frekuensi'
                                     if (kategori === 'All Kategori') {
-                                        // Jika kategori adalah 'All Kategori', tampilkan jumlah keseluruhan klaim dan komplain
-                                        tooltip += 'Total Klaim: ' + this.point.total_klaim +
-                                            ', Total Komplain: ' + this.point.total_komplain;
+                                        tooltip += this.point.qty_all + ' kg';
                                     } else if (kategori === 'Komplain') {
-                                        // Jika kategori adalah 'Komplain', tampilkan jumlah klaim
-                                        tooltip += 'Jumlah Komplain: ' + this.point.total_komplain;
+                                        tooltip += this.point.qty_komplain + ' kg';
                                     } else if (kategori === 'Klaim') {
-                                        // Jika kategori adalah 'Klaim', tampilkan jumlah komplain
-                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim;
+                                        tooltip += this.point.qty_klaim + ' kg';
+                                    }
+                                } else if (jenis === 'pcs') {
+                                    if (kategori === 'All Kategori') {
+                                        tooltip += this.point.pcs_all + ' pcs';
+                                    } else if (kategori === 'Komplain') {
+                                        tooltip += this.point.pcs_komplain + ' pcs';
+                                    } else if (kategori === 'Klaim') {
+                                        tooltip += this.point.pcs_klaim + ' pcs';
+                                    }
+                                } else if (jenis === 'frekuensi') {
+                                    if (kategori === 'All Kategori') {
+                                        tooltip += '<br>'+'Total Klaim: ' + this.point.total_klaim +'<br>'+' Total Komplain: ' + this.point.total_komplain + '<br>'+'Total Qty: ' + this.point.qty_all +'<br>'+'Total Pcs: ' + this.point.pcs_all;
+                                    } else if (kategori === 'Komplain') {
+                                        tooltip += 'Jumlah Komplain: ' + this.point.total_komplain +'<br>'+' Total Qty: ' + this.point.qty_all;
+                                    } else if (kategori === 'Klaim') {
+                                        tooltip += 'Jumlah Klaim: ' + this.point.total_klaim +'<br>'+' Total Pcs: ' + this.point.pcs_all;
                                     }
                                 }
                                 tooltip += ' (' + this.point.percentage.toFixed(1) + '%)';
@@ -1338,6 +1369,8 @@
                         }]
                     });
                 }
+
+
             });
         </script>
 
@@ -1398,7 +1431,7 @@
                                 total_klaim2: data[i].total_klaim2,
                                 total_komplain2: data[i].total_komplain2
                             });
-                            console.log("kategori masuk: ",data);
+                            console.log("kategori masuk: ", data);
                         }
                     }
 
@@ -1696,115 +1729,115 @@
         </script>
 
         <!-- Repair Maintenance Alat Bantu -->
-<script>
-     // Inisialisasi chart dengan data default
-     var repairAlatBantu;
+        <script>
+            // Inisialisasi chart dengan data default
+            var repairAlatBantu;
 
-// Inisialisasi dropdown tahun saat halaman dimuat
-document.addEventListener('DOMContentLoaded', function() {
-    let dateDropdown = document.getElementById('date-dropdown-alat');
-    let currentYear = new Date().getFullYear();
-    let earliestYear = 2020; // Tahun awal yang diinginkan
-    while (currentYear >= earliestYear) {
-        let dateOption = document.createElement('option');
-        dateOption.text = currentYear;
-        dateOption.value = currentYear;
-        dateDropdown.add(dateOption);
-        currentYear -= 1;
-    }
-    // Panggil updateChart2() untuk memuat data awal
-    updateChartAlat();
-});
+            // Inisialisasi dropdown tahun saat halaman dimuat
+            document.addEventListener('DOMContentLoaded', function() {
+                let dateDropdown = document.getElementById('date-dropdown-alat');
+                let currentYear = new Date().getFullYear();
+                let earliestYear = 2020; // Tahun awal yang diinginkan
+                while (currentYear >= earliestYear) {
+                    let dateOption = document.createElement('option');
+                    dateOption.text = currentYear;
+                    dateOption.value = currentYear;
+                    dateDropdown.add(dateOption);
+                    currentYear -= 1;
+                }
+                // Panggil updateChart2() untuk memuat data awal
+                updateChartAlat();
+            });
 
-// Event handler untuk perubahan pada dropdown tahun
-document.getElementById('date-dropdown-alat').addEventListener('change', function() {
-    updateChartAlat();
-});
+            // Event handler untuk perubahan pada dropdown tahun
+            document.getElementById('date-dropdown-alat').addEventListener('change', function() {
+                updateChartAlat();
+            });
 
-function updateChartAlat() {
-    var selectedYear = document.getElementById('date-dropdown-alat').value;
-    var selectedSection = document.getElementById('section-dropdown-alat').value;
+            function updateChartAlat() {
+                var selectedYear = document.getElementById('date-dropdown-alat').value;
+                var selectedSection = document.getElementById('section-dropdown-alat').value;
 
-    // Perform AJAX request to get new data based on selected year and section
-    $.ajax({
-        url: '/getRepairAlatBantu', // Replace with appropriate endpoint URL
-        method: 'GET',
-        data: {
-            year: selectedYear,
-            section: selectedSection
-        },
-        success: function(response) {
-            var labels = response.labels;
-            var data2 = response.data2;
-
-            var color; // Variabel untuk menyimpan warna yang sesuai
-
-            // Tentukan warna berdasarkan bagian yang dipilih
-            switch (selectedSection) {
-                case 'CUTTING':
-                    color = '#e74c3c';
-                    break;
-                case 'MACHINING CUSTOM':
-                    color = '#3498db';
-                    break;
-                case 'MACHINING':
-                    color = 'blue';
-                    break;
-                case 'HEAT TREATMENT':
-                    color = '#27ae60';
-                    break;
-                default:
-                    color = 'darkgrey'; // Warna default jika tidak ada yang cocok
-            }
-
-            if (!repairAlatBantu) {
-                repairAlatBantu = Highcharts.chart('repairAlatBantu', {
-                    chart: {
-                        type: 'column'
+                // Perform AJAX request to get new data based on selected year and section
+                $.ajax({
+                    url: '/getRepairAlatBantu', // Replace with appropriate endpoint URL
+                    method: 'GET',
+                    data: {
+                        year: selectedYear,
+                        section: selectedSection
                     },
-                    title: {
-                        text: 'Linestop (Dalam Menit)'
-                    },
-                    xAxis: {
-                        categories: labels
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Waktu (menit)'
+                    success: function(response) {
+                        var labels = response.labels;
+                        var data2 = response.data2;
+
+                        var color; // Variabel untuk menyimpan warna yang sesuai
+
+                        // Tentukan warna berdasarkan bagian yang dipilih
+                        switch (selectedSection) {
+                            case 'CUTTING':
+                                color = '#e74c3c';
+                                break;
+                            case 'MACHINING CUSTOM':
+                                color = '#3498db';
+                                break;
+                            case 'MACHINING':
+                                color = 'blue';
+                                break;
+                            case 'HEAT TREATMENT':
+                                color = '#27ae60';
+                                break;
+                            default:
+                                color = 'darkgrey'; // Warna default jika tidak ada yang cocok
+                        }
+
+                        if (!repairAlatBantu) {
+                            repairAlatBantu = Highcharts.chart('repairAlatBantu', {
+                                chart: {
+                                    type: 'column'
+                                },
+                                title: {
+                                    text: 'Linestop (Dalam Menit)'
+                                },
+                                xAxis: {
+                                    categories: labels
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    title: {
+                                        text: 'Waktu (menit)'
+                                    }
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                series: [{
+                                    name: 'Line Stop (Dalam Menit)',
+                                    data: data2,
+                                    color: color // Gunakan warna yang telah ditentukan
+                                }]
+                            });
+                        } else {
+                            repairAlatBantu.xAxis[0].setCategories(labels, false);
+                            repairAlatBantu.series[0].setData(data2, true);
+                            repairAlatBantu.series[0].update({
+                                color: color
+                            }); // Update warna
                         }
                     },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{
-                        name: 'Line Stop (Dalam Menit)',
-                        data: data2,
-                        color: color // Gunakan warna yang telah ditentukan
-                    }]
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        // Handle error here
+                    }
                 });
-            } else {
-                repairAlatBantu.xAxis[0].setCategories(labels, false);
-                repairAlatBantu.series[0].setData(data2, true);
-                repairAlatBantu.series[0].update({
-                    color: color
-                }); // Update warna
+
+                // Call function to update the period of work completion chart
+                updatePeriodeWaktuAlat();
+
+
             }
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            // Handle error here
-        }
-    });
 
-    // Call function to update the period of work completion chart
-    updatePeriodeWaktuAlat();
-
-
-}
-
-  /// Inisialisasi chart periode waktu pengerjaan dengan data default
-  var ctxPeriode = document.getElementById('periodeRepairAlat').getContext('2d');
+            /// Inisialisasi chart periode waktu pengerjaan dengan data default
+            var ctxPeriode = document.getElementById('periodeRepairAlat').getContext('2d');
             var periodeWaktuAlat = new Chart(ctxPeriode, {
                 type: 'bar',
                 data: {
@@ -1885,110 +1918,110 @@ function updateChartAlat() {
             // Event handler untuk perubahan pada dropdown section
             document.getElementById('section-dropdown-alat').addEventListener('change', function() {
                 updateChartAlat();
-updatePeriodeWaktuAlat();
+                updatePeriodeWaktuAlat();
             });
 
             // Event handler untuk perubahan pada dropdown section
             document.getElementById('date-dropdown-alat').addEventListener('change', function() {
                 updateChartAlat();
-updatePeriodeWaktuAlat();
+                updatePeriodeWaktuAlat();
             });
 
 
             document.getElementById('start_month_alat').addEventListener('change', function() {
                 updateChartAlat();
-updatePeriodeWaktuAlat();
+                updatePeriodeWaktuAlat();
             });
 
             document.getElementById('end_month_alat').addEventListener('change', function() {
                 updateChartAlat();
-updatePeriodeWaktuAlat();
+                updatePeriodeWaktuAlat();
             });
         </script>
 
-<script>
-    function updateChartPeriodeAlat() {
-        var section_alat = document.getElementById('section-dropdown-periode-alat').value;
-    var startDate_alat = document.getElementById('start_alat').value;
-    var endDate_alat = document.getElementById('end_alat').value;
+        <script>
+            function updateChartPeriodeAlat() {
+                var section_alat = document.getElementById('section-dropdown-periode-alat').value;
+                var startDate_alat = document.getElementById('start_alat').value;
+                var endDate_alat = document.getElementById('end_alat').value;
 
-    $.ajax({
-        url: '/getPeriodeAlat',
-        type: 'GET',
-        data: {
-            section_alat: section_alat,
-            start_alat: startDate_alat,
-            end_alat: endDate_alat
-        },
-        success: function(response) {
-            drawChartPeriodeAlat(response);
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    });
-}
-
-// Fungsi untuk menggambar grafik linestop alat bantu menggunakan data yang diterima
-function drawChartPeriodeAlat(data) {
-    var categories_alat = []; // Array untuk menyimpan kategori (nomor mesin)
-    var seriesData_alat = []; // Array untuk menyimpan data series
-
-    // Tentukan warna yang sesuai untuk setiap section
-    var colors = {
-        'cutting': '#e74c3c',
-        'machining custom': '#3498db',
-        'machining': 'blue',
-        'heat treatment': '#27ae60'
-    };
-
-    // Membuat data series berdasarkan section dengan warna yang sesuai
-    data.forEach(item => {
-        // Menambahkan kategori (nomor mesin) dan data series
-        categories_alat.push(item.mesin);
-        var color = colors[item.section.toLowerCase()] || 'gray'; // Gunakan warna sesuai dengan section, jika tidak ada gunakan warna default
-        seriesData_alat.push({
-            name: item.mesin + ' (' + item.section + ')',
-            y: parseFloat(item.total_minutes_alat),
-            color: color
-        });
-    });
-
-    // Menggambar grafik menggunakan Highcharts JS
-    Highcharts.chart('periodeAlat', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Detail Linestop / Alat Bantu (Dalam Menit)'
-        },
-        xAxis: {
-            categories: categories_alat
-        },
-        yAxis: {
-            title: {
-                text: 'Total Menit'
+                $.ajax({
+                    url: '/getPeriodeAlat',
+                    type: 'GET',
+                    data: {
+                        section_alat: section_alat,
+                        start_alat: startDate_alat,
+                        end_alat: endDate_alat
+                    },
+                    success: function(response) {
+                        drawChartPeriodeAlat(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
             }
-        },
-        series: [{
-            name: 'Line Stop (Dalam menit)',
-            data: seriesData_alat // Menggunakan data yang sudah disesuaikan warnanya
-        }],
-        credits: { // Configuration to disable credits
-                    enabled: false
-                },
-        plotOptions: {
-            column: {
-                colorByPoint: true // Mengatur agar warna sesuai dengan point (data) pada sumbu-x
+
+            // Fungsi untuk menggambar grafik linestop alat bantu menggunakan data yang diterima
+            function drawChartPeriodeAlat(data) {
+                var categories_alat = []; // Array untuk menyimpan kategori (nomor mesin)
+                var seriesData_alat = []; // Array untuk menyimpan data series
+
+                // Tentukan warna yang sesuai untuk setiap section
+                var colors = {
+                    'cutting': '#e74c3c',
+                    'machining custom': '#3498db',
+                    'machining': 'blue',
+                    'heat treatment': '#27ae60'
+                };
+
+                // Membuat data series berdasarkan section dengan warna yang sesuai
+                data.forEach(item => {
+                    // Menambahkan kategori (nomor mesin) dan data series
+                    categories_alat.push(item.mesin);
+                    var color = colors[item.section.toLowerCase()] ||
+                        'gray'; // Gunakan warna sesuai dengan section, jika tidak ada gunakan warna default
+                    seriesData_alat.push({
+                        name: item.mesin + ' (' + item.section + ')',
+                        y: parseFloat(item.total_minutes_alat),
+                        color: color
+                    });
+                });
+
+                // Menggambar grafik menggunakan Highcharts JS
+                Highcharts.chart('periodeAlat', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Detail Linestop / Alat Bantu (Dalam Menit)'
+                    },
+                    xAxis: {
+                        categories: categories_alat
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Total Menit'
+                        }
+                    },
+                    series: [{
+                        name: 'Line Stop (Dalam menit)',
+                        data: seriesData_alat // Menggunakan data yang sudah disesuaikan warnanya
+                    }],
+                    credits: { // Configuration to disable credits
+                        enabled: false
+                    },
+                    plotOptions: {
+                        column: {
+                            colorByPoint: true // Mengatur agar warna sesuai dengan point (data) pada sumbu-x
+                        }
+                    }
+                });
             }
-        }
-    });
-}
 
-// Memanggil fungsi updateChartPeriodeAlat() untuk menginisialisasi grafik linestop alat bantu
-updateChartPeriodeAlat();
-
-</script>
+            // Memanggil fungsi updateChartPeriodeAlat() untuk menginisialisasi grafik linestop alat bantu
+            updateChartPeriodeAlat();
+        </script>
 
 
 
