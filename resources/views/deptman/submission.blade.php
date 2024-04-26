@@ -73,8 +73,8 @@
                                                             style="font-size: 18px;">Open</span>
                                                     @endif
                                                 </td>
-
                                                 <td class="text-center">
+                                                    @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                                                     <form onsubmit="return confirm('Apakah Anda Yakin ?');" method="POST">
                                                         <a href="{{ route('showConfirm', $row->id) }}"
                                                             class="btn btn-sm btn-primary" title="Konfirmasi Data">
@@ -82,6 +82,7 @@
                                                             <!-- Gantilah 'fas fa-eye' dengan kelas ikon yang sesuai -->
                                                         </a>
                                                     </form>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -163,21 +164,28 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
+                                                    
                                                     @if ($row->status == 1)
+                                                    @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                                                         <a href="{{ route('showFollowUp', $row->id) }}"
                                                             class="btn btn-sm btn-primary" title="Tindak Lanjut">
                                                             <i class="fa fa-file-text fa-2x" aria-hidden="true"></i>
                                                         </a>
+                                                        @endif
                                                     @elseif ($row->status == 2)
+                                                    @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 ||  Auth::user()->role_id == 14)
                                                         <a href="{{ route('showHistoryProgres', $row->id) }}"
                                                             class="btn btn-sm btn-success"  title="Riwayat Progres">
                                                             <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
                                                         </a>
+                                                        @endif
                                                     @elseif ($row->status == 3)
+                                                    @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 ||  Auth::user()->role_id == 14)
                                                         <a href="{{ route('showHistoryProgres', $row->id) }}"
                                                             class="btn btn-sm btn-success"  title="Riwayat Progres">
                                                             <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
                                                         </a>
+                                                        @endif
                                                     @endif
                                                 </td>
                                             </tr>

@@ -136,29 +136,29 @@ class HandlingController extends Controller
 
     public function FilterPieChartProses(Request $request)
     {
-        $type_name2 = $request->input('type_name2');
-        $kategori2 = $request->input('kategori2');
+        $type_name2 = $request->input('type_name');
+        $kategori2 = $request->input('kategori_2');
         $jenis2 = $request->input('jenis2');
-        $type2 = $request->input('type2');
+        $tipe2 = $request->input('tipe2');
         $start_month3 = $request->input('start_month3'); // Tambahkan parameter bulan mulai
         $end_month3 = $request->input('end_month3');
 
-        $query2 = Handling::select('handlings.process_type AS type_name2,',
+        $query2 = Handling::select('handlings.process_type AS type_name',
             DB::raw('SUM(handlings.qty) AS total_qty'),
             DB::raw('SUM(handlings.pcs) AS total_pcs'),
             DB::raw('SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) AS total_komplain2'),
             DB::raw('SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END) AS total_klaim2'),
             DB::raw('COALESCE(SUM(CASE WHEN handlings.type_1 = "Komplain" THEN 1 ELSE 0 END) +
-                SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori2')
+                SUM(CASE WHEN handlings.type_2 = "Klaim" THEN 1 ELSE 0 END), 0) AS kategori_2')
         )
-        ->where(function ($query2) use ($type2) {
-            if ($type2 == 'total_komplain') {
+        ->where(function ($query2) use ($tipe2) {
+            if ($tipe2 == 'total_komplain') {
                 $query2->where('handlings.type_1', 'Komplain');
-            } elseif ($type2 == 'total_klaim') {
+            } elseif ($tipe2 == 'total_klaim') {
                 $query2->where('handlings.type_2', 'Klaim');
-            } elseif ($type2 == 'qty') {
+            } elseif ($tipe2 == 'qty') {
                 $query2->selectSub('total_qty', 'total');
-            } elseif ($type2 == 'pcs') {
+            } elseif ($tipe2 == 'pcs') {
                 $query2->selectSub('total_pcs', 'total');
             }
         })

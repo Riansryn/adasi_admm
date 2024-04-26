@@ -268,7 +268,8 @@
                                                                 <div class="col-lg-6 mb-2 d-flex justify-content-start">
                                                                     <img src="{{ asset('assets/image/' . $image) }}"
                                                                         class="img-fluid rounded mx-1" alt="image"
-                                                                        style="max-width: 100%; object-fit: cover;">
+                                                                        style="max-width: 100%; object-fit: cover;"
+                                                                        onclick="showModal('{{ asset('assets/image/' . $image) }}')">
                                                                 </div>
                                                                 @php $count++; @endphp
                                                             @endif
@@ -289,6 +290,17 @@
                                         </button>
                                     </div>
                                 </div>
+                                <div id="imageModal" class="modal"
+                                    style="display: none; position: fixed; z-index: 1; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.9);">
+                                    <div
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 700px; background-color: #fefefe; border-radius: 5px;">
+                                        <span class="close"
+                                            style="position: absolute; top: 10px; right: 10px; color: #000; font-size: 30px; font-weight: bold; cursor: pointer;"
+                                            onclick="closeModal()">&times;</span>
+                                        <img class="modal-content" id="modalImage"
+                                            style="display: block; margin: auto; width: 50%; max-width: 70%;">
+                                    </div>
+                                </div>
                         </form>
                     </div>
                 </div>
@@ -303,41 +315,76 @@
                 customerIdNameSelect.value = selectedOption.getAttribute('data-name_customer');
                 customerIdAreaSelect.value = selectedOption.getAttribute('data-area');
             }
+            var imageError = document.getElementById('imageError');
+            imageError.style.display = 'none';
 
-            document.getElementById('formFile').addEventListener('change', function(event) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    var imgElement = document.getElementById('uploadedImage');
-                    imgElement.src = reader.result;
-                }
-                reader.readAsDataURL(event.target.files[0]);
-            });
+            // document.getElementById('formFile').addEventListener('change', function(event) {
+            //     var reader = new FileReader();
+            //     reader.onload = function() {
+            //         var imgElement = document.getElementById('uploadedImage');
+            //         imgElement.src = reader.result;
+            //     }
+            //     reader.readAsDataURL(event.target.files[0]);
+            // });
 
-            function viewImages(event) {
-                var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            function showModal(imageSrc) {
+                var modal = document.getElementById("imageModal");
+                var modalImg = document.getElementById("modalImage");
+                modal.style.display = "block";
+                modalImg.src = imageSrc;
+            }
+
+            // Fungsi untuk menutup modal saat tombol "x" di klik
+            function closeModal() {
+                var modal = document.getElementById("imageModal");
+                modal.style.display = "none";
+            }
+
+            function viewImage(event) {
+                var imageContainer = document.getElementById('imagePreviewContainer');
+                imageContainer.innerHTML = ''; // Kosongkan kontainer gambar sebelum menambahkan gambar baru
+
+                var files = event.target.files; // Ambil file-file yang diunggah
+
+                // Hapus gambar yang lama
                 var existingImagesContainer = document.getElementById('existingImages');
+                existingImagesContainer.innerHTML = '';
 
-                imagePreviewContainer.innerHTML = ''; // Kosongkan kontainer untuk gambar baru
+                // Iterasi melalui setiap file
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader(); // Buat pembaca file
 
-                // Menampilkan gambar-gambar baru
-                for (var i = 0; i < event.target.files.length; i++) {
-                    var file = event.target.files[i];
+                    reader.onload = function(e) {
+                        // Buat elemen gambar baru
+                        var imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
 
-                    if (file.type.match('image.*')) {
-                        var img = document.createElement('img');
-                        img.classList.add('img-fluid', 'rounded', 'mx-1');
-                        img.style.maxWidth = '200px';
-                        img.style.objectFit = 'cover';
+                        // Tentukan ukuran gambar berdasarkan jumlah file yang diunggah
+                        if (files.length === 1 || files.length === 2) {
+                            imgElement.style.width = '50%'; // Set lebar gambar menjadi 50% untuk 1 atau 2 gambar
+                        } else {
+                            imgElement.style.width = '33.33%'; // Set lebar gambar menjadi 33.33% untuk lebih dari 2 gambar
+                        }
 
-                        var imageURL = URL.createObjectURL(file);
-                        img.src = imageURL;
+                        // Tambahkan gambar ke dalam kontainer
+                        imageContainer.appendChild(imgElement);
 
-                        imagePreviewContainer.appendChild(img);
-                    }
+                        // Tambahkan fungsi untuk menampilkan modal saat gambar di klik
+                        imgElement.onclick = function() {
+                            showModal(this.src);
+                        };
+                    };
+
+                    reader.readAsDataURL(file); // Baca file sebagai URL data
                 }
 
-                // Menghapus gambar-gambar yang sudah ada dari tampilan
-                existingImagesContainer.style.display = 'none';
+                // Setelah semua gambar ditambahkan, kita akan mengatur ulang lebar kontainer gambar
+                setTimeout(function() {
+                    var images = imageContainer.querySelectorAll('img');
+                    var containerWidth = (files.length > 2) ? '100%' : '50%'; // Tentukan lebar kontainer
+                    imageContainer.style.width = containerWidth;
+                }, 100); // Beri sedikit waktu agar gambar ditampilkan sebelum menyesuaikan lebar kontainer
             }
         </script>
 

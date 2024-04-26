@@ -377,8 +377,7 @@
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="jenis">Jenis:</label>
                                             <select id="jenis" class="form-select form-select-sm"
-                                                aria-label=".form-select-sm example"
-                                                onchange="FilterPieChartTipe(); FilterKategori();">
+                                                aria-label=".form-select-sm example" onchange="FilterPieChartTipe()">
                                                 <option selected>--- Pilih Jenis ---</option>
                                                 <option value="frekuensi">Frekuensi Jenis</option>
                                                 <option value="qty">QTY</option>
@@ -388,8 +387,7 @@
                                         <div class="col-lg-6" style="margin-top: 1%">
                                             <label for="tipe">Kategori:</label>
                                             <select id="type" class="form-select form-select-sm"
-                                                aria-label=".form-select-sm example"
-                                                onchange="FilterPieChartTipe(); FilterKategori();">
+                                                aria-label=".form-select-sm example" onchange="FilterPieChartTipe()">
                                                 <option selected>--- Pilih Kategori ---</option>
                                                 <option value="kategori">All Kategori</option>
                                                 <option value="type_1">Komplain</option>
@@ -420,21 +418,21 @@
                                         </div>
                                         {{-- filternya --}}
                                         <div class="col-lg-6" style="margin-top: 1%">
-                                            <label for="jenis">Jenis:</label>
+                                            <label for="jenis2">Jenis:</label>
                                             <select id="jenis2" class="form-select form-select-sm"
                                                 aria-label=".form-select-sm example" onchange="updatePieChart();">
                                                 <option selected>--- Pilih Jenis ---</option>
-                                                <option value="frekuensi">Frekuensi Jenis</option>
+                                                <option value="frekuensi2">Frekuensi Jenis</option>
                                                 <option value="qty">QTY</option>
                                                 <option value="pcs">PCS</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-6" style="margin-top: 1%">
-                                            <label for="tipe">Kategori:</label>
-                                            <select id="type2" class="form-select form-select-sm"
-                                                aria-label=".form-select-sm example" onchange="updatePieChart(); ">
+                                            <label for="tipe2">Kategori:</label>
+                                            <select id="tipe2" class="form-select form-select-sm"
+                                                aria-label=".form-select-sm example" onchange="updatePieChart();">
                                                 <option selected>--- Pilih Kategori ---</option>
-                                                <option value="kategori2">All Kategori</option>
+                                                <option value="kategori_2">All Kategori</option>
                                                 <option value="type_1">Komplain</option>
                                                 <option value="type_2">Klaim</option>
                                             </select>
@@ -1186,7 +1184,7 @@
 
                 function renderChart(data, filterType, jenis, kategori) {
                     var chartData = [];
-
+                    console.log('Nilai kategori:', kategori);
                     // Memproses data yang diterima untuk grafik
                     for (var i = 0; i < data.length; i++) {
                         if (data[i][filterType] > 0) {
@@ -1255,59 +1253,66 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('tipe2').addEventListener('change', updatePieChart);
+                // document.getElementById('end_month3').addEventListener('change', updatePieChart);
 
                 function updatePieChart() {
                     var jenis2 = document.getElementById('jenis2').value;
-                    var typeSelected2 = document.getElementById('type2').value;
-                    var kategori2 = document.getElementById('type').options[document.getElementById('type')
+                    var typeSelected2 = document.getElementById('tipe2').value;
+                    var kategori_2 = document.getElementById('tipe2').options[document.getElementById('tipe2')
                         .selectedIndex].text;
 
-                    console.log('Memilih kategori2:', kategori2);
                     var filterType2;
                     filterType2 = (typeSelected2 === 'type_1') ? 'total_komplain2' : 'total_klaim2';
                     var startMonth3 = document.getElementById('start_month3').value;
                     var endMonth3 = document.getElementById('end_month3').value;
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/api/FilterPieChartProses?jenis2=' + jenis2 + '&type2=' + typeSelected2 +
-                        '&kategori2=' + encodeURIComponent(kategori2) + '&start_month3=' + startMonth3 +
+                    xhr.open('GET', '/api/FilterPieChartProses?jenis2=' + jenis2 + '&tipe2=' + typeSelected2 +
+                        '&kategori_2=' + encodeURIComponent(kategori_2) + '&start_month3=' + startMonth3 +
                         '&end_month3=' + endMonth3, true);
+
+                    var data; // Mendeklarasikan variabel data di luar blok fungsi xhr.onreadystatechange
+
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState == 4 && xhr.status == 200) {
-                            var data = JSON.parse(xhr.responseText);
-                            if (jenis2 === 'frekuensi' && kategori2 === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
-                                filterType2 = 'kategori';
-                            } else if (jenis2 === 'qty' && kategori2 === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                            data = JSON.parse(xhr.responseText);
+                            if (jenis2 === 'frekuensi2' && kategori_2 === 'All Kategori') {
+                                filterType2 = 'kategori_2';
+                            } else if (jenis2 === 'qty' && kategori_2 === 'All Kategori') {
                                 filterType2 = 'total_qty';
-                            } else if (jenis2 === 'pcs' && kategori2 === 'All Kategori') {
-                                // Jika jenis adalah 'Frekuensi Jenis' dan kategori adalah 'All Kategori', maka atur filterType untuk menampilkan semua jenis
+                            } else if (jenis2 === 'pcs' && kategori_2 === 'All Kategori') {
                                 filterType2 = 'total_pcs';
                             }
-                            renderPieChart(data, filterType2, jenis2,
-                                kategori2); // Menyertakan kategori ke fungsi renderPieChart
+                            renderPieChart(data, filterType2, jenis2, kategori_2);
+                            console.log("menampilkan : ", data);
                         }
+                        
                     };
                     xhr.send();
                 }
 
-                function renderPieChart(data, filterType2, jenis2, kategori2) {
+                function renderPieChart(data, filterType2, jenis2, kategori_2) {
                     var chartData = [];
 
                     // Memproses data yang diterima untuk grafik
                     for (var i = 0; i < data.length; i++) {
+                        // Memeriksa apakah nilai filterType2 dari data saat ini tidak nol dan sesuai dengan filter yang dipilih
                         if (data[i][filterType2] > 0) {
+                            // Menambahkan data ke chartData
                             chartData.push({
-                                name: data[i].type_name2,
+                                name: data[i].type_name,
                                 y: parseInt(data[i][filterType2]),
                                 qty: data[i].total_qty,
                                 pcs: data[i].total_pcs,
                                 total_klaim2: data[i].total_klaim2,
                                 total_komplain2: data[i].total_komplain2
                             });
+                            console.log("kategori masuk: ",data);
                         }
                     }
+
+                    // Membuat grafik pie menggunakan Highcharts
                     Highcharts.chart('ChartPieProses', {
                         chart: {
                             type: 'pie'
@@ -1318,20 +1323,22 @@
                         tooltip: {
                             formatter: function() {
                                 var tooltip = '<b>' + this.point.name + '</b>: ';
+
+                                // Menambahkan informasi tambahan berdasarkan jenis2 dan kategori_2
                                 if (jenis2 === 'qty') {
                                     tooltip += this.point.qty + ' kg';
                                 } else if (jenis2 === 'pcs') {
                                     tooltip += this.point.pcs + ' pcs';
-                                } else if (jenis2 === 'frekuensi') {
+                                } else if (jenis2 === 'frekuensi2') {
                                     // Jika jenis adalah 'frekuensi'
-                                    if (kategori2 === 'All Kategori') {
+                                    if (kategori_2 === 'All Kategori') {
                                         // Jika kategori adalah 'All Kategori', tampilkan jumlah keseluruhan klaim dan komplain
                                         tooltip += 'Total Klaim: ' + this.point.total_klaim2 +
                                             ', Total Komplain: ' + this.point.total_komplain2;
-                                    } else if (kategori2 === 'Komplain') {
+                                    } else if (kategori_2 === 'Komplain') {
                                         // Jika kategori adalah 'Komplain', tampilkan jumlah klaim
                                         tooltip += 'Jumlah Komplain: ' + this.point.total_komplain2;
-                                    } else if (kategori2 === 'Klaim') {
+                                    } else if (kategori_2 === 'Klaim') {
                                         // Jika kategori adalah 'Klaim', tampilkan jumlah komplain
                                         tooltip += 'Jumlah Klaim: ' + this.point.total_klaim2;
                                     }
@@ -1356,12 +1363,6 @@
                         }]
                     });
                 }
-
-                document.getElementById('type2').addEventListener('change', updatePieChart);
-                // document.getElementById('start_month3').addEventListener('change', updatePieChart);
-                // document.getElementById('end_month3').addEventListener('change', updatePieChart);
-                // updatePieChart(); // Panggil updatePieChart saat DOM dimuat
-
             });
 
 
@@ -1393,36 +1394,6 @@
                     }]
                 });
             });
-
-
-            // document.addEventListener('DOMContentLoaded', function() {
-            //     var chartData = {!! json_encode($pieProses) !!};
-            //     console.log(chartData); // Pastikan untuk memeriksa data yang tercetak di konsol
-
-            //     Highcharts.chart('ChartPieProses', {
-            //         chart: {
-            //             type: 'pie'
-            //         },
-            //         title: {
-            //             text: 'Total Proses'
-            //         },
-            //         plotOptions: {
-            //             pie: {
-            //                 allowPointSelect: true,
-            //                 cursor: 'pointer',
-            //                 dataLabels: {
-            //                     enabled: true,
-            //                     format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-            //                 }
-            //             }
-            //         },
-            //         series: [{
-            //             name: 'Process',
-            //             colorByPoint: true,
-            //             data: chartData
-            //         }]
-            //     });
-            // });
         </script>
 
 

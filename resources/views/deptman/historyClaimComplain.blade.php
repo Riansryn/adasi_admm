@@ -120,7 +120,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('showCloseProgres', ['id' => $row->id]) }}" class="btn btn-sm btn-success">
+                                                    <a href="{{ route('showHistoryProgres', ['id' => $row->id]) }}" class="btn btn-sm btn-success">
                                                         <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
                                                     </a>                                                    
                                                 </td>

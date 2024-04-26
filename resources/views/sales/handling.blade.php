@@ -22,11 +22,14 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Tampilan Data Handling</h5>
+                            @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4)
                             <div class="card-header" style="margin-bottom: 20px;">
                                 <a href="{{ route('create') }}" class="btn btn-success btn-sm" style="font-size: 20px;">
                                     <i class="fas fa-plus"></i> Tambah Data
                                 </a>
                             </div>
+                            @endif
+                            @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 11 || Auth::user()->role_id == 12 || Auth::user()->role_id == 13 || Auth::user()->role_id == 14 )
                             <!-- Table with stripped rows -->
                             <div class="table-responsive" style="height: 100%; overflow-y: auto;">
                                 <table id="viewSales" class="table table-striped" style="table-layout: fixed;">
@@ -98,14 +101,17 @@
                                                         @method('DELETE')
                                                         @if ($row->status != 1 && $row->status != 2 && $row->status != 3)
                                                             <!-- Menambahkan kondisi untuk status yang tidak sama dengan 1, 2, atau 3 -->
+                                                            @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4)
                                                             <a href="{{ route('edit', $row->id) }}"
                                                                 class="btn btn-sm btn-primary" title="Ubah Data">
                                                                 <i class="fa-solid fa-edit fa-1x"></i>
                                                             </a>
+                                                            
                                                             <button type="submit" class="btn btn-sm btn-danger"
                                                                 title="Hapus">
                                                                 <i class="fas fa-trash fa-1x"></i>
                                                             </button>
+                                                            @endif
                                                         @elseif($row->status == 1)
                                                             <a href="{{ route('showHistory', $row->id) }}"
                                                                 class="btn btn-sm btn-success">
@@ -113,13 +119,15 @@
                                                             </a>
                                                         @elseif ($row->status == 2)
                                                             <!-- Jika status 2 (Finish), tampilkan SweetAlert untuk konfirmasi -->
+                                                            @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4)
                                                             <button type="button" class="btn btn-sm btn-danger"
                                                                 onclick="confirmStatusChange({{ $row->id }})">
                                                                 <i class="fa fa-window-close fa-1x"></i>
                                                             </button>
                                                             <a href="{{ route('showHistory', $row->id) }}" class="btn btn-sm btn-success">
                                                                 <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
-                                                            </a>                                                            
+                                                            </a>                  
+                                                            @endif                                          
                                                         @elseif($row->status == 3)
                                                             <a href="{{ route('showHistory', $row->id) }}"
                                                                 class="btn btn-sm btn-success">
@@ -143,6 +151,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -104,6 +104,13 @@
             <b>
                 <li class="nav-label">DMS Menu</h5>
             </b>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </li><!-- End Logout Nav -->
             @if (Auth::user()->role_id == 1)
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboard-admin-nav">
@@ -143,7 +150,7 @@
                 </ul>
             </li>
             @if (Auth::check())
-                @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 ||Auth::user()->role_id == 9 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 8 ||Auth::user()->role_id == 9  || Auth::user()->role_id == 14 || Auth::user()->role_id == 1)
                     <li class="nav-label">Production</li>
                     <li class="nav-item">
                         <a class="nav-link collapsed" data-bs-toggle="collapse" href="#prod-forms-nav">
@@ -167,7 +174,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (Auth::user()->role_id == 6 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 6 || Auth::user()->role_id == 1 || Auth::user()->role_id == 14)
                     <li class="nav-label">Maintenance</li>
                     <li class="nav-item">
                         <a class="nav-link collapsed" data-bs-target="#maint-received-nav" data-bs-toggle="collapse"
@@ -199,7 +206,7 @@
                 @endif
                 <!-- End Prod Forms Nav -->
                 <ul class="sidebar-nav">
-                    @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
+                    @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 14)
                         {{-- Role ID untuk Maintenance --}}
                         {{-- Tampilkan sidebar untuk Maintenance --}}
                         <li class="nav-label">Engineering</li>
@@ -262,7 +269,7 @@
                             </ul>
                         </li><!-- End Dept Complain & Claim Nav -->
                     @endif
-                    @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4)
+                    @if (Auth::user()->role_id == 1 ||Auth::user()->role_id == 2 ||  Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 11 || Auth::user()->role_id == 12 || Auth::user()->role_id == 13 || Auth::user()->role_id == 14)
                         {{-- Role ID untuk Sales --}}
                         <li class="nav-label">Sales</li>
                         <li class="nav-item">
@@ -286,7 +293,6 @@
                                 </li>
                             </ul>
                         </li><!-- End Sales FPP Nav -->
-                        <li class="nav-item">
                             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse"
                                 href="#">
                                 <i class="bi bi-journal-text"></i><span>Handling Klaim dan Komplain</span><i
@@ -316,13 +322,7 @@
         </ul>
         <!-- Footer Sidebar -->
         <ul class="sidebar-nav fixed-bottom ps-3">
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
-                </a>
-            </li><!-- End Logout Nav -->
+           
         </ul>
         <!-- End Footer Sidebar -->
     </aside><!-- End Sidebar-->
