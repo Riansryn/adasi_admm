@@ -40,6 +40,17 @@ class FormFPPController extends Controller
         return view('maintenance.index', compact('formperbaikans', 'tindaklanjuts'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
+    public function DashboardMaintenanceGA()
+    {
+        // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
+        $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
+
+        // Mengambil semua data TindakLanjut diurutkan berdasarkan updated_at terbaru
+        $tindaklanjuts = TindakLanjut::orderBy('updated_at', 'desc')->get();
+
+        return view('ga.dashboardga', compact('formperbaikans', 'tindaklanjuts'))->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
     public function DashboardDeptMTCE()
     {
         // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
@@ -49,6 +60,17 @@ class FormFPPController extends Controller
         $tindaklanjuts = TindakLanjut::orderBy('updated_at', 'desc')->get();
 
         return view('deptmtce.index', compact('formperbaikans', 'tindaklanjuts'))->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
+    public function DashboardFPPGA()
+    {
+        // Mengambil semua data FormFPP diurutkan berdasarkan updated_at terbaru
+        $formperbaikans = FormFPP::orderBy('updated_at', 'desc')->get();
+
+        // Mengambil semua data TindakLanjut diurutkan berdasarkan updated_at terbaru
+        $tindaklanjuts = TindakLanjut::orderBy('updated_at', 'desc')->get();
+
+        return view('ga.approvedfpp', compact('formperbaikans', 'tindaklanjuts'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     public function DashboardFPPSales()

@@ -76,6 +76,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     // Maintenance
     Route::get('dashboardmaintenance', [FormFPPController::class, 'DashboardMaintenance'])
         ->name('maintenance.index');
+    Route::get('dashboardmaintenancega', [FormFPPController::class, 'DashboardMaintenanceGA'])
+        ->name('ga.dashboardga');
     Route::get('lihatmaintenance/{formperbaikan}', [FormFPPController::class, 'LihatMaintenance'])
         ->name('maintenance.lihat');
     Route::get('editmaintenance/{formperbaikan}', [FormFPPController::class, 'EditMaintenance'])
@@ -88,6 +90,9 @@ Route::middleware(['web', 'auth'])->group(function () {
         ->name('preventives.updateIssue');
 
     Route::get('dashboardmesins', [MesinController::class, 'index'])->name('dashboardmesins');
+    Route::get('dashboardgamesin', [MesinController::class, 'dashboardGAMesin'])->name('dashboardgamesin');
+    Route::get('/mesins/showMesinGA/{mesin}', [MesinController::class, 'showMesinGA'])->name('mesins.showMesinGA');
+
 
     Route::put('mesins/{mesin}/update-issue', [DetailPreventiveController::class, 'updateIssue'])
         ->name('detailpreventives.updateIssue');
@@ -97,12 +102,15 @@ Route::middleware(['web', 'auth'])->group(function () {
     // Dept Maintenance
     Route::get('dashboarddeptmtce', [FormFPPController::class, 'DashboardDeptMTCE'])
         ->name('deptmtce.index');
+    Route::get('dashboardapprovedga', [FormFPPController::class, 'DashboardFPPGA'])
+        ->name('ga.approvedfpp');
     Route::get('lihatdeptmtce/{formperbaikan}', [FormFPPController::class, 'LihatDeptMTCE'])
         ->name('deptmtce.show');
     Route::get('editdeptmtcepreventive/{mesin}', [PreventiveController::class, 'EditDeptMTCEPreventive'])
         ->name('deptmtce.lihatpreventive');
     Route::get('dashboardPreventive', [PreventiveController::class, 'dashboardPreventive'])->name('dashboardPreventive');
     Route::get('dashboardPreventiveMaintenance', [PreventiveController::class, 'dashboardPreventiveMaintenance'])->name('dashboardPreventiveMaintenance');
+    Route::get('dashboardPreventiveMaintenanceGA', [PreventiveController::class, 'dashboardPreventiveMaintenanceGA'])->name('dashboardPreventiveMaintenanceGA');
     Route::get('formpreventif', [PreventiveController::class, 'create'])->name('preventives.create');
     Route::get('editpreventive', [PreventiveController::class, 'edit'])->name('preventives.edit');
     Route::post('sparepart-import', [SparepartController::class, 'import'])->name('spareparts.import');

@@ -20,6 +20,29 @@ class MesinController extends Controller
         return view('mesins.index', compact('mesins'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
+
+    public function dashboardGAMesin()
+    {
+        $mesins = Mesin::orderBy('updated_at', 'desc')->get();
+
+        return view('ga.dashmesin', compact('mesins'))->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
+
+    public function showMesinGA(Mesin $mesin, FormFPP $formperbaikan, Sparepart $sparepart)
+    {
+        // Mengambil formperbaikans berdasarkan status 3 dan nomor_mesin dari mesin yang sama dengan mesin di formperbaikan
+        $formperbaikans = FormFPP::where('status', '3')
+            ->where('mesin', $mesin->no_mesin)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        // Mengambil daftar sparepart berdasarkan nomor mesin
+        $spareparts = Sparepart::where('nomor_mesin', $mesin->no_mesin)->get();
+
+        return view('ga.showMesin', compact('mesin', 'formperbaikan', 'formperbaikans', 'spareparts', 'sparepart'));
+    }
+
     public function create()
     {
         $mesins = Mesin::orderBy('updated_at', 'asc')->get();

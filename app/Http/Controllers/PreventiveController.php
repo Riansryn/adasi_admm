@@ -36,6 +36,20 @@ class PreventiveController extends Controller
         return view('maintenance.tabelpreventive', compact('mesins', 'preventives', 'preventive'));
     }
 
+    public function dashboardPreventiveMaintenanceGA(Request $request, JadwalPreventif $preventive)
+    {
+        // Mengambil data mesin beserta jadwal preventif, diurutkan berdasarkan section dan statusnya 0
+        $mesins = Mesin::with('preventifs')
+            ->where('status', 0)
+            ->orderBy('section')
+            ->get();
+
+        $preventives = JadwalPreventif::latest()->get();
+
+        // Mengirimkan data ke tampilan
+        return view('ga.dashpreventivemaintenance', compact('mesins', 'preventives', 'preventive'));
+    }
+
 
     // public function dashboardPreventiveMaintenance(Request $request)
     // {
