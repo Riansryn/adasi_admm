@@ -165,11 +165,35 @@
                                         <div class="col-lg-6">
                                             <select name="category" class="form-control" id="category" name="category"
                                                 style="width: 100%;" required>
-                                                <option value="">------------------- Kategori -----------------
+                                                <option value="" class="text-center">-------- Silahkan Pilih
+                                                    Kategori --------
                                                 </option>
-                                                <option value="Retak">Retak</option>
-                                                <option value="Pecah">Pecah</option>
-                                                <option value="Etc">Etc</option>
+                                                <option value="CT - Ukuran Minus">CT - Ukuran Minus</option>
+                                                <option value="CT - Potongan Miring">CT - Potongan Miring</option>
+                                                <option value="CT - NG Dimensi">CT - NG Dimensi</option>
+                                                <option value="MCH - Dimensi NG">MCH - Dimensi NG</option>
+                                                <option value="MCH - Ada Step">MCH - Ada Step</option>
+                                                <option value="MCH - NG Paralelism">MCH - NG Paralelism</option>
+                                                <option value="MCH - NG Siku">MCH - NG Siku</option>
+                                                <option value="HT - NG Siku">HT - NG Siku</option>
+                                                <option value="HT - Retak/Patah">HT - Retak/Patah</option>
+                                                <option value="HT - Bending">HT - Bending</option>
+                                                <option value="HT - Kekerasan Minus">HT - Kekerasan Minus</option>
+                                                <option value="HT - Kekerasan Lebih">HT - Kekerasan Lebih</option>
+                                                <option value="HT - Scratch/Gores">HT - Scratch/Gores</option>
+                                                <option value="HT - Aus">HT - Aus</option>
+                                                <option value="HT - Appearance">HT - Appearance</option>
+                                                <option value="MKT - Jumlah Tidak Sesuai">MKT - Jumlah Tidak Sesuai
+                                                </option>
+                                                <option value="MKT - Dimensi Tidak Sesuai">MKT - Dimensi Tidak Sesuai
+                                                </option>
+                                                <option value="MKT - Type Material Tidak Sesuai">MKT - Type Material Tidak
+                                                    Sesuai</option>
+                                                <option value="MTRL - Pin Hole">MTRL - Pin Hole</option>
+                                                <option value="MTRL - Inklusi">MTRL - Inklusi</option>
+                                                <option value="MTRL - Sulit Machining">MTRL - Sulit Machining</option>
+                                                <option value="MTRL - Karat">MTRL - Karat</option>
+                                                <option value="Others">Others</option>
                                                 <!-- Tambahkan opsi statis lainnya jika diperlukan -->
                                             </select>
                                         </div>

@@ -63,7 +63,7 @@
                                     <td>{{ $formperbaikan->created_at }}</td>
                                     <td>{{ $formperbaikan->updated_at }}</td>
                                     <td>
-                                        <a class="btn btn-warning" href="{{ route('fpps.show', $formperbaikan->id) }}">
+                                        <a class="btn btn-warning" href="{{ route('maintenance.lihat', $formperbaikan->id) }}">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
                                     </td>

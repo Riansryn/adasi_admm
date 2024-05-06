@@ -43,6 +43,7 @@ class HandlingController extends Controller
             ->selectRaw('COUNT(CASE WHEN status = 3 THEN 1 END) as Close')
             ->first();
 
+        // dd($data);
         // Mengembalikan data dalam format JSON
         return response()->json($data);
     }

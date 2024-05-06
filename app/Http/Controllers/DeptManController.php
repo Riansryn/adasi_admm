@@ -144,7 +144,7 @@ class DeptManController extends Controller
         return view('deptman.historyProgres', compact('handling', 'customers', 'type_materials', 'data'));
     }
 
-    public function showCloseProgres($id)
+    public function showCloseProgres(string $id): View
     {
         $handlings = Handling::findOrFail($id);
         $customers = Customer::all();

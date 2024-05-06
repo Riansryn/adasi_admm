@@ -2,14 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
-use App\http\Controllers\DeptManController;
 use App\Http\Controllers\DetailPreventiveController;
 use App\Http\Controllers\EventController;
-use App\http\Controllers\ExcelController;
 use App\Http\Controllers\FormFPPController;
 use App\Http\Controllers\HandlingController;
 use App\Http\Controllers\MesinController;
-use App\http\Controllers\PDFController;
 use App\Http\Controllers\PreventiveController;
 use App\Http\Controllers\SparepartController;
 use App\Http\Controllers\UserController;
@@ -93,7 +90,6 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('dashboardgamesin', [MesinController::class, 'dashboardGAMesin'])->name('dashboardgamesin');
     Route::get('/mesins/showMesinGA/{mesin}', [MesinController::class, 'showMesinGA'])->name('mesins.showMesinGA');
 
-
     Route::put('mesins/{mesin}/update-issue', [DetailPreventiveController::class, 'updateIssue'])
         ->name('detailpreventives.updateIssue');
     Route::put('mesins/{mesin}/update-perbaikan', [DetailPreventiveController::class, 'updatePerbaikan'])
@@ -130,17 +126,16 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/dashboardHandling', 'App\Http\Controllers\DsController@dashboardHandling')->name('dashboardHandling');
     Route::get('/getChartData', 'App\Http\Controllers\HandlingController@getChartData');
     Route::get('/get-data-by-year', 'App\Http\Controllers\HandlingController@getDataByYear');
-    Route::get('/getRepairMaintenance', 'App\Http\Controllers\DsController@getRepairMaintenance');
-    Route::get('/getRepairAlatBantu', 'App\Http\Controllers\DsController@getRepairAlatBantu');
-    Route::get('/getPeriodeWaktuPengerjaan', 'App\Http\Controllers\DsController@getPeriodeWaktuPengerjaan');
-    Route::get('/getPeriodeWaktuAlat', 'App\Http\Controllers\DsController@getPeriodeWaktuAlat');
+    Route::get('/getRepairMaintenance', 'App\Http\Controllers\MaintenanceController@getRepairMaintenance');
+    Route::get('/getRepairAlatBantu', 'App\Http\Controllers\MaintenanceController@getRepairAlatBantu');
+    Route::get('/getPeriodeWaktuPengerjaan', 'App\Http\Controllers\MaintenanceController@getPeriodeWaktuPengerjaan');
+    Route::get('/getPeriodeWaktuAlat', 'App\Http\Controllers\MaintenanceController@getPeriodeWaktuAlat');
     Route::get('/api/filter-pie-chart-tipe', 'App\Http\Controllers\HandlingController@FilterPieChartTipe');
     Route::get('/api/filter-tipe-all', 'App\Http\Controllers\HandlingController@FilterTipeAll');
     Route::get('/api/FilterPieChartProses', 'App\Http\Controllers\HandlingController@FilterPieChartProses');
 
-    Route::get('/getPeriodeMesin', 'App\Http\Controllers\DsController@getPeriodeMesin');
-    Route::get('/getPeriodeAlat', 'App\Http\Controllers\DsController@getPeriodeAlat');
-
+    Route::get('/getPeriodeMesin', 'App\Http\Controllers\MaintenanceController@getPeriodeMesin');
+    Route::get('/getPeriodeAlat', 'App\Http\Controllers\MaintenanceController@getPeriodeAlat');
 
     Route::get('handling', [HandlingController::class, 'index'])->name('index');
     Route::get('create', [HandlingController::class, 'create'])->name('create');
@@ -160,5 +155,5 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('/updateFollowUp/{id}', 'App\Http\Controllers\DeptManController@updateFollowUp')->name('updateFollowUp');
     Route::get('scheduleVisit', 'App\Http\Controllers\DeptManController@scheduleVisit')->name('scheduleVisit');
     Route::get('showHistoryCLaimComplain', 'App\Http\Controllers\DeptManController@showHistoryCLaimComplain')->name('showHistoryCLaimComplain');
-    Route::get('/showCloseProgres', 'App\Http\Controllers\DeptManController@showCloseProgres')->name('showCloseProgres');
+    Route::get('/showCloseProgres/{id}', 'App\Http\Controllers\DeptManController@showCloseProgres')->name('showCloseProgres');
 });

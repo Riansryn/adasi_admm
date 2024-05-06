@@ -19,48 +19,6 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Data Table History Claim & Complain</h5>
-                            <!-- Button trigger modal -->
-                            {{-- <div class="card-header" style="margin-bottom: 50px;">
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                    data-bs-target="#dateRangeModal">
-                                    <i class="bi bi-calendar3 fa-2x"></i>
-                                </button>
-                            </div>
-                            <!-- Modal -->
-                            <div class="modal fade" id="dateRangeModal" tabindex="-1" aria-labelledby="dateRangeModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="dateRangeModalLabel">Select Date Range</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label for="start-date" class="form-label">Start Date:</label>
-                                                        <input type="date" class="form-control" id="start-date">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="end-date" class="form-label">End Date:</label>
-                                                        <input type="date" class="form-control" id="end-date">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                                <i class="fas fa-times fa-2x"></i> <!-- Icon close -->
-                                            </button>
-                                            <button type="button" class="btn btn-success" onclick="exportToExcel()">
-                                                <i class="fas fa-file-excel fa-2x"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
                             <!-- Table with stripped rows -->
                             <div class="table-responsive">
                                 <table id="viewSales" class="table table-striped" style="table-layout: fixed;">
@@ -120,7 +78,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('showHistoryProgres', ['id' => $row->id]) }}" class="btn btn-sm btn-success">
+                                                    <a href="{{ route('showCloseProgres', ['id' => $row->id]) }}" class="btn btn-sm btn-success">
                                                         <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
                                                     </a>                                                    
                                                 </td>

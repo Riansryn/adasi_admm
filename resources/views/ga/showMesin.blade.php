@@ -89,10 +89,10 @@
                                             <div>
                                                 @if($mesin->foto)
                                                 <!-- Jika ada foto, tampilkan gambar -->
-                                                <img id="fotoPreview" src="{{ asset('assets/' . $mesin->foto) }}" alt="Preview Foto" style="max-width: 200px;">
+                                                <img id="fotoPreview" src="{{ asset('assets/' . $mesin->foto) }}" alt="Preview Foto" style="max-width: 200px; cursor: pointer;">
                                                 @else
                                                 <!-- Jika tidak ada foto, tampilkan pesan -->
-                                                <p>No image available</p>
+                                                <img id="fotoPreview" src="" alt="" style="max-width: 300px; max-height: 200px; display: none; cursor: pointer;">
                                                 @endif
                                             </div>
                                         </div>
@@ -102,11 +102,27 @@
                                             <div>
                                                 @if($mesin->sparepart)
                                                 <!-- Jika ada sparepart, tampilkan gambar -->
-                                                <img id="sparepartPreview" src="{{ asset('assets/' . $mesin->sparepart) }}" src="{{ asset('assets/' . $mesin->foto) }}" alt="Preview Sparepart" style="max-width: 200px;">
+                                                <img id="sparepartPreview" src="{{ asset('assets/' . $mesin->sparepart) }}" alt="Preview Sparepart" style="max-width: 200px; cursor: pointer;">
                                                 @else
                                                 <!-- Jika tidak ada sparepart, tampilkan pesan -->
-                                                <p>No image available</p>
+                                                <img id="sparepartPreview" src="" alt="" style="max-width: 300px; max-height: 200px; display: none; cursor: pointer;">
                                                 @endif
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal untuk foto -->
+                                        <div id="fotoModal" class="modal">
+                                            <span class="close" onclick="closeFotoModal()">&times;</span>
+                                            <div class="modal-content">
+                                                <img id="fotoModalImage" src="" alt="">
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal untuk sparepart -->
+                                        <div id="sparepartModal" class="modal">
+                                            <span class="close" onclick="closeSparepartModal()">&times;</span>
+                                            <div class="modal-content">
+                                                <img id="sparepartModalImage" src="" alt="">
                                             </div>
                                         </div>
                                     </form>
@@ -225,37 +241,159 @@
 </main><!-- End #main -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Menangkap elemen input file
-        var fotoInput = document.getElementById('foto');
-        var sparepartInput = document.getElementById('sparepart');
-
-        // Menangkap elemen gambar preview
         var fotoPreview = document.getElementById('fotoPreview');
         var sparepartPreview = document.getElementById('sparepartPreview');
 
-        // Mengatur listener untuk input file
-        fotoInput.addEventListener('change', function() {
-            previewImage(this, fotoPreview);
+        fotoPreview.addEventListener('click', function() {
+            toggleModal('fotoModal', 'fotoPreview', 'fotoModalImage');
         });
 
-        sparepartInput.addEventListener('change', function() {
-            previewImage(this, sparepartPreview);
+        sparepartPreview.addEventListener('click', function() {
+            toggleModal('sparepartModal', 'sparepartPreview', 'sparepartModalImage');
         });
 
-        // Fungsi untuk menampilkan preview gambar
-        function previewImage(input, previewElement) {
-            var file = input.files[0];
-            var reader = new FileReader();
+        function toggleModal(modalId, previewId, modalImageId) {
+            var modal = document.getElementById(modalId);
+            var modalImg = document.getElementById(modalImageId);
+            var preview = document.getElementById(previewId);
 
-            reader.onload = function(e) {
-                previewElement.src = e.target.result;
-                previewElement.style.display = 'block'; // Menampilkan preview setelah gambar diunggah
-            };
-
-            reader.readAsDataURL(file);
+            if (modal.style.display === "block") {
+                modal.style.display = "none";
+            } else {
+                modal.style.display = "block";
+                modalImg.src = preview.src;
+            }
         }
+
+        function closeFotoModal() {
+            var modal = document.getElementById("fotoModal");
+            modal.style.display = "none";
+        }
+
+        function closeSparepartModal() {
+            var modal = document.getElementById("sparepartModal");
+            modal.style.display = "none";
+        }
+
+        var fotoModal = document.getElementById("fotoModal");
+        var sparepartModal = document.getElementById("sparepartModal");
+
+        // Menambahkan event listener untuk menutup modal saat tombol "X" diklik
+        fotoModal.querySelector(".close").addEventListener('click', function() {
+            closeFotoModal();
+        });
+
+        sparepartModal.querySelector(".close").addEventListener('click', function() {
+            closeSparepartModal();
+        });
+
+        // Menambahkan event listener untuk menutup modal saat area di luar modal diklik
+        window.addEventListener('click', function(event) {
+            if (event.target == fotoModal || event.target == sparepartModal) {
+                closeFotoModal();
+                closeSparepartModal();
+            }
+        });
     });
 </script>
+
+<style>
+    /* CSS untuk modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        /* Ubah ukuran lebar */
+        height: 400px;
+        /* Ubah ukuran tinggi */
+        overflow: auto;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        padding: 20px;
+    }
+
+    /* CSS untuk tombol close */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* CSS untuk gambar di dalam modal */
+    .modal-content {
+        width: 100%;
+        height: auto;
+    }
+</style>
+
+<style>
+    /* CSS untuk modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Konten dalam modal */
+    .modal-content {
+        background-color: white;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        /* Atur lebar maksimum modal */
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Tombol close */
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+    }
+
+    /* CSS untuk gambar di dalam modal */
+    .modal-content img {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+
 
 <style>
     .pdf-button {
