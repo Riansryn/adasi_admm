@@ -28,6 +28,17 @@
                                 <div class="col lg-6">
                                     <div class="row">
                                         <div class="col-lg-6">
+                                            <label for="modified_by" class="col-sm-2 col-form-label">User : <span
+                                                style="color: red;">*</span></label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input type="text" class="form-control" id="modified_by" name="modified_by"
+                                                maxlength="6" style="width: 100%; max-width: 100%;" placeholder="{{ Auth::user()->name }}" disabled>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-lg-6">
                                             <label for="no_wo" class="col-sm-2 col-form-label">No. WO:<span
                                                     style="color: red;">*</span></label>
                                         </div>
@@ -145,12 +156,14 @@
                                     <br>
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label for="qty" class="form-label">QTY (Kg):</label>
+                                            <label for="qty" class="form-label">QTY (Kg):<span
+                                                style="color: red;">*</span></label>
                                             <input type="text" class="form-control input-sm" id="qty"
                                                 name="qty" style="max-width: 80%;" required>
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="pcs" class="form-label">Unit (Pcs):</label>
+                                            <label for="pcs" class="form-label">Unit (Pcs):<span
+                                                style="color: red;">*</span></label>
                                             <input type="text" class="form-control input-sm" id="pcs"
                                                 name="pcs" style="max-width: 80%" required>
                                         </div>

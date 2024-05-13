@@ -164,39 +164,6 @@
                                                 style="width: 100%" required disabled>
                                                 <option value="">------------------- Category -----------------
                                                 </option>
-                                                <option value="Retak"
-                                                    {{ $handlings->category == 'Retak' ? 'selected' : '' }}>
-                                                    Retak</option>
-                                                <option value="Pecah"
-                                                    {{ $handlings->category == 'Pecah' ? 'selected' : '' }}>
-                                                    Pecah</option>
-                                                <option value="Etc"
-                                                    {{ $handlings->category == 'Etc' ? 'selected' : '' }}>
-                                                    Etc
-                                                </option>
-                                                <!-- Tambahkan opsi statis lainnya jika diperlukan -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <label for="hasil_tindak_lanjut" class="col-sm-5 col-form-label">Keterangan:
-                                                (Jika ada)</label>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <textarea class="form-control" rows="5" id="results" name="results" style="width: 100%" disabled required>{{ $handlings->results }}</textarea>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <label for="process_type" class="col-sm-5 col-form-label">Jenis Proses:<span
-                                                    style="color: red;">*</span></label>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <select name="process_type" class="form-control" id="process_type"
-                                                style="width: 25%" required disabled>
                                                 <option value="" class="text-center">-------- Silahkan Pilih
                                                     Kategori --------</option>
                                                 <option value="CT - Ukuran Minus"
@@ -267,6 +234,42 @@
                                                     Karat</option>
                                                 <option value="Others"
                                                     {{ $handlings->category == 'Others' ? 'selected' : '' }}>Others
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <label for="hasil_tindak_lanjut" class="col-sm-5 col-form-label">Keterangan:
+                                                (Jika ada)</label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <textarea class="form-control" rows="5" id="results" name="results" style="width: 100%" disabled required>{{ $handlings->results }}</textarea>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <label for="process_type" class="col-sm-5 col-form-label">Jenis Proses:<span
+                                                    style="color: red;">*</span></label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <select name="process_type" class="form-control" id="process_type"
+                                                style="width: 25%" required disabled>
+                                                <option value="">------------------- Jenis Proses -----------------
+                                                </option>
+                                                <option value="Heat Treatment"
+                                                    {{ $handlings->process_type == 'Heat Treatment' ? 'selected' : '' }}>
+                                                    Heat
+                                                    treatment</option>
+                                                <option value="Cutting"
+                                                    {{ $handlings->process_type == 'Cutting' ? 'selected' : '' }}>
+                                                    Cutting
+                                                </option>
+                                                <option value="Machining"
+                                                    {{ $handlings->process_type == 'Machining' ? 'selected' : '' }}>
+                                                    Machining
                                                 </option>
                                             </select>
                                         </div>

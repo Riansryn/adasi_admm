@@ -269,7 +269,8 @@ class DeptManController extends Controller
 
             // Update status Handling menjadi 3
             $handlings->update([
-               'type_2' => 'Klaim',
+                'type_1' => '',
+                'type_2' => 'Klaim',
                 'status' => 1,
             ]);
 

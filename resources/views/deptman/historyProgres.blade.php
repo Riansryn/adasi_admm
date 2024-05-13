@@ -165,73 +165,73 @@
                                                 <option value="" class="text-center">-------- Silahkan Pilih
                                                     Kategori --------</option>
                                                 <option value="CT - Ukuran Minus"
-                                                    {{ $handlings->category == 'CT - Ukuran Minus' ? 'selected' : '' }}>CT
+                                                    {{ $handling->category == 'CT - Ukuran Minus' ? 'selected' : '' }}>CT
                                                     - Ukuran Minus</option>
                                                 <option value="CT - Potongan Miring"
-                                                    {{ $handlings->category == 'CT - Potongan Miring' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'CT - Potongan Miring' ? 'selected' : '' }}>
                                                     CT - Potongan Miring</option>
                                                 <option value="CT - NG Dimensi"
-                                                    {{ $handlings->category == 'CT - NG Dimensi' ? 'selected' : '' }}>CT -
+                                                    {{ $handling->category == 'CT - NG Dimensi' ? 'selected' : '' }}>CT -
                                                     NG Dimensi</option>
                                                 <option value="MCH - Dimensi NG"
-                                                    {{ $handlings->category == 'MCH - Dimensi NG' ? 'selected' : '' }}>MCH
+                                                    {{ $handling->category == 'MCH - Dimensi NG' ? 'selected' : '' }}>MCH
                                                     - Dimensi NG</option>
                                                 <option value="MCH - Ada Step"
-                                                    {{ $handlings->category == 'MCH - Ada Step' ? 'selected' : '' }}>MCH -
+                                                    {{ $handling->category == 'MCH - Ada Step' ? 'selected' : '' }}>MCH -
                                                     Ada Step</option>
                                                 <option value="MCH - NG Paralelism"
-                                                    {{ $handlings->category == 'MCH - NG Paralelism' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'MCH - NG Paralelism' ? 'selected' : '' }}>
                                                     MCH - NG Paralelism</option>
                                                 <option value="MCH - NG Siku"
-                                                    {{ $handlings->category == 'MCH - NG Siku' ? 'selected' : '' }}>MCH -
+                                                    {{ $handling->category == 'MCH - NG Siku' ? 'selected' : '' }}>MCH -
                                                     NG Siku</option>
                                                 <option value="HT - NG Siku"
-                                                    {{ $handlings->category == 'HT - NG Siku' ? 'selected' : '' }}>HT - NG
+                                                    {{ $handling->category == 'HT - NG Siku' ? 'selected' : '' }}>HT - NG
                                                     Siku</option>
                                                 <option value="HT - Retak/Patah"
-                                                    {{ $handlings->category == 'HT - Retak/Patah' ? 'selected' : '' }}>HT -
+                                                    {{ $handling->category == 'HT - Retak/Patah' ? 'selected' : '' }}>HT -
                                                     Retak/Patah</option>
                                                 <option value="HT - Bending"
-                                                    {{ $handlings->category == 'HT - Bending' ? 'selected' : '' }}>HT -
+                                                    {{ $handling->category == 'HT - Bending' ? 'selected' : '' }}>HT -
                                                     Bending</option>
                                                 <option value="HT - Kekerasan Minus"
-                                                    {{ $handlings->category == 'HT - Kekerasan Minus' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'HT - Kekerasan Minus' ? 'selected' : '' }}>
                                                     HT - Kekerasan Minus</option>
                                                 <option value="HT - Kekerasan Lebih"
-                                                    {{ $handlings->category == 'HT - Kekerasan Lebih' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'HT - Kekerasan Lebih' ? 'selected' : '' }}>
                                                     HT - Kekerasan Lebih</option>
                                                 <option value="HT - Scratch/Gores"
-                                                    {{ $handlings->category == 'HT - Scratch/Gores' ? 'selected' : '' }}>HT
+                                                    {{ $handling->category == 'HT - Scratch/Gores' ? 'selected' : '' }}>HT
                                                     - Scratch/Gores</option>
                                                 <option value="HT - Aus"
-                                                    {{ $handlings->category == 'HT - Aus' ? 'selected' : '' }}>HT - Aus
+                                                    {{ $handling->category == 'HT - Aus' ? 'selected' : '' }}>HT - Aus
                                                 </option>
                                                 <option value="HT - Appearance"
-                                                    {{ $handlings->category == 'HT - Appearance' ? 'selected' : '' }}>HT -
+                                                    {{ $handling->category == 'HT - Appearance' ? 'selected' : '' }}>HT -
                                                     Appearance</option>
                                                 <option value="MKT - Jumlah Tidak Sesuai"
-                                                    {{ $handlings->category == 'MKT - Jumlah Tidak Sesuai' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'MKT - Jumlah Tidak Sesuai' ? 'selected' : '' }}>
                                                     MKT - Jumlah Tidak Sesuai</option>
                                                 <option value="MKT - Dimensi Tidak Sesuai"
-                                                    {{ $handlings->category == 'MKT - Dimensi Tidak Sesuai' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'MKT - Dimensi Tidak Sesuai' ? 'selected' : '' }}>
                                                     MKT - Dimensi Tidak Sesuai</option>
                                                 <option value="MKT - Type Material Tidak Sesuai"
-                                                    {{ $handlings->category == 'MKT - Type Material Tidak Sesuai' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'MKT - Type Material Tidak Sesuai' ? 'selected' : '' }}>
                                                     MKT - Type Material Tidak Sesuai</option>
                                                 <option value="MTRL - Pin Hole"
-                                                    {{ $handlings->category == 'MTRL - Pin Hole' ? 'selected' : '' }}>MTRL
+                                                    {{ $handling->category == 'MTRL - Pin Hole' ? 'selected' : '' }}>MTRL
                                                     - Pin Hole</option>
                                                 <option value="MTRL - Inklusi"
-                                                    {{ $handlings->category == 'MTRL - Inklusi' ? 'selected' : '' }}>MTRL -
+                                                    {{ $handling->category == 'MTRL - Inklusi' ? 'selected' : '' }}>MTRL -
                                                     Inklusi</option>
                                                 <option value="MTRL - Sulit Machining"
-                                                    {{ $handlings->category == 'MTRL - Sulit Machining' ? 'selected' : '' }}>
+                                                    {{ $handling->category == 'MTRL - Sulit Machining' ? 'selected' : '' }}>
                                                     MTRL - Sulit Machining</option>
                                                 <option value="MTRL - Karat"
-                                                    {{ $handlings->category == 'MTRL - Karat' ? 'selected' : '' }}>MTRL -
+                                                    {{ $handling->category == 'MTRL - Karat' ? 'selected' : '' }}>MTRL -
                                                     Karat</option>
                                                 <option value="Others"
-                                                    {{ $handlings->category == 'Others' ? 'selected' : '' }}>Others
+                                                    {{ $handling->category == 'Others' ? 'selected' : '' }}>Others
                                                 </option>
                                             </select>
                                         </div>
@@ -257,8 +257,8 @@
                                                 style="width: 25%" required disabled>
                                                 <option value="">------------------- Jenis Proses -----------------
                                                 </option>
-                                                <option value="HeatTreatment"
-                                                    {{ $handling->process_type == 'HeatTreatment' ? 'selected' : '' }}>
+                                                <option value="Heat Treatment"
+                                                    {{ $handling->process_type == 'Heat Treatment' ? 'selected' : '' }}>
                                                     Heat
                                                     treatment</option>
                                                 <option value="Cutting"

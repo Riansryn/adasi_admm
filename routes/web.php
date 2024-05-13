@@ -137,6 +137,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/getPeriodeMesin', 'App\Http\Controllers\MaintenanceController@getPeriodeMesin');
     Route::get('/getPeriodeAlat', 'App\Http\Controllers\MaintenanceController@getPeriodeAlat');
 
+    Route::get('/showDataDiri', 'App\Http\Controllers\AuthController@showDataDiri')->name('showDataDiri');
+    Route::post('/ubahPassword', 'App\Http\Controllers\AuthController@ubahPassword')->name('ubahPassword');
+
     Route::get('handling', [HandlingController::class, 'index'])->name('index');
     Route::get('create', [HandlingController::class, 'create'])->name('create');
     Route::post('store', [HandlingController::class, 'store'])->name('store');
