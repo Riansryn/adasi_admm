@@ -34,6 +34,8 @@
                                             value="{{ $handlings->no_wo }}" required disabled>
                                         <input type="hidden" id="handling_id" name="handling_id"
                                             value="{{ $handlings->id }}">
+                                            <input type="hidden" id="users_id" name="users_id"
+                                                value="{{ Auth::user()->id }}">
                                     </div>
                                 </div>
                                 <br>

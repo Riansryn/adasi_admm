@@ -22,7 +22,7 @@ class HandlingController extends Controller
 
     public function index()
     {
-        $data = Handling::with('customers', 'type_materials')
+        $data = Handling::with('customers', 'type_materials', 'users')
     ->whereIn('status', [1, 2, 0, 3])
     ->orderByRaw('FIELD(status, 3, 2, 0, 1)')
     ->orderByDesc('created_at')
@@ -254,6 +254,7 @@ class HandlingController extends Controller
         // Buat data handling
         $handling = new Handling();
         $handling->no_wo = $no_wo;
+        $handling->user_id = $request->user()->id;
         $handling->customer_id = $request->customer_id;
         $handling->type_id = $request->type_id;
         $handling->thickness = $request->thickness;
@@ -345,6 +346,7 @@ class HandlingController extends Controller
         // Update post with new image paths
         $handlings->update([
             'no_wo' => $request->no_wo,
+            'user_id' => $request->user()->id,
             'customer_id' => $request->customer_id,
             'type_id' => $request->type_id,
             'thickness' => $request->thickness,

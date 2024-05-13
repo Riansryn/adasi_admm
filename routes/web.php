@@ -159,4 +159,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('scheduleVisit', 'App\Http\Controllers\DeptManController@scheduleVisit')->name('scheduleVisit');
     Route::get('showHistoryCLaimComplain', 'App\Http\Controllers\DeptManController@showHistoryCLaimComplain')->name('showHistoryCLaimComplain');
     Route::get('/showCloseProgres/{id}', 'App\Http\Controllers\DeptManController@showCloseProgres')->name('showCloseProgres');
+
+    // SS
+    Route::get('/showSS', 'App\Http\Controllers\SumbangSaranController@showSS')->name('showSS');
+    Route::post('/simpanSS', 'App\Http\Controllers\SumbangSaranController@simpanSS')->name('simpanSS');
 });

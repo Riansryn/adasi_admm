@@ -3,18 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
     use HasFactory;
 
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,8 +47,18 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    // public function handlings(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Handling::class);
-    // }
+    public function handings(): HasMany
+    {
+        return $this->hasMany(Handling::class);
+    }
+
+    public function schedule_visits(): HasMany
+    {
+        return $this->hasMany(ScheduleVisit::class);
+    }
+
+    public function sumbang_saran(): HasMany
+    {
+        return $this->hasMany(SumbangSaran::class);
+    }
 }

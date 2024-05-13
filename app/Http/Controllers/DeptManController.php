@@ -212,6 +212,7 @@ class DeptManController extends Controller
             $scheduleVisit->file_name = $originalFilename;
             $scheduleVisit->status = '1';
             $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
+            $scheduleVisit->users_id = $request->user()->id;
             $scheduleVisit->save();
 
             return redirect()->route('showFollowUp', ['id' => $id])->with(['success' => 'Data Berhasil Diubah!']);
@@ -231,6 +232,7 @@ class DeptManController extends Controller
             $scheduleVisit->file_name = $originalFilename;
             $scheduleVisit->status = '3';
             $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
+            $scheduleVisit->users_id = $request->user()->id;
             $scheduleVisit->save();
             // Temukan entitas Handling berdasarkan ID
             $handlings = Handling::findOrFail($request->handling_id);
@@ -262,6 +264,7 @@ class DeptManController extends Controller
             $scheduleVisit->history_type = '1';
             $scheduleVisit->status = '1';
             $scheduleVisit->handling_id = $request->handling_id; // Mengambil ID handling
+            $scheduleVisit->users_id = $request->user()->id;
             $scheduleVisit->save();
 
             // Temukan entitas Handling berdasarkan ID

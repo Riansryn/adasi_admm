@@ -27,11 +27,12 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <label for="modified_by" class="col-sm-2 col-form-label">User : <span
-                                                style="color: red;">*</span></label>
+                                                    style="color: red;">*</span></label>
                                         </div>
                                         <div class="col-lg-6">
                                             <input type="text" class="form-control" id="modified_by" name="modified_by"
-                                                maxlength="6" style="width: 100%; max-width: 100%;" placeholder="{{ Auth::user()->name }}" disabled>
+                                                maxlength="6" style="width: 100%; max-width: 100%;"
+                                                placeholder="{{ Auth::user()->name }}" disabled>
                                         </div>
                                     </div>
                                     <br>
@@ -120,19 +121,19 @@
                                             <label for="t" class="form-label">T:</label>
                                             <input type="text" class="form-control input-sm" id="thickness"
                                                 name="thickness" placeholder="Thickness" style="max-width: 80%;"
-                                                value="{{ $handlings->thickness }}">
+                                                value="{{ $handlings->thickness }}" onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">W:</label>
                                             <input type="text" class="form-control input-sm" id="weight"
                                                 name="weight" placeholder="Weight" style="max-width: 80%;"
-                                                value="{{ $handlings->weight }}">
+                                                value="{{ $handlings->weight }}" onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">L:</label>
                                             <input type="text" class="form-control input-sm" id="lenght"
                                                 name="lenght" placeholder="Lenght" style="max-width: 80%;"
-                                                value="{{ $handlings->lenght }}">
+                                                value="{{ $handlings->lenght }}" onkeypress="hanyaAngka(event)">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -140,13 +141,13 @@
                                             <label for="w" class="form-label">OD:</label>
                                             <input type="text" class="form-control input-sm" id="outer_diameter"
                                                 name="outer_diameter" placeholder="Outer Diameter" style="max-width: 40%"
-                                                value="{{ $handlings->outer_diameter }}">
+                                                value="{{ $handlings->outer_diameter }}" onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">ID:</label>
                                             <input type="text" class="form-control input-sm" id="inner_diameter"
                                                 name="inner_diameter" placeholder="Inner Diameter" style="max-width: 40%"
-                                                value="{{ $handlings->inner_diameter }}">
+                                                value="{{ $handlings->inner_diameter }}" onkeypress="hanyaAngka(event)">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -154,13 +155,13 @@
                                             <label for="qty" class="form-label">QTY (Kg):</label>
                                             <input type="text" class="form-control input-sm" id="qty"
                                                 name="qty" style="max-width: 40%;" value="{{ $handlings->qty }}"
-                                                required>
+                                                required onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="pcs" class="form-label">Unit (Pcs):</label>
                                             <input type="text" class="form-control input-sm" id="pcs"
                                                 name="pcs" style="max-width: 40%" value="{{ $handlings->pcs }}"
-                                                required>
+                                                required onkeypress="hanyaAngka(event)">
                                         </div>
                                     </div>
                                     <br>
@@ -387,15 +388,6 @@
             var imageError = document.getElementById('imageError');
             imageError.style.display = 'none';
 
-            // document.getElementById('formFile').addEventListener('change', function(event) {
-            //     var reader = new FileReader();
-            //     reader.onload = function() {
-            //         var imgElement = document.getElementById('uploadedImage');
-            //         imgElement.src = reader.result;
-            //     }
-            //     reader.readAsDataURL(event.target.files[0]);
-            // });
-
             function showModal(imageSrc) {
                 var modal = document.getElementById("imageModal");
                 var modalImg = document.getElementById("modalImage");
@@ -454,6 +446,16 @@
                     var containerWidth = (files.length > 2) ? '100%' : '50%'; // Tentukan lebar kontainer
                     imageContainer.style.width = containerWidth;
                 }, 100); // Beri sedikit waktu agar gambar ditampilkan sebelum menyesuaikan lebar kontainer
+            }
+
+            function hanyaAngka(evt) {
+                // Mendapatkan karakter yang ditekan
+                var charCode = (evt.which) ? evt.which : event.keyCode;
+                // Mengizinkan hanya angka (0-9), tombol backspace, dan tombol delete
+                if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 8 && charCode !== 46) {
+                    // Mencegah aksi default jika karakter tidak valid
+                    evt.preventDefault();
+                }
             }
         </script>
 

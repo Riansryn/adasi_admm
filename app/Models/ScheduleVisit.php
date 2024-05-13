@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 class ScheduleVisit extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'users_id',
         'handling_id',
         'schedule',
         'results',
@@ -28,4 +28,8 @@ class ScheduleVisit extends Model
         return $this->belongsTo(Handling::class, 'handling_id');
     }
 
+    public function users(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
 }

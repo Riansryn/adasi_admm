@@ -29,11 +29,15 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <label for="modified_by" class="col-sm-2 col-form-label">User : <span
-                                                style="color: red;">*</span></label>
+                                                    style="color: red;">*</span></label>
                                         </div>
                                         <div class="col-lg-6">
+                                            <input type="hidden" id="user_id" name="user_id"
+                                                value="{{ Auth::user()->id }}">
+                                            <!-- Tampilkan nama pengguna yang sedang masuk (opsional) -->
                                             <input type="text" class="form-control" id="modified_by" name="modified_by"
-                                                maxlength="6" style="width: 100%; max-width: 100%;" placeholder="{{ Auth::user()->name }}" disabled>
+                                                maxlength="6" style="width: 100%; max-width: 100%;"
+                                                placeholder="{{ Auth::user()->name }}" disabled>
                                         </div>
                                     </div>
                                     <br>
@@ -125,17 +129,20 @@
                                         <div class="col-md-3">
                                             <label for="t" class="form-label">T:</label>
                                             <input type="text" class="form-control input-sm" id="thickness"
-                                                name="thickness" placeholder="Thickness" style="max-width: 80%">
+                                                name="thickness" placeholder="Thickness" style="max-width: 80%"
+                                                onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">W:</label>
                                             <input type="text" class="form-control input-sm" id="weight"
-                                                name="weight" placeholder="Weight" style="max-width: 80%;">
+                                                name="weight" placeholder="Weight" style="max-width: 80%;"
+                                                onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">L:</label>
                                             <input type="text" class="form-control input-sm" id="lenght"
-                                                name="lenght" placeholder="Lenght" style="max-width: 80%;">
+                                                name="lenght" placeholder="Lenght" style="max-width: 80%;"
+                                                onkeypress="hanyaAngka(event)">
                                         </div>
                                     </div>
                                     <br>
@@ -143,29 +150,30 @@
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">OD:</label>
                                             <input type="text" class="form-control input-sm" id="outer_diameter"
-                                                name="outer_diameter" placeholder="Outer Diameter"
-                                                style="max-width: 80%">
+                                                name="outer_diameter" placeholder="Outer Diameter" style="max-width: 80%"
+                                                onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="w" class="form-label">ID:</label>
                                             <input type="text" class="form-control input-sm" id="inner_diameter"
-                                                name="inner_diameter" placeholder="Inner Diameter"
-                                                style="max-width: 80%">
+                                                name="inner_diameter" placeholder="Inner Diameter" style="max-width: 80%"
+                                                onkeypress="hanyaAngka(event)">
                                         </div>
                                     </div>
                                     <br>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label for="qty" class="form-label">QTY (Kg):<span
-                                                style="color: red;">*</span></label>
+                                                    style="color: red;">*</span></label>
                                             <input type="text" class="form-control input-sm" id="qty"
-                                                name="qty" style="max-width: 80%;" required>
+                                                name="qty" style="max-width: 80%;" required pattern="[0-9]+"
+                                                required onkeypress="hanyaAngka(event)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="pcs" class="form-label">Unit (Pcs):<span
-                                                style="color: red;">*</span></label>
+                                                    style="color: red;">*</span></label>
                                             <input type="text" class="form-control input-sm" id="pcs"
-                                                name="pcs" style="max-width: 80%" required>
+                                                name="pcs" style="max-width: 80%" required onkeypress="hanyaAngka(event)">
                                         </div>
                                     </div>
                                     <br>
@@ -443,6 +451,16 @@
                     sortField: 'text'
                 });
             });
+
+            function hanyaAngka(evt) {
+                // Mendapatkan karakter yang ditekan
+                var charCode = (evt.which) ? evt.which : event.keyCode;
+                // Mengizinkan hanya angka (0-9), tombol backspace, dan tombol delete
+                if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 8 && charCode !== 46) {
+                    // Mencegah aksi default jika karakter tidak valid
+                    evt.preventDefault();
+                }
+            }
         </script>
     </main><!-- End #main -->
 @endsection
